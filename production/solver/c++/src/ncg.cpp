@@ -153,7 +153,7 @@ int main(int argc, char* argv[]) {
 	json.append("rate", rate);
 	json.append("x_max", x_max);
 	json.append("x_min", x_min);
-	json.append("x", x1);
+	//json.append("x", x1);
 	cout << "\n\n";
 	cout << json.dump();
 	cout << "\n\n";
