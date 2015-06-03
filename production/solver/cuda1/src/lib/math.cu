@@ -28,7 +28,7 @@ namespace cuda {
          int i = blockDim.x * blockIdx.x + threadIdx.x;
          rtrn[i] = a * A[i]  + b * B[i];
       };
-   */
+
 
    inline void linalg_grad_async(const double& a, vector<double>& A,  const double& b, vector<double>& B, vector<double>& rtrn) {
 
@@ -47,7 +47,8 @@ namespace cuda {
       cuda::unalloc(_x);
    };
 
-
+   */
+  
    inline void linalg_grad( long int N ,  double EPS, vector<double>& x,  vector<double>& grad, double* _space) {
 
       int TPB_OPTIMAL_1D = 256;
