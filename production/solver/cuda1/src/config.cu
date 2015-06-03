@@ -6,7 +6,7 @@
 const long int _GLB_ITR_ = 100;     // Max Solver Iterations
 const long int _GLB_ITR_LINE_ = 10; // Max Line search iterationsc
 const double _GLB_EPS_ = 1e-6;      // Value of epsilon, Note this is equal to the tolerence (both residual and linesearch)
-const long int _GLB_N_ = 1024 * 1;  // Probelm Size - Note keep at base 2
+const long int _GLB_N_ = 1024 * 2;  // Probelm Size - Note keep at base 2
 
 using namespace std;
 
