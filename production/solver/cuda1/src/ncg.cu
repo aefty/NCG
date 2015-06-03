@@ -48,11 +48,8 @@ int main(int argc, char* argv[]) {
 
 	clock_t t_start = clock();
 
-<<<<<<< HEAD
 	std::cout << "NCG - Started \n\n";
-=======
-	std::cout << "NCG - Started \n";
->>>>>>> 2121b1afb91f1e00bbd53ed5101ab1041e79a4f6
+
 
 	// BEGIN NCG
 	{
@@ -138,10 +135,6 @@ int main(int argc, char* argv[]) {
 	double x_max = *max_element(std::begin(x1), std::end(x1));
 	double x_min = *min_element(std::begin(x1), std::end(x1));
 
-<<<<<<< HEAD
-	
-=======
->>>>>>> 2121b1afb91f1e00bbd53ed5101ab1041e79a4f6
 	json.append("size", _GLB_N_);
 	json.append("itr", itr);
 	json.append("conv", tol);
@@ -152,15 +145,8 @@ int main(int argc, char* argv[]) {
 	json.append("x_min", x_min);
 	json.append("x", x1);
 
-<<<<<<< HEAD
 	cout << "\n\n";
 	cout << json.dump();
 	cout << "\n\n";
-=======
-	cout << "\n";
-	cout << json.dump();
-	cout << "\n";
->>>>>>> 2121b1afb91f1e00bbd53ed5101ab1041e79a4f6
-
 	return 0;
 }
