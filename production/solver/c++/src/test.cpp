@@ -1,3 +1,9 @@
+/**
+ * TEST FILE (./c++/src/test.cpp)
+ * Operation performance test file.
+ */
+
+
 #include <iomanip>
 #include <stdio.h>
 #include <stdlib.h>
@@ -42,16 +48,16 @@ int main(int argc, char* argv[]) {
 	std::linalg_grad(_GLB_N_, _GLB_EPS_, C,  A);
 	double t_grad = (clock() - t_start_grad) / (double) CLOCKS_PER_SEC;
 
-	clock_t t_start_nFun = clock();
-	std::test_NfunCall(_GLB_N_, D);
-	double t_nFun = (clock() - t_start_nFun) / (double) CLOCKS_PER_SEC;
+	clock_t t_start_grad_noWriteBack = clock();
+	std::linalg_grad_noWriteBack(_GLB_N_, _GLB_EPS_, C);
+	double t_grad_noWriteBack = (clock() - t_start_grad_noWriteBack) / (double) CLOCKS_PER_SEC;
 
 	json.append("size", _GLB_N_);
 	json.append("dot_time", t_dot);
 	json.append("sdot_time", t_sdot);
 	json.append("add_time", t_add);
 	json.append("grad_time", t_grad);
-	json.append("fun_time", t_nFun);
+	json.append("grad_noWriteBack", t_grad_noWriteBack);
 
 	cout << "\n\n" << json.dump() << "\n\n";
 	return 0;

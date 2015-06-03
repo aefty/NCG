@@ -1,3 +1,8 @@
+/**
+ * JSON OUTPUT (./c++/lib/json.cpp)
+ * JSON ouput class
+ */
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -15,7 +20,7 @@ class JSON {
    void append(string const& name, double const& scalar);
    void append(string const& name, float const& scalar);
    void append(string const& name, int const& scalar);
-   void append(string const& name, long long int const& scalar);
+   void append(string const& name, long int const& scalar);
 
    string dump();
  private:
@@ -147,7 +152,7 @@ void JSON::append(string const& name, int const& scalar) {
    this->output += "\"" + name + "\":" + to_string(scalar);
 };
 
-void JSON::append(string const& name, long long int const& scalar) {
+void JSON::append(string const& name, long int const& scalar) {
    if (this->output.size() > 1) {
       this->output += ",";
    }

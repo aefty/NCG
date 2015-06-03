@@ -1,17 +1,22 @@
-long long int _GLB_ITR_ = 100;
-long long int _GLB_ITR_LINE_ = 10;
-double _GLB_EPS_ = 1e-6;
-long long int _GLB_N_ = 1024 * 1;
+/**
+ * SOLVER CONFIGUATION (./c++/src/config.cpp)
+ * Global configuration of the solver including the function and intial value are specfied.
+ */
+
+const long int _GLB_ITR_ = 100;     // Max Solver Iterations
+const long int _GLB_ITR_LINE_ = 10; // Max Line search iterationsc
+const double _GLB_EPS_ = 1e-6;      // Value of epsilon, Note this is equal to the tolerence (both residual and linesearch)
+const long int _GLB_N_ = 1024 * 2;  // Probelm Size - Note keep at base 2
 
 using namespace std;
 
-inline void FUNCTION(double* x , double& rtrn ) {
-	for (int i = 0; i < _GLB_N_ - 1; ++i) {
+inline void FUNCTION(const long int N, double* x , double& rtrn ) {
+	for (int i = 0; i < N - 1; ++i) {
 		rtrn += 100 * (x[i + 1] - x[i] * x[i]) * (x[i + 1] - x[i] * x[i]) + (1 - x[i]) * (1 - x[i]);
 	};
 };
 
-inline void GUESS( vector<double>& x0) {
-	vector<double>rtrn (_GLB_N_, 3);
-	x0 = rtrn ;
+inline void GUESS(const long int  N, vector<double>& rtrn) {
+	vector<double>x0 (N, 7);
+	rtrn = x0 ;
 };
