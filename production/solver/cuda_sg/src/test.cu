@@ -54,8 +54,8 @@ int main(int argc, char* argv[]) {
 
 	// Line Descretiztion
 	int TPB_OPTIMAL_1D = 1;
-	double h = 1;
-	double D = 5;
+	double h = 1.0;
+	long int D = 5;
 
 	int rows = (_GLB_N_ / TPB_OPTIMAL_1D) < 1 ? 1 : (_GLB_N_ / TPB_OPTIMAL_1D) ;
 	int cols = D < 1 ? 1 : D ;
