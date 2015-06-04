@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 
 	{
 		cudaDeviceProp prop;
-		cudaGetDeviceProperties(&prop, devId);
+		cudaGetDeviceProperties(&prop);
 		printf("Device : %s\n", prop.name);
 	}
 
