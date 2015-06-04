@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
 	double t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
 
 	clock_t t_start_grad_cuda = clock();
-	discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _A , _P, h , _space);
+	discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, D, _A , _P, h , _space);
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
 
 
