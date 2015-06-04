@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 	if (argc > 4) { _GLB_EPS_ = _GLB_EPS_ * atoi(argv[4]); }
 
 	cuda::deviceSpecs();
-	
+
 	JSON json;
 
 	vector<double> A(_GLB_N_, 1.0);
@@ -55,6 +55,11 @@ int main(int argc, char* argv[]) {
 	cuda::linalg_grad(_GLB_N_, _GLB_EPS_, A,  C, _space);
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
 
+	clock_t t_start_grad_spaceAlloc = clock();
+	cuda::linalg_grad_spaceAlloc(_GLB_N_, _GLB_EPS_, A,  C, _space);
+	double t_grad_spaceAlloc = (clock() - t_start_grad_spaceAlloc) / (double) CLOCKS_PER_SEC;
+
+
 	cuda::unalloc(_space);
 
 	double max_grad = *max_element(std::begin(C), std::end(C));
@@ -65,6 +70,7 @@ int main(int argc, char* argv[]) {
 	json.append("sdot_time", t_sdot);
 	json.append("add_time", t_add);
 	json.append("cuda_grad_time", t_grad_cuda);
+	json.append("grad_spaceAlloc", t_grad_spaceAlloc);
 	json.append("min", min_grad);
 	json.append("max", max_grad);
 	//json.append("A", A);
