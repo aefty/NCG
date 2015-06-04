@@ -21,7 +21,7 @@ __global__ void discLine_kernel( long int N ,  double* x, double* p, double h, d
 	printf("%d , %d\n", i, j);
 
 
-	//space[j * N + i] = x[i] + p[i] * h * j;
+	space[j * N + i] = x[i] + p[i] * h * j;
 };
 
 
@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
 
 
 	double h = 0.001;
-	double disc = 4;
+	double disc = 3;
 
 	vector<double> space(disc, 0.0);
 	double* _space = (double*) cuda::alloc(space);
@@ -77,12 +77,12 @@ int main(int argc, char* argv[]) {
 		double* _p = (double*)cuda::alloc(A);
 
 		int rows = (_GLB_N_ / TPB_OPTIMAL_1D) < 1 ? 1 : (_GLB_N_ / TPB_OPTIMAL_1D) ;
-		int cols = 3 < 1 ? 1 : 3 ;
+		int cols = disc < 1 ? 1 : disc ;
 
 		dim3 GPU_TPB_2D (TPB_OPTIMAL_1D, TPB_OPTIMAL_1D);
 		dim3 GPU_BLOCK_2D(rows , cols);
 
-		discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _x , _p, h , _space);
+		discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _x , _p, h , _space);
 	}
 
 
