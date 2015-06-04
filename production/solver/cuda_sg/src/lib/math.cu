@@ -17,6 +17,15 @@ namespace gpu {
          double val = 0.0;
          FUNCTION(N, &space[i * N], &val);
          func_val[i] = val;
+
+         printf("i : %d - ", i );
+
+         for (int k = 0; k < N; ++k) {
+            printf(" %f , ", space[i * N + k]);
+         }
+
+         printf(" - value : %f\n", val );
+
       };
    };
 };
