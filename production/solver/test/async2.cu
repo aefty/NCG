@@ -50,15 +50,22 @@ double maxError(double* a, int n) {
 }
 
 int main(int argc, char** argv) {
-  const int n = 4 * 1024;
-  const int blockSize = 256, nStreams = n;
+
+  int M = 1; int F = 1;
+
+  if (argc > 1) {  M = atoi(argv[1]); }
+
+  if (argc > 1) {  F = atoi(argv[1]); }
+
+  const int n = 1024 * M;
+  const int blockSize = F, nStreams = n;
   const int streamSize = n / nStreams;
   const int streamBytes = streamSize * sizeof(double);
   const int bytes = n * sizeof(double);
 
   int devId = 0;
 
-  if (argc > 1) { devId = atoi(argv[1]); }
+
 
   cudaDeviceProp prop;
   checkCuda( cudaGetDeviceProperties(&prop, devId));
