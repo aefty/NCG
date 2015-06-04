@@ -6,7 +6,7 @@ namespace gpu {
 
       if (i < N && j < D) {
          space[j * N + i] = x[i] + p[i] * h * j;
-         printf("i %d ,  j %d ,  value : %f \n", i, j, space[j * N + i]);
+         //     printf("i %d ,  j %d ,  value : %f \n", i, j, space[j * N + i]);
       }
    };
 
@@ -18,7 +18,7 @@ namespace gpu {
          FUNCTION(N, &space[i * N], &val);
          func_val[i] = val;
 
-         printf("i : %d, value : %f \n", i , val );
+         //   printf("i : %d, value : %f \n", i , val );
 
       };
    };
