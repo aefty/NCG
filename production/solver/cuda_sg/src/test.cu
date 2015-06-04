@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
 		cuda::unalloc(_func_val, func_val );
 
 
-		int min_i = std::distance(func_val, min_element(func_val, func_val + _GLB_N_));
+		int min_i = distance(func_val, min_element(func_val, &func_val + _GLB_N_));
 		cout << min_i;
 
 	}
