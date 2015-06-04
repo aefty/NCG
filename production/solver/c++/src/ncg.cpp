@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
 
 	// BEGIN NCG
 	{
-		std::cout << "|";
+		std::cout << "|"; std::cout.flush();
 		std::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
 		std::linalg_sdot( -1.0, p, p);
 
