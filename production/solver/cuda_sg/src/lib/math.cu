@@ -35,12 +35,14 @@ namespace cuda {
 
    inline void lineSearch_disc(long int N , double h, double rad, vector<double>& x, vector<double>& p, double* _space) {
       int TPB_OPTIMAL_2D = 16;
+      int bockx = N / GPU_TPB_2D.x ? N / GPU_TPB_2D.x : 1;
+      int bocky = N / (rad / h) ? N / (rad / h) : 1;
 
       dim3 GPU_TPB_2D(TPB_OPTIMAL_2D, TPB_OPTIMAL_2D);
-      dim3 GPU_BLOCK_2D(N / GPU_TPB_2D.x , (unsigned int)rad / h);
+      dim3 GPU_BLOCK_2D(bockx , bocky);
 
-      cout << N / GPU_TPB_2D.x << endl;
-      cout << (unsigned int)rad / h << endl;
+      cout << bockx << endl;
+      cout << bocky << endl;
 
       double* _x = (double*)cuda::alloc(x);
       double* _p = (double*)cuda::alloc(p);

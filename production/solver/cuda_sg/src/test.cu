@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 
 	if (argc > 4) { _GLB_EPS_ = _GLB_EPS_ * atoi(argv[4]); }
 
-	//cuda::deviceSpecs();
+	cuda::deviceSpecs();
 
 	JSON json;
 
@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
 	double max_grad = *max_element(std::begin(C), std::end(C));
 	double min_grad = *min_element(std::begin(C), std::end(C));
 
-	cout << cudaGetLastError();
+
 	cudaDeviceSynchronize();
 
 	cuda::unalloc(_space, space );
