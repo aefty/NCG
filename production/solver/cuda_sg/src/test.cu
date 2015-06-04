@@ -20,6 +20,7 @@ __global__ void discLine_kernel( long int N ,  double* x, double* p, double h, d
 
 	printf("%d , %d\n", i, j);
 
+
 	//space[j * N + i] = x[i] + p[i] * h * j;
 };
 
@@ -71,7 +72,7 @@ int main(int argc, char* argv[]) {
 	{
 
 		int TPB_OPTIMAL_1D = 128;
-		int blocks = (_GLB_N_ * disc / TPB_OPTIMAL_1D) ? _GLB_N_ * disc / TPB_OPTIMAL_1D : 1 ;
+		int blocks = (_GLB_N_ * disc / TPB_OPTIMAL_1D) < 1 ? 1 : _GLB_N_ * disc / TPB_OPTIMAL_1D  ;
 
 		cout << TPB_OPTIMAL_1D << endl;
 		cout << blocks << endl;
@@ -79,7 +80,7 @@ int main(int argc, char* argv[]) {
 		double* _x = (double*)cuda::alloc(A);
 		double* _p = (double*)cuda::alloc(A);
 
-		discLine_kernel <<<blocks , TPB_OPTIMAL_1D>>> (_GLB_N_, _x , _p, h , _space);
+		discLine_kernel <<< blocks , TPB_OPTIMAL_1D>>> (_GLB_N_, _x , _p, h , _space);
 	}
 
 
