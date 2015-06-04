@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 
 	cout << _GLB_ITR_ << endl;
 
-	cuda::deviceSpecs();
+	gpu::deviceSpecs();
 
 	JSON json;
 
@@ -35,10 +35,10 @@ int main(int argc, char* argv[]) {
 	GUESS(_GLB_N_, x0);
 
 	vector<double> x1(_GLB_N_);
-	double* _x1 = (double*) cuda::alloc(x1);
+	double* _x1 = (double*) gpu::alloc(x1);
 
 	vector<double> p(_GLB_N_);
-	double* _p = (double*) cuda::alloc(p);
+	double* _p = (double*) gpu::alloc(p);
 
 	vector<double> vtemp(_GLB_N_);
 	vector<double> g00(_GLB_N_);
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
 	vector<double> g1(_GLB_N_);
 
 	int lineDisc = 1024;
-	double* _space = (double*) cuda::alloc(lineDisc);
+	double* _space = (double*) gpu::alloc(lineDisc);
 
 	double gg0 = 0.0;
 	double gg1 = 0.0;
@@ -71,10 +71,11 @@ int main(int argc, char* argv[]) {
 	// BEGIN NCG
 	{
 		std::cout << "|";
-		std::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
-		std::linalg_sdot( -1.0, p, p);
+		
+		cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
+		cpu::linalg_sdot( -1.0, p, p);
 
-		std::linalg_dot(p, p, gg0);
+		cpu::linalg_dot(p, p, gg0);
 
 		x1 = x0;
 
@@ -132,16 +133,16 @@ int main(int argc, char* argv[]) {
 			// END LINE SEARCH
 			t_lineSearch += (clock() - t_lineSearch_start) / (double) CLOCKS_PER_SEC;
 
-			std::linalg_grad(_GLB_N_, _GLB_EPS_, x1, g1);
-			std::linalg_dot(g1, g1, gg1);
+			cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x1, g1);
+			cpu::linalg_dot(g1, g1, gg1);
 			B = gg1 / gg0;
 
 			//% p = -g1 + B * p;
-			std::linalg_add(-1.0, g1, B, p, p);
+			cpu::linalg_add(-1.0, g1, B, p, p);
 
 			//% tol = norm(x1 - x0)
-			std::linalg_add(1.0, x1, -1.0, x0, vtemp);
-			std::linalg_dot(vtemp, vtemp, tol);
+			cpu::linalg_add(1.0, x1, -1.0, x0, vtemp);
+			cpu::linalg_dot(vtemp, vtemp, tol);
 			tol = pow(tol , 0.5);
 			gg0 = gg1;
 			x0 = x1;

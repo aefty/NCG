@@ -8,7 +8,7 @@
 		}} while (0);
 
 
-namespace cuda {
+namespace gpu {
 	inline void* alloc(long long int N) {
 		void* p;
 		size_t s = N * sizeof(double);

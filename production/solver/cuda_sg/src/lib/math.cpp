@@ -1,4 +1,4 @@
-namespace std {
+namespace cpu {
 
    inline void linalg_dot(vector<double>& A , vector<double>& B, double& rtrn) {
       rtrn = 0.0;

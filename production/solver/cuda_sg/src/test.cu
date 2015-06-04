@@ -25,25 +25,19 @@ int main(int argc, char* argv[]) {
 
 	if (argc > 4) { _GLB_EPS_ = _GLB_EPS_ * atoi(argv[4]); }
 
-	cuda::deviceSpecs();
+	gpu::deviceSpecs();
 
 	JSON json;
 
-	vector<double> A(_GLB_N_, 1.0);
-	A[1] = -13.0;
-	double* _A = (double*)cuda::alloc(A);
+	vector<double> A(_GLB_N_, 2.0); double* _A = (double*)gpu::alloc(A);
 	vector<double> B(_GLB_N_, 1.0);
 	vector<double> C(_GLB_N_, 1.0);
 
-	vector<double> P(_GLB_N_);
-	P[2] = 0.5;
-	double* _P = (double*)cuda::alloc(P);
-
+	vector<double> P(_GLB_N_); double* _P = (double*)gpu::alloc(P);
 
 	// Line Descretiztion
-	int TPB_OPTIMAL_1D = 1;
-	double h = .5;
-	long int D = 5;
+	int TPB_OPTIMAL_1D = 128;
+	long int D = 128 * 128;
 
 	int rows = (_GLB_N_ / TPB_OPTIMAL_1D) < 1 ? 1 : (_GLB_N_ / TPB_OPTIMAL_1D) ;
 	int cols = D < 1 ? 1 : D ;
@@ -51,43 +45,52 @@ int main(int argc, char* argv[]) {
 	dim3 GPU_TPB_2D (TPB_OPTIMAL_1D, TPB_OPTIMAL_1D);
 	dim3 GPU_BLOCK_2D(rows , cols);
 
-	vector<double> space(D * _GLB_N_, 0.0);
-	double* _space = (double*) cuda::alloc(space);
-
-	vector<double> func_val(D, 0.0);
-	double* _func_val = (double*) cuda::alloc(func_val);
+	vector<double> space(D * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
+	vector<double> func_val(D, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
 
 	double scalar = 1.0;
 
-	clock_t t_start_dot = clock();
-	std::linalg_dot (A, B, scalar);
-	double t_dot = (clock() - t_start_dot) / (double) CLOCKS_PER_SEC;
-
-	clock_t t_start_sdot = clock();
-	std::linalg_sdot(scalar, A, B);
-	double t_sdot = (clock() - t_start_sdot) / (double) CLOCKS_PER_SEC;
-
-	clock_t t_start_add = clock();
-	std::linalg_add (1.0, A, 1.0, B, C);
-	double t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
+	clock_t t_start_dot, t_start_sdot, t_start_lineSearch;
+	double t_dot, t_sdot, t_add, t_lineSearch
 
 
-	clock_t t_start_grad_cuda = clock();
-
-	int  min_i = 0;
-	cuda::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
-	cuda::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
-	cuda::unalloc(_func_val, func_val );
-
-	for (int i = 1; i < func_val.size(); i++) {
-		if (func_val[i] < func_val[min_i]) {
-			min_i = i;
-		}
+	{
+		t_start_dot = clock();
+		gpu::linalg_dot (A, B, scalar);
+		double t_dot = (clock() - t_start_dot) / (double) CLOCKS_PER_SEC;
 	}
 
-	std::linalg_add (1.0, A, min_i * h, P, A);
+	{
 
-	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
+		clock_t t_start_sdot = clock();
+		gpu::linalg_sdot(scalar, A, B);
+		double t_sdot = (clock() - t_start_sdot) / (double) CLOCKS_PER_SEC;
+	}
+
+	{
+
+		clock_t t_start_add = clock();
+		gpu::linalg_add (1.0, A, 1.0, B, C);
+		double t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
+	}
+
+	{
+		t_start_lineSearch = clock();
+		int  min_i = 0;
+		double h = .5;
+		gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+		gpu::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
+		gpu::unalloc(_func_val, func_val );
+
+		for (int i = 1; i < func_val.size(); i++) {
+			if (func_val[i] < func_val[min_i]) {
+				min_i = i;
+			}
+		}
+
+		std::linalg_add (1.0, A, min_i * h, P, A);
+		t_lineSearch = (clock() - t_start_lineSearch) / (double) CLOCKS_PER_SEC;
+	}
 
 	double max_grad = *max_element(std::begin(C), std::end(C));
 	double min_grad = *min_element(std::begin(C), std::end(C));
@@ -95,11 +98,11 @@ int main(int argc, char* argv[]) {
 
 	cudaDeviceSynchronize();
 
-	cuda::unalloc(_space, space );
-	cuda::unalloc(_space);
-	cuda::unalloc(_func_val);
-	cuda::unalloc(_A);
-	cuda::unalloc(_P);
+	gpu::unalloc(_space, space );
+	gpu::unalloc(_space);
+	gpu::unalloc(_func_val);
+	gpu::unalloc(_A);
+	gpu::unalloc(_P);
 
 	json.append("size", _GLB_N_);
 	json.append("dot_time", t_dot);
@@ -108,9 +111,8 @@ int main(int argc, char* argv[]) {
 	json.append("cuda_grad_time", t_grad_cuda);
 	json.append("min", min_grad);
 	json.append("max", max_grad);
-	json.append("space", space);
-	json.append("func_val", func_val);
-	json.append("min_i", min_i);
+	//json.append("space", space);
+	//json.append("func_val", func_val);
 	json.append("A_min", A);
 	//json.append("C", C);
 
