@@ -82,8 +82,8 @@ int main(int argc, char* argv[]) {
 	double t_lineSearch = (clock() - t_start_lineSearch) / (double) CLOCKS_PER_SEC;
 
 
-	double max_grad = *max_element(std::begin(C), std::end(C));
-	double min_grad = *min_element(std::begin(C), std::end(C));
+	double max_grad = *max_element(std::begin(A), std::end(A));
+	double min_grad = *min_element(std::begin(A), std::end(A));
 
 
 	cudaDeviceSynchronize();
@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
 	json.append("max", max_grad);
 	//json.append("space", space);
 	//json.append("func_val", func_val);
-	json.append("A_min", A);
+	//json.append("A_min", A);
 	//json.append("C", C);
 
 	cout << "\n\n" << json.dump() << "\n\n";
