@@ -3,8 +3,7 @@
  * Math and linear alebra subrutines.
  */
 
-
-namespace std {
+namespace cpu {
   /**
    * Inner Product
    * @param A    Vector

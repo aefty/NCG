@@ -1,3 +1,8 @@
+/**
+ * NON LINEAR CG SOLVER (./cuda_sg/src/ncg.cu)
+ * Main solver file.
+ */
+
 #include <iomanip>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,8 +14,8 @@
 
 #include "config.cu"
 #include "lib/util.cpp"
-#include "lib/math.cu"
 #include "lib/math.cpp"
+#include "lib/lineSearch.cu"
 #include "lib/json.cpp"
 
 using namespace std;
@@ -23,8 +28,12 @@ int main(int argc, char* argv[]) {
 
 	if (argc > 2) { showX = atoi(argv[2]); }
 
-
 	gpu::deviceSpecs();
+
+	/**
+	 * CODE BLOCK 1
+	 * Initilization
+	 */
 
 	JSON json;
 
@@ -46,6 +55,7 @@ int main(int argc, char* argv[]) {
 	double alpha = 1;
 	double h = _GLB_EPS_;
 
+	// ~50% staturated
 	int TPB_2D = 16 ;
 	long int range = 256;
 
@@ -78,7 +88,10 @@ int main(int argc, char* argv[]) {
 			cout << "|" << tol << endl;
 			clock_t t_lineSearch_start = clock();
 
-			// BEGIN LINE SEARCH
+			/**
+			* CODE BLOCK 2
+			* Line Search
+			*/
 			{
 				gpu::alloc(x0, _x0);
 				gpu::alloc(p, _p);
@@ -99,6 +112,11 @@ int main(int argc, char* argv[]) {
 			}
 			// END LINE SEARCH
 
+
+			/**
+			* CODE BLOCK 3
+			* Direction
+			*/
 			cpu::linalg_add (1.0, x0, alpha, p, x1);
 
 			t_lineSearch += (clock() - t_lineSearch_start) / (double) CLOCKS_PER_SEC;
@@ -123,6 +141,7 @@ int main(int argc, char* argv[]) {
 	//END NCG
 
 
+	// Get timining and metrics
 	double t_run = (clock() - t_start) / (double) CLOCKS_PER_SEC;
 	double rate = (double)_GLB_N_ / t_run;
 	t_lineSearch = t_lineSearch;
@@ -133,6 +152,7 @@ int main(int argc, char* argv[]) {
 	double x_max = *max_element(std::begin(x1), std::end(x1));
 	double x_min = *min_element(std::begin(x1), std::end(x1));
 
+	// Output
 	json.append("size", _GLB_N_);
 	json.append("itr", itr);
 	json.append("conv", tol);

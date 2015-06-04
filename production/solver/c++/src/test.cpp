@@ -3,7 +3,6 @@
  * Operation performance test file.
  */
 
-
 #include <iomanip>
 #include <stdio.h>
 #include <stdlib.h>

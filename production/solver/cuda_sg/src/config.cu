@@ -1,5 +1,5 @@
 /**
- * SOLVER CONFIGUATION (./cuda/src/config.cpp)
+ * SOLVER CONFIGUATION (./cuda_sg/src/config.cpp)
  * Global configuration of the solver including the function and intial value are specfied.
  */
 

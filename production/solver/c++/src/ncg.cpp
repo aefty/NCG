@@ -63,15 +63,15 @@ int main(int argc, char* argv[]) {
 
 	// BEGIN NCG
 	{
-		std::cout << "|"; std::cout.flush();
-		std::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
-		std::linalg_sdot( -1.0, p, p);
 
-		std::linalg_dot(p, p, gg0);
+		cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
+		cpu::linalg_sdot( -1.0, p, p);
+
+		cpu::linalg_dot(p, p, gg0);
 		x1 = x0;
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
-			std::cout << "|"; std::cout.flush();
+			cout << "|" << tol << endl;
 
 			j = 0;
 			alpha_last = 1.0;
@@ -91,29 +91,29 @@ int main(int argc, char* argv[]) {
 					//%% 2nd-term Taylor expansion (average -/+ expansion for better accuracy)
 
 					//%g00 = Grad(x1-EPS*p);
-					std::linalg_add(1.0, x1, -1.0 * _GLB_EPS_, p, vtemp);
-					std::linalg_grad(_GLB_N_, _GLB_EPS_, vtemp, g00);
+					cpu::linalg_add(1.0, x1, -1.0 * _GLB_EPS_, p, vtemp);
+					cpu::linalg_grad(_GLB_N_, _GLB_EPS_, vtemp, g00);
 
 					//%g01 = Grad(x1+EPS*p);
-					std::linalg_add(1.0, x1, _GLB_EPS_, p, vtemp);
-					std::linalg_grad(_GLB_N_, _GLB_EPS_, vtemp, g01);
+					cpu::linalg_add(1.0, x1, _GLB_EPS_, p, vtemp);
+					cpu::linalg_grad(_GLB_N_, _GLB_EPS_, vtemp, g01);
 
 					// %Hp = (g01-g00)/(2*EPS);
-					std::linalg_add(1.0, g01, -1.0, g00, vtemp);
-					std::linalg_sdot(1.0 / (2.0 * _GLB_EPS_), vtemp,  Hp);
+					cpu::linalg_add(1.0, g01, -1.0, g00, vtemp);
+					cpu::linalg_sdot(1.0 / (2.0 * _GLB_EPS_), vtemp,  Hp);
 
 					alpha_last = alpha;
 
 					//%alpha = -g00'*p/(p'*Hp);
-					std::linalg_dot(g00, p, stemp);
-					std::linalg_dot(p, Hp, alpha);
+					cpu::linalg_dot(g00, p, stemp);
+					cpu::linalg_dot(p, Hp, alpha);
 					alpha = -1.0 * stemp / alpha;
 
 					cout << alpha;
 					return 0;
 
 					// %x1=x1+alpha*p;
-					std::linalg_add(1.0, x1, alpha, p, x1);
+					cpu::linalg_add(1.0, x1, alpha, p, x1);
 
 					j++;
 				}
@@ -126,16 +126,16 @@ int main(int argc, char* argv[]) {
 			 * Direction
 			 */
 
-			std::linalg_grad(_GLB_N_, _GLB_EPS_, x1, g1);
-			std::linalg_dot(g1, g1, gg1);
+			cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x1, g1);
+			cpu::linalg_dot(g1, g1, gg1);
 			B = gg1 / gg0;
 
 			//% p = -g1 + B * p;
-			std::linalg_add(-1.0, g1, B, p, p);
+			cpu::linalg_add(-1.0, g1, B, p, p);
 
 			//% tol = norm(x1 - x0)
-			std::linalg_add(1.0, x1, -1.0, x0, vtemp);
-			std::linalg_dot(vtemp, vtemp, tol);
+			cpu::linalg_add(1.0, x1, -1.0, x0, vtemp);
+			cpu::linalg_dot(vtemp, vtemp, tol);
 			tol = pow(tol , 0.5) / _GLB_N_;
 			gg0 = gg1;
 			x0 = x1;

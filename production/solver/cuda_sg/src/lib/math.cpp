@@ -1,3 +1,9 @@
+/**
+ * LINEAR ALGEBRA (./cuda_sg/scrc/lib/math.cpp)
+ * Math and linear alebra subrutines.
+ * Refer to (./c++/lib/math.cpp) for details.
+ */
+
 namespace cpu {
 
    inline void linalg_dot(vector<double>& A , vector<double>& B, double& rtrn) {

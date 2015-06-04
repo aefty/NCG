@@ -1,3 +1,8 @@
+/**
+ * JSON OUTPUT (./c++/lib/json.cpp)
+ * JSON ouput class with a bunch of overloading.
+ */
+
 #include <iostream>
 #include <string>
 #include <vector>
