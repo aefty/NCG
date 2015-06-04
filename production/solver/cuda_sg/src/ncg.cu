@@ -102,6 +102,8 @@ int main(int argc, char* argv[]) {
 
 
 
+
+
 			gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
 
 
@@ -119,6 +121,9 @@ int main(int argc, char* argv[]) {
 
 			alpha = min_i * h;
 			cpu::linalg_add (1.0, x0, alpha, p, x1);
+
+			goto end;
+
 			// END LINE SEARCH
 
 			t_lineSearch += (clock() - t_lineSearch_start) / (double) CLOCKS_PER_SEC;
@@ -141,7 +146,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	//END NCG
-
+end:
 
 	double t_run = (clock() - t_start) / (double) CLOCKS_PER_SEC;
 	double rate = (double)_GLB_N_ / t_run;
