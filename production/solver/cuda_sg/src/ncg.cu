@@ -102,7 +102,7 @@ int main(int argc, char* argv[]) {
 
 
 
-			h  = 0.1;
+			h  = h * 2;
 		redo:
 			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
 			gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
@@ -122,7 +122,7 @@ int main(int argc, char* argv[]) {
 
 			cout << alpha << endl;
 
-			if (itr > 0) { goto end; }
+			//if (itr > 0) { goto end; }
 
 			if (alpha == 0 && h > _GLB_EPS_) {
 				h = h / 2.0;
@@ -155,7 +155,7 @@ int main(int argc, char* argv[]) {
 	}
 	//END NCG
 
-end:
+	//end:
 	double t_run = (clock() - t_start) / (double) CLOCKS_PER_SEC;
 	double rate = (double)_GLB_N_ / t_run;
 	t_lineSearch = t_lineSearch;
