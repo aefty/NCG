@@ -33,22 +33,14 @@ namespace cuda {
 
    */
 
-   inline void lineSearch_disc(long int N , double h, double rad, vector<double>& x, vector<double>& p, double* _space) {
-      int TPB_OPTIMAL_2D = 16;
-
-      int bockx = N / TPB_OPTIMAL_2D ? N / TPB_OPTIMAL_2D : 1;
-      int bocky = (rad / h) ? (rad / h) : 1;
-
-      dim3 GPU_TPB_2D(TPB_OPTIMAL_2D, TPB_OPTIMAL_2D);
-      dim3 GPU_BLOCK_2D(bockx , bocky);
-
-      cout << bockx << endl;
-      cout << bocky << endl;
+   inline void lineSearch_disc(long int N ,  double h, int disc, vector<double>& x, vector<double>& p, double* _space) {
+      int TPB_OPTIMAL_1D = 128;
+      int blocks = N * disc / TPB_OPTIMAL_1D;
 
       double* _x = (double*)cuda::alloc(x);
       double* _p = (double*)cuda::alloc(p);
 
-      discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, h , _space);
+      discLine_kernel <<< blocks , 128>>> (N, _x , _p, h , _space);
    };
 
    /*

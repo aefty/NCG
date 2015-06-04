@@ -35,12 +35,12 @@ int main(int argc, char* argv[]) {
 
 	vector<double> GRAD(_GLB_N_, 0.0);
 
-	double h = 0.1;
-	double rad = 10.0;
 
-	vector<double> space(rad / h, 1.0);
+	double h = 0.001;
+	double disc = 4;
+
+	vector<double> space(disc, 0.0);
 	double* _space = (double*) cuda::alloc(space);
-
 
 	double scalar = 1.0;
 
@@ -58,8 +58,19 @@ int main(int argc, char* argv[]) {
 
 	clock_t t_start_grad_cuda = clock();
 
+	{
 
-	cuda::lineSearch_disc(_GLB_N_ , h, rad,  A, A, _space);
+		int TPB_OPTIMAL_1D = 128;
+		int blocks = N * disc / TPB_OPTIMAL_1D;
+
+		double* _x = (double*)cuda::alloc(A);
+		double* _p = (double*)cuda::alloc(A);
+
+		discLine_kernel <<< blocks , TPB_OPTIMAL_1D>>> (N, _x , _p, h , _space);
+	}
+
+
+	cuda::lineSearch_disc(_GLB_N_ , h, disc,  A, A, _space);
 
 
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
