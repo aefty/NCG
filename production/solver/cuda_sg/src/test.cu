@@ -29,7 +29,8 @@ int main(int argc, char* argv[]) {
 
 	JSON json;
 
-	vector<double> A(_GLB_N_, -2.0);
+	vector<double> A(_GLB_N_, 1.0);
+	A[1] = -13.0;
 	double* _A = (double*)cuda::alloc(A);
 	vector<double> B(_GLB_N_, 1.0);
 	vector<double> C(_GLB_N_, 1.0);
