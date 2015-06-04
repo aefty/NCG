@@ -100,8 +100,8 @@ int main(int argc, char* argv[]) {
 			gpu::alloc(x0, _x0);
 			gpu::alloc(p, _p);
 
+			h  = 0.1;
 		redo:
-			h  = h * 2;
 			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
 			gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
 
