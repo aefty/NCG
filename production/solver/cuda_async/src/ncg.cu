@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
 	if (argc > 1) { _GLB_N_ = (long int) _GLB_N_ * atof(argv[1]); }
 
 	if (argc > 2) {
-		cout << "asdf : " atof(argv[2] << endl;
+		cout << "asdf : " atof(argv[2]) << endl;
 	}
 
 	if (argc > 3) { _GLB_ITR_LINE_ = (long int)_GLB_ITR_LINE_ * atof(argv[3]); }
