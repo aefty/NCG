@@ -14,27 +14,6 @@
 
 using namespace std;
 
-__global__ void discLine_kernel( long int N , long int D ,  double* x, double* p, double h, double* space) {
-	int i = blockDim.x * blockIdx.x + threadIdx.x;
-	int j = blockDim.y * blockIdx.y + threadIdx.y;
-
-	//printf("%d , %d\n", i, j);
-
-	if (i < N && j < D) {
-		space[j * N + i] = x[i] + p[i] * h * j;
-	}
-};
-
-__global__ void lineValue_kernel( long int N , long int D , double* space, double* alpha_set) {
-	int i = blockDim.x * blockIdx.x + threadIdx.x;
-
-	if (i < D ) {
-		double val = 0.0;
-		FUNCTION(N, &space[i * N], &val);
-		alpha_set[i] = val; //(val < alpha_set[i]) ? val : alpha_set[i];
-	}
-};
-
 
 int main(int argc, char* argv[]) {
 
@@ -74,8 +53,11 @@ int main(int argc, char* argv[]) {
 	vector<double> space(D * _GLB_N_, 0.0);
 	double* _space = (double*) cuda::alloc(space);
 
-	vector<double> alpha_set(D, 0.0);
-	double* _alpha_set = (double*) cuda::alloc(alpha_set);
+	vector<double> func_val(D, 0.0);
+	double* _func_val = (double*) cuda::alloc(func_val);
+
+
+
 
 	double scalar = 1.0;
 
@@ -94,8 +76,17 @@ int main(int argc, char* argv[]) {
 	double t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
 
 	clock_t t_start_grad_cuda = clock();
-	discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
-	lineValue_kernel <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _alpha_set);
+	{
+		cuda::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+		cuda::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
+		cuda::unalloc(_func_val, func_val );
+
+
+		int min_i = std::istance(func_val, min_element(func_val, func_val + _GLB_N_));
+		cout << min_i;
+
+	}
+
 
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
 
@@ -111,8 +102,8 @@ int main(int argc, char* argv[]) {
 	cuda::unalloc(_space, space );
 	cuda::unalloc(_space);
 
-	cuda::unalloc(_alpha_set, alpha_set );
-	cuda::unalloc(_alpha_set);
+
+	cuda::unalloc(_func_val);
 
 	json.append("size", _GLB_N_);
 	json.append("dot_time", t_dot);

@@ -1,72 +1,35 @@
 namespace cuda {
 
-   __device__ static float atomicMax(float* address, float val) {
-      int* address_as_i = (int*) address;
-      int old = *address_as_i, assumed;
+   __device__ float atomicMax(float* address, float val) {
+      int* address_as_int = (int*)address;
+      int old = *address_as_int, assumed;
 
-      do {
+      while (val > __int_as_float(old)) {
          assumed = old;
-         old = ::atomicCAS(address_as_i, assumed,
-                           __float_as_int(::fmaxf(val, __int_as_float(assumed))));
-      } while (assumed != old);
+         old = atomicCAS(address_as_int, assumed,
+                         __float_as_int(val));
+      }
 
       return __int_as_float(old);
    }
 
-
-   __global__ void discLine_kernel( long int N ,  double* x, double* p, double h, double* space) {
+   __global__ void lineDiscretize( long int N , long int D ,  double* x, double* p, double h, double* space) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
       int j = blockDim.y * blockIdx.y + threadIdx.y;
 
-      printf("%d , %d\n", i, j);
-
-      //space[j * N + i] = x[i] + p[i] * h * j;
+      if (i < N && j < D) {
+         space[j * N + i] = x[i] + p[i] * h * j;
+      }
    };
 
-   /*å
-      __global__ void lineValue( long int N , double* space, double* alpha_set) {
-         int i = blockDim.x * blockIdx.x + threadIdx.x;
+   __global__ void lineValue( long int N , long int D , double* space, double* func_val) {
+      int i = blockDim.x * blockIdx.x + threadIdx.x;
+
+      if (i < D ) {
          double val = 0.0;
          FUNCTION(N, &space[i * N], &val);
-         alpha_set[i] = (val < alpha_set[i]) ? val : alpha_set[i];
+         func_val[i] = val;
       };
-
-   */
-
-   inline void lineSearch_disc(long int N ,  double h, int disc, vector<double>& x, vector<double>& p, double* _space) {
-      int TPB_OPTIMAL_1D = 128;
-      int blocks = N * disc / TPB_OPTIMAL_1D;
-
-      double* _x = (double*)cuda::alloc(x);
-      double* _p = (double*)cuda::alloc(p);
-
-      discLine_kernel <<< blocks , 128>>> (N, _x , _p, h , _space);
    };
-
-   /*
-      inline void lineSearch_solve(long int N , double EPS, double* _space, vector<double>& x, vector<double>& p, double& alpha_last , double& alpha) {
-         int TPB_OPTIMAL_1D = 256;
-         int TPB_OPTIMAL_2D = 16;
-
-         dim3 GPU_TPB_1D (TPB_OPTIMAL_1D);
-         dim3 GPU_BLOCK_1D(_GLB_N_ / GPU_TPB_1D.x);
-
-
-
-         vector<double> alpha_set(GPU_TPB_1D.x * GPU_BLOCK_1D.x);
-         double* _alpha_set = (double*)cuda::alloc(alpha_set);
-
-
-
-         discLine <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, EPS , _space);
-         lineValue  <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (N,  _space, _alpha_set);
-
-         cuda::unalloc(_alpha_set, alpha_set);
-         cuda::unalloc(_x);
-         cuda::unalloc(_p);
-
-         alpha = *min_element(std::begin(alpha_set), std::end(alpha_set));
-      };
-      */
 };
 
