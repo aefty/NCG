@@ -104,8 +104,8 @@ int main(int argc, char* argv[]) {
 
 			h  = _GLB_EPS_;
 		redo:
-			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-			gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
+			gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+			gpu::lineValue <<< GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
 
 			CUDA_ERR_CHECK(cudaDeviceSynchronize());
 			gpu::unalloc(_func_val, func_val );
@@ -118,7 +118,7 @@ int main(int argc, char* argv[]) {
 
 			alpha = min_i * h;
 
-			cout << alpha << endl;
+			//cout << alpha << endl;
 
 			//if (itr > 0) { goto end; }
 
