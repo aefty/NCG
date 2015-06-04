@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
   float ms; // elapsed time in milliseconds
 
   // create events and streams
-  cudaEvent_t startEvent, stopEvent, dummyEvent;
+  cudaEvent_t startEvent, stopEvent;
   cudaStream_t stream[nStreams];
   checkCuda( cudaEventCreate(&startEvent) );
   checkCuda( cudaEventCreate(&stopEvent) );
