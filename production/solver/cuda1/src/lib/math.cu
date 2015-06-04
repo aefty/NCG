@@ -9,17 +9,17 @@ namespace cuda {
 
    __global__ void bulkGrad( long int N ,  double EPS, double* space, double* grad) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
-      extern __shared__ double cache[];
+      double val = 0.0;
 
       if (i < N) {
          space[i * N + i] -= EPS;
-         FUNCTION(N, &space[i * N], &cache[threadIdx.x]);
+         FUNCTION(N, &space[i * N], &val);
 
          space[i * N + i] += 2.0 * EPS;
-         cache[threadIdx.x] = cache[threadIdx.x] * -1.0;
+         val = val * -1.0;
 
-         FUNCTION(N, &space[i * N], &cache[threadIdx.x]);
-         grad[i] = cache[threadIdx.x] / (2.0 * EPS);
+         FUNCTION(N, &space[i * N], &val);
+         grad[i] = val / (2.0 * EPS);
       }
    };
 
@@ -54,8 +54,8 @@ namespace cuda {
       dim3 GPU_TPB_2D(TPB_OPTIMAL_2D, TPB_OPTIMAL_2D);
       dim3 GPU_BLOCK_2D(_GLB_N_ / GPU_TPB_2D.x , _GLB_N_ / GPU_TPB_2D.y);
 
-      initSpace <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , EPS , _space);
-      bulkGrad  <<< GPU_BLOCK_1D , GPU_TPB_1D , (int)6000 / GPU_BLOCK_1D.x >>> (N, EPS, _space, _grad);
+      initSpace <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , EPS , _space);
+      bulkGrad  <<< GPU_BLOCK_1D , GPU_TPB_1Då >>> (N, EPS, _space, _grad);
 
       cuda::unalloc(_grad, grad);
       cuda::unalloc(_x);
@@ -76,7 +76,7 @@ namespace cuda {
       dim3 GPU_BLOCK_2D(_GLB_N_ / GPU_TPB_2D.x , _GLB_N_ / GPU_TPB_2D.y);
 
       // initSpace <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , EPS , _space);
-      bulkGrad_test  <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (N, EPS, _space, _grad);
+      bulkGrad_test  <<< GPU_BLOCK_1D , GPU_TPB_1D>>> (N, EPS, _space, _grad);
 
       cuda::unalloc(_grad, grad);
       cuda::unalloc(_x);
