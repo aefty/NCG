@@ -55,7 +55,7 @@ int main(int argc, char** argv) {
 
   if (argc > 1) {  M = atoi(argv[1]); }
 
-  if (argc > 1) {  F = atoi(argv[1]); }
+  if (argc > 2) {  F = atoi(argv[2]); }
 
   const int n = 1024 * M;
   const int blockSize = F, nStreams = n;
