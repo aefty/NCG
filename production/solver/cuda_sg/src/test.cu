@@ -82,7 +82,14 @@ int main(int argc, char* argv[]) {
 		cuda::unalloc(_func_val, func_val );
 
 
-		int min_i = std::distance(func_val, std::min_element(func_val, std::end(func_val)));
+		int  min_i = 0;
+
+		for (int i = 1; i < func_val.size; i++) {
+			if (func_val[i] < func_val[min_i]) {
+				min_i = i;
+			}
+		}
+
 		cout << min_i;
 
 	}

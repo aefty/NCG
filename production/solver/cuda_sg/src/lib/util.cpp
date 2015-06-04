@@ -71,5 +71,5 @@ namespace cuda {
 			std::cout << "  Max grid dimensions:  [ " << props.maxGridSize[0] << ", " << props.maxGridSize[1]  << ", " << props.maxGridSize[2] << " ]" << endl;
 			std::cout << endl;
 		}
-	}
+	};
 };
