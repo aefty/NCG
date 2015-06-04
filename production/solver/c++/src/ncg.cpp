@@ -85,8 +85,6 @@ int main(int argc, char* argv[]) {
 			 */
 			{
 				while (j < _GLB_ITR_LINE_ && abs(alpha - alpha_last) >= _GLB_EPS_) {
-					std::cout << "."; std::cout.flush();
-
 					//%% Note : Calculate Hessian x p (Hp)
 					//%% 2nd-term Taylor expansion (average -/+ expansion for better accuracy)
 
