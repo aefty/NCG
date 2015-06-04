@@ -13,6 +13,7 @@
 // limitations under the License.
 
 #include <stdio.h>
+#include <iostream>
 
 // Convenience function for checking CUDA runtime API results
 // can be wrapped around any runtime API call. No-op in release builds.
@@ -70,7 +71,7 @@ int main(int argc, char** argv) {
   cudaDeviceProp prop;
   checkCuda( cudaGetDeviceProperties(&prop, devId));
   printf("Device : %s\n", prop.name);
-  printf("CUDA version : v%f\n", CUDART_VERSION);
+  printf("CUDA version : v%s\n", CUDART_VERSION);
   checkCuda( cudaSetDevice(devId) );
 
   // allocate pinned host memory and device memory
