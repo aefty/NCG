@@ -50,19 +50,19 @@ double maxError(double* a, int n) {
 }
 
 int main(int argc, char** argv) {
-  int M = 1; int F = 1; int S = 4;
+  int M = 1; int F = 1;
 
   if (argc > 1) {  M = atoi(argv[1]); }
 
   if (argc > 2) {  F = atoi(argv[2]); }
 
-  if (argc > 2) {  S = atoi(argv[2]); }
 
-  const int n = 1024 * M;
-  const int blockSize = F, nStreams = S;
+
+  const int blockSize = 256 * M, nStreams = 4 * F;
+  const int n = 4 * 1024 * blockSize * nStreams;
   const int streamSize = n / nStreams;
-  const int streamBytes = streamSize * sizeof(double);
-  const int bytes = n * sizeof(double);
+  const int streamBytes = streamSize * sizeof(float);
+  const int bytes = n * sizeof(float);
 
   int devId = 0;
 
@@ -71,8 +71,12 @@ int main(int argc, char** argv) {
   cudaDeviceProp prop;
   checkCuda( cudaGetDeviceProperties(&prop, devId));
   printf("Device : %s\n", prop.name);
-  printf("CUDA version : v%d\n", CUDART_VERSION);
-  printf("Number of Blocks : v%d\n",   streamSize / blockSize);
+  printf("CUDA version : %d\n", CUDART_VERSION);
+  printf("N : %d\n",   n);
+  printf("Streams : %d\n",   nStreams);
+
+  printf("Blocks : %d\n",   streamSize / blockSize);
+  printf("Threads : %d\n",   blockSize);
 
 
   checkCuda( cudaSetDevice(devId) );
