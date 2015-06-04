@@ -28,10 +28,10 @@ namespace cuda {
       //grad[i] = 0.0;
 
       if (i < N) {
-         space[i * N + i] -= EPS;
+         // space[i * N + i] -= EPS;
          FUNCTION(N, &space[i * N], &grad[i]);
 
-         space[i * N + i] += 2.0 * EPS;
+         // space[i * N + i] += 2.0 * EPS;
          // grad[i] = grad[i] * -1.0;
 
          FUNCTION(N, &space[i * N], &grad[i]);
