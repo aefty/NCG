@@ -104,10 +104,8 @@ int main(int argc, char* argv[]) {
 
 			h  = _GLB_EPS_;
 		redo:
-			gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-			gpu::lineValue <<< GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
-
-
+			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+			gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
 
 			CUDA_ERR_CHECK(cudaDeviceSynchronize());
 			gpu::unalloc(_func_val, func_val );
@@ -174,13 +172,13 @@ int main(int argc, char* argv[]) {
 	json.append("rate", rate);
 	json.append("x_max", x_max);
 	json.append("x_min", x_min);
-	json.append("func_val", func_val);
-	json.append("p", p);
-	json.append("x0", x0);
-	json.append("x1", x1);
-	json.append("min_i", min_i);
-	json.append("alpha", alpha);
-	json.append("space", space);
+	//json.append("func_val", func_val);
+	//json.append("p", p);
+	//json.append("x0", x0);
+	//json.append("x1", x1);
+	//json.append("min_i", min_i);
+	//json.append("alpha", alpha);
+	//json.append("space", space);
 
 	cout << "\n\n";
 	cout << json.dump();
