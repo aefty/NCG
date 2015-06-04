@@ -102,8 +102,8 @@ int main(int argc, char* argv[]) {
 
 			h  = 0.1;
 		redo:
-			gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-			gpu::lineValue <<< GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
+			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+			gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
 
 			CUDA_ERR_CHECK(cudaDeviceSynchronize());
 			gpu::unalloc(_func_val, func_val );
@@ -126,7 +126,7 @@ int main(int argc, char* argv[]) {
 
 			cpu::linalg_add (1.0, x0, alpha, p, x1);
 
-
+			goto end;
 			// END LINE SEARCH
 
 			t_lineSearch += (clock() - t_lineSearch_start) / (double) CLOCKS_PER_SEC;
@@ -150,6 +150,7 @@ int main(int argc, char* argv[]) {
 	}
 	//END NCG
 
+end:
 	double t_run = (clock() - t_start) / (double) CLOCKS_PER_SEC;
 	double rate = (double)_GLB_N_ / t_run;
 	t_lineSearch = t_lineSearch;
