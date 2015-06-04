@@ -42,7 +42,7 @@ namespace cuda {
       double* _x = (double*)cuda::alloc(x);
       double* _p = (double*)cuda::alloc(p);
 
-      discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, h , _space);
+      discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, h , _space);
    };
 
    /*
