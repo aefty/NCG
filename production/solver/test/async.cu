@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
 
   if (argc > 1) {  M = atoi(argv[1]); }
 
-  if (argc > 1) {  F = atoi(argv[1]); }
+  if (argc > 2) {  F = atoi(argv[2]); }
 
   const int n = 1024 * M;
   const int blockSize = F, nStreams = n;
@@ -69,6 +69,7 @@ int main(int argc, char** argv) {
   cudaDeviceProp prop;
   checkCuda( cudaGetDeviceProperties(&prop, devId));
   printf("Device : %s\n", prop.name);
+  std::cout << "CUDA version:   v" << CUDART_VERSION << endl;
   checkCuda( cudaSetDevice(devId) );
 
   // allocate pinned host memory and device memory

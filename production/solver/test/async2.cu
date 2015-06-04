@@ -70,6 +70,7 @@ int main(int argc, char** argv) {
   cudaDeviceProp prop;
   checkCuda( cudaGetDeviceProperties(&prop, devId));
   printf("Device : %s\n", prop.name);
+  std::cout << "CUDA version:   v" << CUDART_VERSION << endl;
   checkCuda( cudaSetDevice(devId) );
 
   // allocate pinned host memory and device memory
