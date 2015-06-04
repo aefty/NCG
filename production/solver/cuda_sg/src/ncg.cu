@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
 			//% tol = norm(x1 - x0)
 			cpu::linalg_add(1.0, x1, -1.0, x0, vtemp);
 			cpu::linalg_dot(vtemp, vtemp, tol);
-			tol = pow(tol , 0.5);
+			tol = pow(tol , 0.5) / _GLB_N_;
 			gg0 = gg1;
 
 			x0 = x1;
