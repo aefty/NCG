@@ -42,7 +42,8 @@ int main(int argc, char* argv[]) {
 	vector<double> Hp(_GLB_N_);
 	vector<double> g1(_GLB_N_);
 
-	//double* _space = (double*) cuda::alloc((long int)_GLB_N_ * _GLB_N_);
+	int lineDisc = (long int) * 1024;
+	double* _space = (double*) cuda::alloc(lineDisc);
 
 	double gg0 = 0.0;
 	double gg1 = 0.0;
@@ -83,8 +84,11 @@ int main(int argc, char* argv[]) {
 
 			clock_t t_lineSearch_start = clock();
 
-			// BEING LINE SEARCH
+			cuda::line_search(N , x1, p,alpha);
+			std::linalg_add(1.0, x1, alpha, p, x1);
 
+			// BEING LINE SEARCH
+			/*
 			{
 				while (j < _GLB_ITR_LINE_ && abs(alpha - alpha_last) >= _GLB_EPS_) {
 					std::cout << "."; std::cout.flush();
@@ -117,6 +121,8 @@ int main(int argc, char* argv[]) {
 					j++;
 				}
 			}
+			*/
+
 			// END LINE SEARCH
 			t_lineSearch += (clock() - t_lineSearch_start) / (double) CLOCKS_PER_SEC;
 
@@ -143,7 +149,7 @@ int main(int argc, char* argv[]) {
 	double rate = (double)_GLB_N_ / t_run;
 	t_lineSearch = t_lineSearch;
 
-	//cuda::unalloc(_space);
+	cuda::unalloc(_space);
 
 	double x_max = *max_element(std::begin(x1), std::end(x1));
 	double x_min = *min_element(std::begin(x1), std::end(x1));

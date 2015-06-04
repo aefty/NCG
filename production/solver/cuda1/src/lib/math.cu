@@ -23,23 +23,6 @@ namespace cuda {
       }
    };
 
-   __global__ void bulkGrad_test( long int N ,  double EPS, double* space, double* grad) {
-      int i = blockDim.x * blockIdx.x + threadIdx.x;
-      //grad[i] = 0.0;
-
-
-      if (i < N) {
-         // space[i * N + i] -= EPS;
-         //  FUNCTION(N, &space[i * N], &grad[i]);
-
-         // space[i * N + i] += 2.0 * EPS;
-         // grad[i] = grad[i] * -1.0;
-
-         FUNCTION(N, &space[i * N], &grad[i]);
-         // grad[i] = grad[i] / (2.0 * EPS);
-      }
-   };
-
    inline void linalg_grad( long int N ,  double EPS, vector<double>& x,  vector<double>& grad, double* _space) {
 
       int TPB_OPTIMAL_1D = 256;
@@ -54,11 +37,23 @@ namespace cuda {
       dim3 GPU_TPB_2D(TPB_OPTIMAL_2D, TPB_OPTIMAL_2D);
       dim3 GPU_BLOCK_2D(_GLB_N_ / GPU_TPB_2D.x , _GLB_N_ / GPU_TPB_2D.y);
 
-      initSpace <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , EPS , _space);
-      bulkGrad  <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (N, EPS, _space, _grad);
+      initSpace <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , EPS , _space);
+      bulkGrad  <<< GPU_BLOCK_1D , GPU_TPB_1D>>> (N, EPS, _space, _grad);
 
       cuda::unalloc(_grad, grad);
       cuda::unalloc(_x);
+   };
+
+
+   // FOR TESTING
+
+
+   __global__ void bulkGrad_test( long int N ,  double EPS, double* space, double* grad) {
+      int i = blockDim.x * blockIdx.x + threadIdx.x;
+
+      if (i < N) {
+         FUNCTION(N, &space[i * N], &grad[i]);
+      }
    };
 
    inline void linalg_grad_spaceAlloc( long int N ,  double EPS, vector<double>& x,  vector<double>& grad, double* _space) {
@@ -76,7 +71,7 @@ namespace cuda {
       dim3 GPU_BLOCK_2D(_GLB_N_ / GPU_TPB_2D.x , _GLB_N_ / GPU_TPB_2D.y);
 
       // initSpace <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , EPS , _space);
-      bulkGrad_test  <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (N, EPS, _space, _grad);
+      bulkGrad_test  <<< GPU_BLOCK_1D , GPU_TPB_1D>>> (N, EPS, _space, _grad);
 
       cuda::unalloc(_grad, grad);
       cuda::unalloc(_x);
