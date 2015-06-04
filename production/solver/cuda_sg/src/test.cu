@@ -68,8 +68,8 @@ int main(int argc, char* argv[]) {
 
 	clock_t t_start_lineSearch = clock();
 	double h = .5;
-	gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
-	gpu::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
+	gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _A , _P, h , _space);
+	gpu::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, range, _space ,  _func_val);
 	gpu::unalloc(_func_val, func_val );
 
 	for (int i = 1; i < func_val.size(); i++) {
