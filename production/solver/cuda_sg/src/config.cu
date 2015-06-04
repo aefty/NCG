@@ -8,7 +8,6 @@ long int _GLB_ITR_ = 100;     // Max Solver Iterations
 long int _GLB_ITR_LINE_ = 10; // Max Line search iterationsc
 double _GLB_EPS_ = 1e-6;      // Value of epsilon, Note this is equal to the tolerence (both residual and linesearch)
 
-
 using namespace std;
 
 __host__ __device__ void FUNCTION(long int N, double* x , double* rtrn ) {

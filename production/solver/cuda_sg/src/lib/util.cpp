@@ -58,6 +58,8 @@ namespace gpu {
 	inline void deviceSpecs() {
 		const int kb = 1024;
 		const int mb = kb * kb;
+
+		std::cout << "NCG - Started " << endl;
 		std::cout << "CUDA version:   v" << CUDART_VERSION << endl;
 
 		int devCount;
