@@ -72,20 +72,20 @@ int main(int argc, char* argv[]) {
 
 
 	clock_t t_start_grad_cuda = clock();
-	{
-		int  min_i = 0;
-		cuda::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
-		cuda::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
-		cuda::unalloc(_func_val, func_val );
 
-		for (int i = 1; i < func_val.size(); i++) {
-			if (func_val[i] < func_val[min_i]) {
-				min_i = i;
-			}
+	int  min_i = 0;
+	cuda::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+	cuda::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
+	cuda::unalloc(_func_val, func_val );
+
+	for (int i = 1; i < func_val.size(); i++) {
+		if (func_val[i] < func_val[min_i]) {
+			min_i = i;
 		}
-
-		cuda::unalloc((double*) (_space + sizeof(double) * (min_i * _GLB_N_)), A );
 	}
+
+	cuda::unalloc((double*) (_space + sizeof(double) * (min_i * _GLB_N_)), A );
+
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
 
 	double max_grad = *max_element(std::begin(C), std::end(C));
