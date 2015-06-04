@@ -77,30 +77,18 @@ int main(int argc, char** argv) {
   cudaStream_t stream[nStreams];
   checkCuda( cudaEventCreate(&startEvent) );
   checkCuda( cudaEventCreate(&stopEvent) );
-  checkCuda( cudaEventCreate(&dummyEvent) );
 
-  for (int i = 0; i < nStreams; ++i) {
-    checkCuda( cudaStreamCreate(&stream[i]) );
-  }
-
-  // baseline case - sequential transfer and execute
-  memset(a, 0, bytes);
-  checkCuda( cudaEventRecord(startEvent, 0) );
-  checkCuda( cudaMemcpy(d_a, a, bytes, cudaMemcpyHostToDevice) );
-  kernel <<< n / blockSize, blockSize >>> (d_a, 0);
-  checkCuda( cudaMemcpy(a, d_a, bytes, cudaMemcpyDeviceToHost) );
-  checkCuda( cudaEventRecord(stopEvent, 0) );
-  checkCuda( cudaEventSynchronize(stopEvent) );
-  checkCuda( cudaEventElapsedTime(&ms, startEvent, stopEvent) );
-  printf("Time for sequential transfer and execute (ms): %f\n", ms);
-  printf("  max error: %e\n", maxError(a, n));
 
   // asynchronous version 1: loop over {copy, kernel, copy}
   memset(a, 0, bytes);
   checkCuda( cudaEventRecord(startEvent, 0) );
 
   for (int i = 0; i < nStreams; ++i) {
-    int offset = i * streamSize;
+
+    checkCuda( cudaStreamCreate(&stream[i]) );
+
+    int offset = 0;//i * streamSize;
+
     checkCuda( cudaMemcpyAsync(&d_a[offset], &a[offset],
                                streamBytes, cudaMemcpyHostToDevice,
                                stream[i]) );
@@ -116,40 +104,12 @@ int main(int argc, char** argv) {
   printf("Time for asynchronous V1 transfer and execute (ms): %f\n", ms);
   printf("  max error: %e\n", maxError(a, n));
 
-  // asynchronous version 2:
-  // loop over copy, loop over kernel, loop over copy
-  memset(a, 0, bytes);
-  checkCuda( cudaEventRecord(startEvent, 0) );
 
-  for (int i = 0; i < nStreams; ++i) {
-    int offset = i * streamSize;
-    checkCuda( cudaMemcpyAsync(&d_a[offset], &a[offset],
-                               streamBytes, cudaMemcpyHostToDevice,
-                               stream[i]) );
-  }
-
-  for (int i = 0; i < nStreams; ++i) {
-    int offset = i * streamSize;
-    kernel <<< streamSize / blockSize, blockSize, 0, stream[i] >>> (d_a, offset);
-  }
-
-  for (int i = 0; i < nStreams; ++i) {
-    int offset = i * streamSize;
-    checkCuda( cudaMemcpyAsync(&a[offset], &d_a[offset],
-                               streamBytes, cudaMemcpyDeviceToHost,
-                               stream[i]) );
-  }
-
-  checkCuda( cudaEventRecord(stopEvent, 0) );
-  checkCuda( cudaEventSynchronize(stopEvent) );
-  checkCuda( cudaEventElapsedTime(&ms, startEvent, stopEvent) );
-  printf("Time for asynchronous V2 transfer and execute (ms): %f\n", ms);
-  printf("  max error: %e\n", maxError(a, n));
 
   // cleanup
   checkCuda( cudaEventDestroy(startEvent) );
   checkCuda( cudaEventDestroy(stopEvent) );
-  checkCuda( cudaEventDestroy(dummyEvent) );
+
 
   for (int i = 0; i < nStreams; ++i) {
     checkCuda( cudaStreamDestroy(stream[i]) );
