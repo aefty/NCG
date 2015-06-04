@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
 
 	clock_t t_start_lineSearch = clock();
 	double h = .5;
-	gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+	gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
 	gpu::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
 	gpu::unalloc(_func_val, func_val );
 
@@ -98,7 +98,7 @@ int main(int argc, char* argv[]) {
 	json.append("dot_time", t_dot);
 	json.append("sdot_time", t_sdot);
 	json.append("add_time", t_add);
-	json.append("cuda_grad_time", t_grad_cuda);
+	json.append("lineSearch_time", t_lineSearch);
 	json.append("min", min_grad);
 	json.append("max", max_grad);
 	//json.append("space", space);
