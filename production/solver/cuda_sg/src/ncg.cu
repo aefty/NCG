@@ -45,9 +45,6 @@ int main(int argc, char* argv[]) {
 	vector<double> g01(_GLB_N_);
 	vector<double> g1(_GLB_N_);
 
-	int lineDisc = 1024;
-	double* _space = (double*) gpu::alloc(lineDisc);
-
 	double gg0 = 0.0;
 	double gg1 = 0.0;
 	double B = 0.0;
@@ -67,6 +64,9 @@ int main(int argc, char* argv[]) {
 
 	dim3 GPU_TPB_2D (TPB_2D, TPB_2D);
 	dim3 GPU_BLOCK_2D(block_x , block_y);
+
+	dim3 GPU_TPB_1D (TPB_2D * TPB_2D);
+	dim3 GPU_BLOCK_1D(_GLB_N_ / GPU_TPB_1D.x);
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
@@ -102,8 +102,11 @@ int main(int argc, char* argv[]) {
 
 			// BEGIN LINE SEARCH
 			h = .01;
+			gpu::alloc(x0, _x0);
+			gpu::alloc(p, _p);
+
 			gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-			gpu::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, range, _space ,  _func_val);
+			gpu::lineValue <<< GPU_BLOCK_1D + 1, GPU_TPB_1D >>> (_GLB_N_, range, _space ,  _func_val);
 			gpu::unalloc(_func_val, func_val );
 
 			for (int i = 1; i < func_val.size(); i++) {
