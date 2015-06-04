@@ -40,23 +40,23 @@ int main(int argc, char* argv[]) {
 	double scalar = 1.0;
 
 	clock_t t_start_dot = clock();
-	std::linalg_dot (A, B, scalar);
+	cpu::linalg_dot (A, B, scalar);
 	double t_dot = (clock() - t_start_dot) / (double) CLOCKS_PER_SEC;
 
 	clock_t t_start_sdot = clock();
-	std::linalg_sdot(scalar, A, C);
+	cpu::linalg_sdot(scalar, A, C);
 	double t_sdot = (clock() - t_start_sdot) / (double) CLOCKS_PER_SEC;
 
 	clock_t t_start_add = clock();
-	std::linalg_add (1.0, B, 1.0, C, A);
+	cpu::linalg_add (1.0, B, 1.0, C, A);
 	double t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
 
 	clock_t t_start_grad = clock();
-	std::linalg_grad(_GLB_N_, _GLB_EPS_, C,  A);
+	cpu::linalg_grad(_GLB_N_, _GLB_EPS_, C,  A);
 	double t_grad = (clock() - t_start_grad) / (double) CLOCKS_PER_SEC;
 
 	clock_t t_start_grad_noWriteBack = clock();
-	std::linalg_grad_noWriteBack(_GLB_N_, _GLB_EPS_, C);
+	cpu::linalg_grad_noWriteBack(_GLB_N_, _GLB_EPS_, C);
 	double t_grad_noWriteBack = (clock() - t_start_grad_noWriteBack) / (double) CLOCKS_PER_SEC;
 
 	json.append("size", _GLB_N_);
