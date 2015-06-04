@@ -6,6 +6,7 @@ namespace gpu {
 
       if (i < N && j < D) {
          space[j * N + i] = x[i] + p[i] * h * j;
+         printf("i %d ,  j %d\n", i, j);
       }
    };
 
