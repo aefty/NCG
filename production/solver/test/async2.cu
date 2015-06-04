@@ -41,7 +41,7 @@ double maxError(double* a, int n) {
   double maxE = 0;
 
   for (int i = 0; i < n; i++) {
-    double error = fabs(a[i] - 1.0f);
+    double error = fabs(a[i] - 1.0);
 
     if (error > maxE) { maxE = error; }
   }
