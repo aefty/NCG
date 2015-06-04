@@ -80,7 +80,10 @@ int main(int argc, char* argv[]) {
 		double* _x = (double*)cuda::alloc(A);
 		double* _p = (double*)cuda::alloc(A);
 
-		discLine_kernel <<<2 , 3>>> (_GLB_N_, _x , _p, h , _space);
+		dim3 GPU_TPB_2D (2, 2);
+		dim3 GPU_BLOCK_2D(3 , 3);
+
+		discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _x , _p, h , _space);
 	}
 
 
