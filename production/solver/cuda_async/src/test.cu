@@ -16,6 +16,21 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
+	if (argc > 1) { _GLB_N_ = _GLB_N_ * atoi(argv[1]); }
+
+	if (argc > 2) { _GLB_ITR_ = _GLB_ITR_ * atoi(argv[2]); }
+
+	if (argc > 3) { _GLB_ITR_LINE_ = _GLB_ITR_LINE_ * atoi(argv[3]); }
+
+	if (argc > 4) { _GLB_EPS_ = _GLB_EPS_ * atoi(argv[4]); }
+
+	{
+		cudaDeviceProp prop;
+		cudaGetDeviceProperties(&prop, devId);
+		printf("Device : %s\n", prop.name);
+	}
+
+
 	JSON json;
 
 	vector<double> A(_GLB_N_, 1.0);
@@ -42,8 +57,6 @@ int main(int argc, char* argv[]) {
 	clock_t t_start_grad_cuda = clock();
 	cuda::linalg_grad(_GLB_N_, _GLB_EPS_, A,  C);
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
-
-	cuda::unalloc(_space);
 
 	double max_grad = *max_element(std::begin(C), std::end(C));
 	double min_grad = *min_element(std::begin(C), std::end(C));

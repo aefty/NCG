@@ -11,12 +11,12 @@ namespace cuda {
       double val = 0.0;
 
       x[i] -= EPS;
-      FUNCTION(N, &x, &val);
+      FUNCTION(N, &x[0], &val);
 
       x[i] += 2.0 * EPS;
       val = val * -1.0;
 
-      FUNCTION(N, &x, &val);
+      FUNCTION(N, &x[0], &val);
       grad[0] = val / (2.0 * EPS);
    };
 
@@ -36,7 +36,7 @@ namespace cuda {
          cudaStreamCreate(&stream[i]);
          cudaMemcpyAsync(&x[0], _x, streamSize, cudaMemcpyHostToDevice, stream[i]) ;
 
-         async_grad <<<1, 1, 0, stream[i]>>> (N, i, EPS, _x, _gradi);
+         async_grad <<< 1, 1, 0, stream[i]>>> (N, i, EPS, _x, _gradi);
 
          cudaMemcpyAsync(&grad[i], _gradi, streamSize, cudaMemcpyDeviceToHost, stream[i]) ;
       }

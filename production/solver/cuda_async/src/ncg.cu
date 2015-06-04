@@ -27,9 +27,8 @@ int main(int argc, char* argv[]) {
 
 	{
 		cudaDeviceProp prop;
-		checkCuda( cudaGetDeviceProperties(&prop, devId));
+		cudaGetDeviceProperties(&prop, devId);
 		printf("Device : %s\n", prop.name);
-		checkCuda( cudaSetDevice(devId) );
 	}
 
 
@@ -46,7 +45,7 @@ int main(int argc, char* argv[]) {
 	vector<double> Hp(_GLB_N_);
 	vector<double> g1(_GLB_N_);
 
-	double* _space = (double*) cuda::alloc((long int)_GLB_N_ * _GLB_N_);
+	//double* _space = (double*) cuda::alloc((long int)_GLB_N_ * _GLB_N_);
 
 	double gg0 = 0.0;
 	double gg1 = 0.0;
@@ -70,7 +69,7 @@ int main(int argc, char* argv[]) {
 	// BEGIN NCG
 	{
 		std::cout << "|";
-		cuda::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p, _space);
+		cuda::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
 		std::linalg_sdot( -1.0, p, p);
 
 		std::linalg_dot(p, p, gg0);
@@ -97,11 +96,11 @@ int main(int argc, char* argv[]) {
 
 					//%g00 = Grad(x1-EPS*p);
 					std::linalg_add(1.0, x1, -1.0 * _GLB_EPS_, p, vtemp);
-					cuda::linalg_grad(_GLB_N_, _GLB_EPS_, vtemp, g00, _space);
+					cuda::linalg_grad(_GLB_N_, _GLB_EPS_, vtemp, g00);
 
 					//%g01 = Grad(x1+EPS*p);
 					std::linalg_add(1.0, x1, _GLB_EPS_, p, vtemp);
-					cuda::linalg_grad(_GLB_N_, _GLB_EPS_, vtemp, g01, _space);
+					cuda::linalg_grad(_GLB_N_, _GLB_EPS_, vtemp, g01);
 
 					// %Hp = (g01-g00)/(2*EPS);
 					std::linalg_add(1.0, g01, -1.0, g00, vtemp);
@@ -123,7 +122,7 @@ int main(int argc, char* argv[]) {
 			// END LINE SEARCH
 			t_lineSearch += (clock() - t_lineSearch_start) / (double) CLOCKS_PER_SEC;
 
-			cuda::linalg_grad(_GLB_N_, _GLB_EPS_, x1, g1, _space);
+			cuda::linalg_grad(_GLB_N_, _GLB_EPS_, x1, g1);
 			std::linalg_dot(g1, g1, gg1);
 			B = gg1 / gg0;
 
@@ -146,7 +145,7 @@ int main(int argc, char* argv[]) {
 	double rate = (double)_GLB_N_ / t_run;
 	t_lineSearch = t_lineSearch;
 
-	cuda::unalloc(_space);
+	//cuda::unalloc(_space);
 
 	double x_max = *max_element(std::begin(x1), std::end(x1));
 	double x_min = *min_element(std::begin(x1), std::end(x1));
