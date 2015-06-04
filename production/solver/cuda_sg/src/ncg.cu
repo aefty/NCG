@@ -113,9 +113,9 @@ int main(int argc, char* argv[]) {
 			}
 
 			alpha = min_i * h;
-			cout << "asdfasd" << min_i;
-			cout << "asdfasd" << h;
-			cout << "asdfasd" << alpha;
+			cout << "asdfasd" << min_i << endl;
+			cout << "asdfasd" << h << endl;
+			cout << "asdfasd" << alpha << endl;
 			cpu::linalg_add (1.0, x0, alpha, p, x1);
 			// END LINE SEARCH
 
@@ -157,7 +157,7 @@ int main(int argc, char* argv[]) {
 	json.append("rate", rate);
 	json.append("x_max", x_max);
 	json.append("x_min", x_min);
-	//json.append("x", x1);
+	json.append("func_val", func_val);
 
 	cout << "\n\n";
 	cout << json.dump();
