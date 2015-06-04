@@ -53,8 +53,6 @@ namespace cuda {
 	inline void deviceSpecs() {
 		const int kb = 1024;
 		const int mb = kb * kb;
-		std::cout << "NBody.GPU" << endl << "=========" << endl << endl;
-
 		std::cout << "CUDA version:   v" << CUDART_VERSION << endl;
 
 		int devCount;

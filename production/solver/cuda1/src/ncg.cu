@@ -58,7 +58,7 @@ int main(int argc, char* argv[]) {
 
 	clock_t t_start = clock();
 
-	std::cout << "NCG - Started \n\n" << endl;
+	std::cout << "NCG - Started" << endl;
 
 
 	// BEGIN NCG
@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
 
-			std::cout << "|";
+			std::cout << "|" << endl;
 
 			j = 0;
 			alpha_last = 1.0;
