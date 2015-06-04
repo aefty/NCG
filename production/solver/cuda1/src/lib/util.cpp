@@ -53,6 +53,8 @@ namespace cuda {
 	inline void deviceSpecs() {
 		const int kb = 1024;
 		const int mb = kb * kb;
+
+		std::cout << "NCG - Started " << endl;
 		std::cout << "CUDA version:   v" << CUDART_VERSION << endl;
 
 		int devCount;
@@ -74,5 +76,5 @@ namespace cuda {
 			std::cout << "  Max grid dimensions:  [ " << props.maxGridSize[0] << ", " << props.maxGridSize[1]  << ", " << props.maxGridSize[2] << " ]" << endl;
 			std::cout << endl;
 		}
-	}
+	};
 };
