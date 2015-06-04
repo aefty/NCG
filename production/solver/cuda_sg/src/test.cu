@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
 	clock_t t_start_grad_cuda = clock();
 
 	int  min_i = 0;
-	cuda::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+	cuda::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
 	cuda::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
 	cuda::unalloc(_func_val, func_val );
 
@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	std::linalg_add (1.0, A, min_i * h, p, A);
+	std::linalg_add (1.0, A, min_i * h, P, A);
 
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
 
