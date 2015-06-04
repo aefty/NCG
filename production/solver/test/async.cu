@@ -52,19 +52,13 @@ double maxError(double* a, int n) {
 int main(int argc, char** argv) {
   int M = 1; int F = 1;
 
-  if (argc > 1) {  M = atoi(argv[1]); }
-
-  if (argc > 2) {  F = atoi(argv[2]); }
-
-
-
-  const int blockSize = 256 * M, nStreams = 4 * F;
+  const int blockSize = 256, nStreams = 4;
   const int n = 4 * 1024 * blockSize * nStreams;
   const int streamSize = n / nStreams;
   const int streamBytes = streamSize * sizeof(float);
   const int bytes = n * sizeof(float);
-
   int devId = 0;
+
 
   if (argc > 1) { devId = atoi(argv[1]); }
 
