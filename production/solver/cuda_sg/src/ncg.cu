@@ -35,14 +35,18 @@ int main(int argc, char* argv[]) {
 	GUESS(_GLB_N_, x0);
 
 	vector<double> x1(_GLB_N_);
+	double* _x1 = (double*) cuda::alloc(x1);
+
 	vector<double> p(_GLB_N_);
+	double* _p = (double*) cuda::alloc(p);
+
 	vector<double> vtemp(_GLB_N_);
 	vector<double> g00(_GLB_N_);
 	vector<double> g01(_GLB_N_);
 	vector<double> Hp(_GLB_N_);
 	vector<double> g1(_GLB_N_);
 
-	int lineDisc = (long int) * 1024;
+	int lineDisc = 1024;
 	double* _space = (double*) cuda::alloc(lineDisc);
 
 	double gg0 = 0.0;
@@ -84,8 +88,10 @@ int main(int argc, char* argv[]) {
 
 			clock_t t_lineSearch_start = clock();
 
-			cuda::line_search(N , _GLB_EPS_,_space ], x1, p,alpha,);
-			std::linalg_add(1.0, x1, alpha, p, x1);
+
+		//	cuda::lineSearch_disc(N , _GLB_EPS_*1000 ,_space , x1, p,alpha,);
+		//	cuda::lineSearch_solve(N , _GLB_EPS_,_space ], x1, p,alpha,);
+		//	std::linalg_add(1.0, x1, alpha, p, x1);
 
 			// BEING LINE SEARCH
 			/*

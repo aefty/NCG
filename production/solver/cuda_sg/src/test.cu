@@ -35,6 +35,13 @@ int main(int argc, char* argv[]) {
 
 	vector<double> GRAD(_GLB_N_, 0.0);
 
+	double h = 0.1;
+	double rad = 10.0;
+
+	vector<double> space(rad / h, 1.0);
+	double* _space = (double*) cuda::alloc(space);
+
+
 	double scalar = 1.0;
 
 	clock_t t_start_dot = clock();
@@ -50,11 +57,18 @@ int main(int argc, char* argv[]) {
 	double t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
 
 	clock_t t_start_grad_cuda = clock();
-	cuda::linalg_grad(_GLB_N_, _GLB_EPS_, A,  C);
+
+
+	cuda::lineSearch_disc(_GLB_N_ , h, max, vector<double>& A, vector<double>& A, double * _space);
+
+
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
 
 	double max_grad = *max_element(std::begin(C), std::end(C));
 	double min_grad = *min_element(std::begin(C), std::end(C));
+
+	cuda::unalloc(space, _space);
+	cuda::unalloc(_space);
 
 	json.append("size", _GLB_N_);
 	json.append("dot_time", t_dot);
@@ -63,7 +77,7 @@ int main(int argc, char* argv[]) {
 	json.append("cuda_grad_time", t_grad_cuda);
 	json.append("min", min_grad);
 	json.append("max", max_grad);
-	//json.append("A", A);
+	json.append("space", space);
 	//json.append("C", C);
 
 	cout << "\n\n" << json.dump() << "\n\n";
