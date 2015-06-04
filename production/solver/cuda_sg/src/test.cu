@@ -77,14 +77,14 @@ int main(int argc, char* argv[]) {
 
 	clock_t t_start_grad_cuda = clock();
 	{
-		cuda::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+		cuda::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
 		cuda::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
 		cuda::unalloc(_func_val, func_val );
 
 
 		int  min_i = 0;
 
-		for (int i = 1; i < func_val.size; i++) {
+		for (int i = 1; i < func_val.size(); i++) {
 			if (func_val[i] < func_val[min_i]) {
 				min_i = i;
 			}
