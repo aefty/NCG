@@ -100,9 +100,11 @@ int main(int argc, char* argv[]) {
 			gpu::alloc(x0, _x0);
 			gpu::alloc(p, _p);
 
-			goto end;
+
 
 			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+
+
 			gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
 
 			CUDA_ERR_CHECK(cudaDeviceSynchronize());
@@ -140,7 +142,6 @@ int main(int argc, char* argv[]) {
 	}
 	//END NCG
 
-end:
 
 	double t_run = (clock() - t_start) / (double) CLOCKS_PER_SEC;
 	double rate = (double)_GLB_N_ / t_run;
@@ -163,6 +164,8 @@ end:
 	json.append("p", p);
 	json.append("x0", x0);
 	json.append("x1", x1);
+	json.append("min_i", min_i);
+	json.append("alpha", alpha);
 
 	cout << "\n\n";
 	cout << json.dump();
