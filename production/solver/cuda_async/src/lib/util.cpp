@@ -9,18 +9,6 @@
 
 
 namespace cuda {
-
-
-	inline void* salloc(vector<double>& host_vec, cudaStream_t stream) {
-		void* p;
-		size_t s = host_vec.size() * sizeof(double);
-		double* host_array = &host_vec[0];
-		CUDA_ERR_CHECK(cudaMalloc(&p, s));
-		CUDA_ERR_CHECK(cudaMemcpy(p, host_array, s, cudaMemcpyHostToDevice));
-		return p;
-	};
-
-
 	inline void* alloc(long long int N) {
 		void* p;
 		size_t s = N * sizeof(double);
