@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
   checkCuda( cudaMallocHost((void**)&a, bytes) );      // host pinned
   checkCuda( cudaMalloc((void**)&d_a, bytes) ); // device
 
-  double ms; // elapsed time in milliseconds
+  float ms; // elapsed time in milliseconds
 
   // create events and streams
   cudaEvent_t startEvent, stopEvent, dummyEvent;
