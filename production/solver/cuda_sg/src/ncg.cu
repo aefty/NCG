@@ -116,6 +116,8 @@ int main(int argc, char* argv[]) {
 
 			alpha = min_i * h;
 
+			cout << alpha << endl;
+
 			if (alpha == 0 && h > _GLB_EPS_) {
 				h = h / 2;
 				std::cout << "."; std::cout.flush();
