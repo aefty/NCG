@@ -54,9 +54,10 @@ int main(int argc, char* argv[]) {
 
 	double tol = _GLB_EPS_ + 1.0;
 	int itr = 0;
-
 	int  min_i = 0;
-	double h = .5;
+	double alpha = 1;
+	double h = 1;
+
 
 	int TPB_2D = 16 ;
 	long int range = 16;
@@ -70,8 +71,7 @@ int main(int argc, char* argv[]) {
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
 
-	double alpha;
-	double h = 1;
+
 
 	double t_lineSearch = 0.0;
 
@@ -96,16 +96,13 @@ int main(int argc, char* argv[]) {
 
 			std::cout << "|"; std::cout.flush();
 
-			j = 0;
-			alpha_last = 1.0;
-			alpha = 2.0;
 
 			clock_t t_lineSearch_start = clock();
 
 
 			// BEGIN LINE SEARCH
-			h = .5;
-			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+			h = .01;
+			gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
 			gpu::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
 			gpu::unalloc(_func_val, func_val );
 
@@ -117,7 +114,7 @@ int main(int argc, char* argv[]) {
 
 			alpha = min_i * h;
 
-			cpu::linalg_add (1.0, x0, alpha * h, P, x1);
+			cpu::linalg_add (1.0, x0, alpha, P, x1);
 			// END LINE SEARCH
 
 			t_lineSearch += (clock() - t_lineSearch_start) / (double) CLOCKS_PER_SEC;
