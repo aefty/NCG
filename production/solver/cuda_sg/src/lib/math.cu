@@ -1,18 +1,5 @@
 namespace gpu {
 
-   __device__ float atomicMax(float* address, float val) {
-      int* address_as_int = (int*)address;
-      int old = *address_as_int, assumed;
-
-      while (val > __int_as_float(old)) {
-         assumed = old;
-         old = atomicCAS(address_as_int, assumed,
-                         __float_as_int(val));
-      }
-
-      return __int_as_float(old);
-   }
-
    __global__ void lineDiscretize( long int N , long int D ,  double* x, double* p, double h, double* space) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
       int j = blockDim.y * blockIdx.y + threadIdx.y;

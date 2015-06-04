@@ -36,17 +36,17 @@ int main(int argc, char* argv[]) {
 	vector<double> P(_GLB_N_); double* _P = (double*)gpu::alloc(P);
 
 	// Line Descretiztion
-	int TPB_OPTIMAL_1D = 128;
-	long int D = 32;
+	int TPB_2D = 16 ;
+	long int range = 16;
 
-	int rows = (_GLB_N_ / TPB_OPTIMAL_1D) < 1 ? 1 : (_GLB_N_ / TPB_OPTIMAL_1D) ;
-	int cols = D < 1 ? 1 : D ;
+	int rows = (_GLB_N_ / TPB_2D) < 1 ? 1 : (_GLB_N_ / TPB_2D) ;
+	int cols = range < 1 ? 1 : range ;
 
-	dim3 GPU_TPB_2D (TPB_OPTIMAL_1D, TPB_OPTIMAL_1D);
+	dim3 GPU_TPB_2D (TPB_2D, TPB_2D);
 	dim3 GPU_BLOCK_2D(rows , cols);
 
-	vector<double> space(D * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
-	vector<double> func_val(D, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
+	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
+	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
 
 	double scalar = 1.0;
 

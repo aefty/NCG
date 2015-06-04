@@ -43,7 +43,6 @@ int main(int argc, char* argv[]) {
 	vector<double> vtemp(_GLB_N_);
 	vector<double> g00(_GLB_N_);
 	vector<double> g01(_GLB_N_);
-	vector<double> Hp(_GLB_N_);
 	vector<double> g1(_GLB_N_);
 
 	int lineDisc = 1024;
@@ -52,16 +51,30 @@ int main(int argc, char* argv[]) {
 	double gg0 = 0.0;
 	double gg1 = 0.0;
 	double B = 0.0;
-	double stemp = 0.0;
 
 	double tol = _GLB_EPS_ + 1.0;
 	int itr = 0;
 
-	int j;
-	double alpha_last;
+	int  min_i = 0;
+	double h = .5;
+
+	int TPB_2D = 16 ;
+	long int range = 16;
+
+	int block_x = (_GLB_N_ / TPB_2D) < 1 ? 1 : (_GLB_N_ / TPB_2D) ;
+	int block_y = range < 1 ? 1 : range ;
+
+	dim3 GPU_TPB_2D (TPB_2D, TPB_2D);
+	dim3 GPU_BLOCK_2D(block_x , block_y);
+
+	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
+	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
+
 	double alpha;
+	double h = 1;
 
 	double t_lineSearch = 0.0;
+
 
 	clock_t t_start = clock();
 
@@ -71,7 +84,7 @@ int main(int argc, char* argv[]) {
 	// BEGIN NCG
 	{
 		std::cout << "|";
-		
+
 		cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
 		cpu::linalg_sdot( -1.0, p, p);
 
@@ -90,47 +103,23 @@ int main(int argc, char* argv[]) {
 			clock_t t_lineSearch_start = clock();
 
 
-		//	cuda::lineSearch_disc(N , _GLB_EPS_*1000 ,_space , x1, p,alpha,);
-		//	cuda::lineSearch_solve(N , _GLB_EPS_,_space ], x1, p,alpha,);
-		//	std::linalg_add(1.0, x1, alpha, p, x1);
+			// BEGIN LINE SEARCH
+			h = .5;
+			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+			gpu::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
+			gpu::unalloc(_func_val, func_val );
 
-			// BEING LINE SEARCH
-			/*
-			{
-				while (j < _GLB_ITR_LINE_ && abs(alpha - alpha_last) >= _GLB_EPS_) {
-					std::cout << "."; std::cout.flush();
-
-					//%% Note : Calculate Hessian x p (Hp)
-					//%% 2nd-term Taylor expansion (average -/+ expansion for better accuracy)
-
-					//%g00 = Grad(x1-EPS*p);
-					std::linalg_add(1.0, x1, -1.0 * _GLB_EPS_, p, vtemp);
-					cuda::linalg_grad(_GLB_N_, _GLB_EPS_, vtemp, g00);
-
-					//%g01 = Grad(x1+EPS*p);
-					std::linalg_add(1.0, x1, _GLB_EPS_, p, vtemp);
-					cuda::linalg_grad(_GLB_N_, _GLB_EPS_, vtemp, g01);
-
-					// %Hp = (g01-g00)/(2*EPS);
-					std::linalg_add(1.0, g01, -1.0, g00, vtemp);
-					std::linalg_sdot(1.0 / (2.0 * _GLB_EPS_), vtemp,  Hp);
-
-					alpha_last = alpha;
-
-					//%alpha = -g00'*p/(p'*Hp);
-					std::linalg_dot(g00, p, stemp);
-					std::linalg_dot(p, Hp, alpha);
-					alpha = -1.0 * stemp / alpha;
-
-					// %x1=x1+alpha*p;
-					std::linalg_add(1.0, x1, alpha, p, x1);
-
-					j++;
+			for (int i = 1; i < func_val.size(); i++) {
+				if (func_val[i] < func_val[min_i]) {
+					min_i = i;
 				}
 			}
-			*/
 
+			alpha = min_i * h;
+
+			cpu::linalg_add (1.0, x0, alpha * h, P, x1);
 			// END LINE SEARCH
+
 			t_lineSearch += (clock() - t_lineSearch_start) / (double) CLOCKS_PER_SEC;
 
 			cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x1, g1);
