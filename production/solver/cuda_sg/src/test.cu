@@ -57,26 +57,26 @@ int main(int argc, char* argv[]) {
 	{
 		t_start_dot = clock();
 		gpu::linalg_dot (A, B, scalar);
-		double t_dot = (clock() - t_start_dot) / (double) CLOCKS_PER_SEC;
+		t_dot = (clock() - t_start_dot) / (double) CLOCKS_PER_SEC;
 	}
 
 	{
 
 		clock_t t_start_sdot = clock();
 		gpu::linalg_sdot(scalar, A, B);
-		double t_sdot = (clock() - t_start_sdot) / (double) CLOCKS_PER_SEC;
+		t_sdot = (clock() - t_start_sdot) / (double) CLOCKS_PER_SEC;
 	}
 
 	{
 
 		clock_t t_start_add = clock();
 		gpu::linalg_add (1.0, A, 1.0, B, C);
-		double t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
+		t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
 	}
 
+	int  min_i = 0;
 	{
 		t_start_lineSearch = clock();
-		int  min_i = 0;
 		double h = .5;
 		gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
 		gpu::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
