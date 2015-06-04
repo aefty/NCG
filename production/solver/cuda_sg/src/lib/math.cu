@@ -30,16 +30,16 @@ namespace cuda {
 
    */
 
-   inline void lineSearch_disc(long int N , double h, double max, vector<double>& x, vector<double>& p, double* _space) {
+   inline void lineSearch_disc(long int N , double h, double rad, vector<double>& x, vector<double>& p, double* _space) {
       int TPB_OPTIMAL_2D = 16;
 
       dim3 GPU_TPB_2D(TPB_OPTIMAL_2D, TPB_OPTIMAL_2D);
-      dim3 GPU_BLOCK_2D(N / GPU_TPB_2D.x , (unsigned int)max / disc);
+      dim3 GPU_BLOCK_2D(N / GPU_TPB_2D.x , (unsigned int)rad / h);
 
       double* _x = (double*)cuda::alloc(x);
       double* _p = (double*)cuda::alloc(p);
 
-      discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, h , _space);
+      discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, h , _space);
    };
 
    /*

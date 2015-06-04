@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
 	clock_t t_start_grad_cuda = clock();
 
 
-	cuda::lineSearch_disc(_GLB_N_ , h, max, vector<double>& A, vector<double>& A, double * _space);
+	cuda::lineSearch_disc(_GLB_N_ , h, rad,  A, A, _space);
 
 
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
 	double max_grad = *max_element(std::begin(C), std::end(C));
 	double min_grad = *min_element(std::begin(C), std::end(C));
 
-	cuda::unalloc(space, _space);
+	cuda::unalloc(_space, space );
 	cuda::unalloc(_space);
 
 	json.append("size", _GLB_N_);
