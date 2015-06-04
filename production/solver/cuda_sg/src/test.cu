@@ -18,10 +18,20 @@ __global__ void discLine_kernel( long int N , long int D ,  double* x, double* p
 	int i = blockDim.x * blockIdx.x + threadIdx.x;
 	int j = blockDim.y * blockIdx.y + threadIdx.y;
 
-	printf("%d , %d\n", i, j);
+	//printf("%d , %d\n", i, j);
 
 	if (i < N && j < D) {
 		space[j * N + i] = x[i] + p[i] * h * j;
+	}
+};
+
+__global__ void lineValue_kernel( long int N , long int D , double* space, double* alpha_set) {
+	int i = blockDim.x * blockIdx.x + threadIdx.x;
+
+	if (i < N ) {
+		double val = 0.0;
+		FUNCTION(N, &space[i * N], &val);
+		alpha_set[i] = val; //(val < alpha_set[i]) ? val : alpha_set[i];
 	}
 };
 
@@ -45,8 +55,6 @@ int main(int argc, char* argv[]) {
 	vector<double> B(_GLB_N_, 1.0);
 	vector<double> C(_GLB_N_, 1.0);
 
-	vector<double> GRAD(_GLB_N_, 0.0);
-
 	vector<double> P(_GLB_N_);
 	P[2] = 0.5;
 	double* _P = (double*)cuda::alloc(P);
@@ -66,6 +74,9 @@ int main(int argc, char* argv[]) {
 	vector<double> space(D * _GLB_N_, 0.0);
 	double* _space = (double*) cuda::alloc(space);
 
+	vector<double> alpha_set(D, 0.0);
+	double* _alpha_set = (double*) cuda::alloc(_alpha_set);
+
 	double scalar = 1.0;
 
 
@@ -83,9 +94,10 @@ int main(int argc, char* argv[]) {
 	double t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
 
 	clock_t t_start_grad_cuda = clock();
-	discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, D, _A , _P, h , _space);
-	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
+	discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, D, _A , _P, h , _space);
+	discLine_kernel <<< N / 128 + 1 , 128 >>> (_GLB_N_, D, _space ,  _alpha_set);
 
+	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
 
 
 
@@ -99,6 +111,9 @@ int main(int argc, char* argv[]) {
 	cuda::unalloc(_space, space );
 	cuda::unalloc(_space);
 
+	cuda::unalloc(_alpha_set, alpha_set );
+	cuda::unalloc(_alpha_set);
+
 	json.append("size", _GLB_N_);
 	json.append("dot_time", t_dot);
 	json.append("sdot_time", t_sdot);
@@ -107,6 +122,7 @@ int main(int argc, char* argv[]) {
 	json.append("min", min_grad);
 	json.append("max", max_grad);
 	json.append("space", space);
+	json.append("alpha_set", alpha_set);
 	//json.append("C", C);
 
 	cout << "\n\n" << json.dump() << "\n\n";
