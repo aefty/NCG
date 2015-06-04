@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 
 	if (argc > 4) { _GLB_EPS_ = _GLB_EPS_ * atoi(argv[4]); }
 
-	cuda::deviceSpecs();
+	//cuda::deviceSpecs();
 
 	JSON json;
 
