@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
 	clock_t t_start_grad_cuda = clock();
 	{
 		int  min_i = 0;
-		cuda::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+		cuda::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
 		cuda::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
 		cuda::unalloc(_func_val, func_val );
 
@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
 	json.append("max", max_grad);
 	json.append("space", space);
 	json.append("func_val", func_val);
-	json.append("min_i", min);
+	json.append("min_i", min_i);
 	json.append("A_min", A);
 	//json.append("C", C);
 
