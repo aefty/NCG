@@ -31,14 +31,11 @@ int main(int argc, char* argv[]) {
 
 	JSON json;
 
-	vector<double> x0;
-	GUESS(_GLB_N_, x0);
+	vector<double> x0; GUESS(_GLB_N_, x0); double* _x0 = (double*) gpu::alloc(x1);
 
 	vector<double> x1(_GLB_N_);
-	double* _x1 = (double*) gpu::alloc(x1);
 
-	vector<double> p(_GLB_N_);
-	double* _p = (double*) gpu::alloc(p);
+	vector<double> p(_GLB_N_); double* _p = (double*) gpu::alloc(p);
 
 	vector<double> vtemp(_GLB_N_);
 	vector<double> g00(_GLB_N_);
@@ -105,7 +102,7 @@ int main(int argc, char* argv[]) {
 			gpu::alloc(x0, _x0);
 			gpu::alloc(p, _p);
 
-			gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
 			gpu::lineValue <<< GPU_BLOCK_1D + 1, GPU_TPB_1D >>> (_GLB_N_, range, _space ,  _func_val);
 			gpu::unalloc(_func_val, func_val );
 
