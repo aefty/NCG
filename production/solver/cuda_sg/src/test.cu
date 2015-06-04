@@ -14,14 +14,15 @@
 
 using namespace std;
 
-__global__ void discLine_kernel( long int N ,  double* x, double* p, double h, double* space) {
+__global__ void discLine_kernel( long int N , long int D ,  double* x, double* p, double h, double* space) {
 	int i = blockDim.x * blockIdx.x + threadIdx.x;
 	int j = blockDim.y * blockIdx.y + threadIdx.y;
 
 	printf("%d , %d\n", i, j);
 
-
-	space[j * N + i] = x[i] + p[i] * h * j;
+	if (i < N && j < D) {
+		space[j * N + i] = x[i] + p[i] * h * j;
+	}
 };
 
 
@@ -40,21 +41,35 @@ int main(int argc, char* argv[]) {
 	JSON json;
 
 	vector<double> A(_GLB_N_, 1.0);
+	double* _A = (double*)cuda::alloc(A);
 	vector<double> B(_GLB_N_, 1.0);
 	vector<double> C(_GLB_N_, 1.0);
 	vector<double> D(_GLB_N_, 1.0);
 
 	vector<double> GRAD(_GLB_N_, 0.0);
 
-	vector<double> P(_GLB_N_, 1.0);
+	vector<double> P(_GLB_N_);
 	P[2] = 0.5;
+	double* _p = (double*)cuda::alloc(P);
 
+
+	// Line Descretiztion
+	int TPB_OPTIMAL_1D = 1;
 	double h = 1;
-	double disc = 5;
+	double D = 5;
 
-	vector<double> space(disc * _GLB_N_, 0.0);
+	int rows = (_GLB_N_ / TPB_OPTIMAL_1D) < 1 ? 1 : (_GLB_N_ / TPB_OPTIMAL_1D) ;
+	int cols = D < 1 ? 1 : D ;
+
+	dim3 GPU_TPB_2D (TPB_OPTIMAL_1D, TPB_OPTIMAL_1D);
+	dim3 GPU_BLOCK_2D(rows , cols);
+
+	vector<double> space(D * _GLB_N_, 0.0);
 	double* _space = (double*) cuda::alloc(space);
 
+
+
+	///
 	double scalar = 1.0;
 
 	clock_t t_start_dot = clock();
@@ -72,18 +87,6 @@ int main(int argc, char* argv[]) {
 	clock_t t_start_grad_cuda = clock();
 
 	{
-
-		int TPB_OPTIMAL_1D = 1;
-
-		double* _x = (double*)cuda::alloc(A);
-		double* _p = (double*)cuda::alloc(P);
-
-		int rows = (_GLB_N_ / TPB_OPTIMAL_1D) < 1 ? 1 : (_GLB_N_ / TPB_OPTIMAL_1D) ;
-		int cols = disc < 1 ? 1 : disc ;
-
-		dim3 GPU_TPB_2D (TPB_OPTIMAL_1D, TPB_OPTIMAL_1D);
-		dim3 GPU_BLOCK_2D(rows , cols);
-
 		discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _x , _p, h , _space);
 	}
 
