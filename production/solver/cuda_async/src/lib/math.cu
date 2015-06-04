@@ -26,21 +26,24 @@ namespace cuda {
       cudaStream_t stream[N];
       int streamLength = 1;
       int streamSize = streamLength * sizeof(double);
+      size_t s = x.size() * sizeof(double);
 
       for (int i = 0; i < N; i++) {
 
          double* _x;
-         CUDA_ERR_CHECK(cudaMalloc(_x, (size_t)x.size()*sizeof(double)));
+         CUDA_ERR_CHECK(cudaMalloc(_x, s));
 
          double* _gradi;
-         CUDA_ERR_CHECK(cudaMalloc(_gradi, (size_t)sizeof(double)));
+         CUDA_ERR_CHECK(cudaMalloc(_gradi, sizeof(double)));
+
+         cudaEvent_t startEvent, stopEvent;
 
          CUDA_ERR_CHECK(cudaStreamCreate(&stream[i]));
          CUDA_ERR_CHECK( cudaEventRecord(startEvent, stream[i]) );
 
          CUDA_ERR_CHECK(cudaMemcpyAsync( _x, &x[0], streamSize, cudaMemcpyHostToDevice, stream[i])) ;
 
-         async_grad <<<1, 1, 0, stream[i]>>> (N, i, EPS, _x, _gradi);
+         async_grad <<< 1, 1, 0, stream[i]>>> (N, i, EPS, _x, _gradi);
 
          CUDA_ERR_CHECK(cudaMemcpyAsync( &grad[i], _gradi,  streamSize, cudaMemcpyDeviceToHost, stream[i])) ;
 
