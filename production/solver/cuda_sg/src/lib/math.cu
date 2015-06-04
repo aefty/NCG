@@ -37,11 +37,11 @@ namespace cuda {
       dim3 GPU_TPB_2D(TPB_OPTIMAL_2D, TPB_OPTIMAL_2D);
       dim3 GPU_BLOCK_2D(_GLB_N_ / GPU_TPB_2D.x , _GLB_N_ / GPU_TPB_2D.y);
 
-      vector<double> = alpha_set(GPU_TPB_1D.x * GPU_BLOCK_1D);
+      vector<double> = alpha_set(GPU_TPB_1D.x * GPU_BLOCK_1D.x);
       double* _alpha_set = (double*)cuda::alloc(alpha_set);
 
-      initSpace <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, EPS , _space);
-      lineValue  <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (N,  _space, _alpha_set);
+      initSpace <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, EPS , _space);
+      lineValue  <<< GPU_BLOCK_1D , GPU_TPB_1D>>> (N,  _space, _alpha_set);
 
       cuda::unalloc(_alpha_set, alpha_set);
       alpha = *min_element(std::begin(alpha_set), std::end(alpha_set));
