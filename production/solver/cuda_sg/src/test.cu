@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
 	vector<double> GRAD(_GLB_N_, 0.0);
 
 	vector<double> P(_GLB_N_, 1.0);
-	P[2] = 1 / 2;
+	P[2] = 0.5;
 
 	double h = 1;
 	double disc = 5;
@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
 		dim3 GPU_TPB_2D (TPB_OPTIMAL_1D, TPB_OPTIMAL_1D);
 		dim3 GPU_BLOCK_2D(rows , cols);
 
-		discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _x , _p, h , _space);
+		discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _x , _p, h , _space);
 	}
 
 
