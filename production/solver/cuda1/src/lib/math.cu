@@ -54,8 +54,8 @@ namespace cuda {
       dim3 GPU_TPB_2D(TPB_OPTIMAL_2D, TPB_OPTIMAL_2D);
       dim3 GPU_BLOCK_2D(_GLB_N_ / GPU_TPB_2D.x , _GLB_N_ / GPU_TPB_2D.y);
 
-      initSpace <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , EPS , _space);
-      bulkGrad  <<< GPU_BLOCK_1D , GPU_TPB_1Då >>> (N, EPS, _space, _grad);
+      initSpace <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , EPS , _space);
+      bulkGrad  <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (N, EPS, _space, _grad);
 
       cuda::unalloc(_grad, grad);
       cuda::unalloc(_x);
@@ -76,7 +76,7 @@ namespace cuda {
       dim3 GPU_BLOCK_2D(_GLB_N_ / GPU_TPB_2D.x , _GLB_N_ / GPU_TPB_2D.y);
 
       // initSpace <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , EPS , _space);
-      bulkGrad_test  <<< GPU_BLOCK_1D , GPU_TPB_1D>>> (N, EPS, _space, _grad);
+      bulkGrad_test  <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (N, EPS, _space, _grad);
 
       cuda::unalloc(_grad, grad);
       cuda::unalloc(_x);
