@@ -18,6 +18,6 @@ __host__ __device__ void FUNCTION(long int N, double* x , double* rtrn ) {
 };
 
 inline void GUESS(long int  N, vector<double>& rtrn) {
-	vector<double>x0 (N, 17);
+	vector<double>x0 (N, 7);
 	rtrn = x0 ;
 };
