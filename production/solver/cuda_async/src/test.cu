@@ -24,12 +24,7 @@ int main(int argc, char* argv[]) {
 
 	if (argc > 4) { _GLB_EPS_ = _GLB_EPS_ * atoi(argv[4]); }
 
-	{
-		cudaDeviceProp prop;
-		cudaGetDeviceProperties(&prop);
-		printf("Device : %s\n", prop.name);
-	}
-
+	cuda::deviceSpecs();
 
 	JSON json;
 
