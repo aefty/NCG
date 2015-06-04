@@ -77,12 +77,12 @@ int main(int argc, char* argv[]) {
 
 	clock_t t_start_grad_cuda = clock();
 	{
-		cuda::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+		cuda::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
 		cuda::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
 		cuda::unalloc(_func_val, func_val );
 
 
-		int min_i = std::istance(func_val, min_element(func_val, func_val + _GLB_N_));
+		int min_i = std::distance(func_val, min_element(func_val, func_val + _GLB_N_));
 		cout << min_i;
 
 	}
