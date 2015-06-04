@@ -53,7 +53,7 @@ namespace std {
    * @param x    X Vector
    * @param grad Gradient Vector
    */
-  inline void linalg_grad(const double N, const double EPS, vector<double> const& x, vector<double>& grad) {
+  inline void linalg_grad(double N, double EPS, vector<double> const& x, vector<double>& grad) {
 
     vector<double> point;
     double val = 0.0;
@@ -81,7 +81,7 @@ namespace std {
    * @param EPS  Epsilon or dx
    * @param x    X Vector
    */
-  inline void linalg_grad_noWriteBack(const double N, const double EPS, vector<double> const& x) {
+  inline void linalg_grad_noWriteBack(double N, const double EPS, vector<double> const& x) {
 
     vector<double> point;
     double val = 0.0;
