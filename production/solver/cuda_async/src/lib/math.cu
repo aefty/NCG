@@ -38,7 +38,7 @@ namespace cuda {
 
          async_grad <<<1, 1, 0, stream[i]>>> (N, i, EPS, _x, _gradi);
 
-         CUDA_ERR_CHECK(cudaMemcpyAsync( _gradi, &grad[i], streamSize, cudaMemcpyDeviceToHost, stream[i])) ;
+         CUDA_ERR_CHECK(cudaMemcpyAsync( &grad[i], _gradi,  streamSize, cudaMemcpyDeviceToHost, stream[i])) ;
       }
 
       cudaThreadSynchronize();
