@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
 	// BEGIN NCG
 	{
 		std::cout << "|";
-		cuda::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
+		std::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
 		std::linalg_sdot( -1.0, p, p);
 
 		std::linalg_dot(p, p, gg0);
@@ -126,7 +126,7 @@ int main(int argc, char* argv[]) {
 			// END LINE SEARCH
 			t_lineSearch += (clock() - t_lineSearch_start) / (double) CLOCKS_PER_SEC;
 
-			cuda::linalg_grad(_GLB_N_, _GLB_EPS_, x1, g1);
+			std::linalg_grad(_GLB_N_, _GLB_EPS_, x1, g1);
 			std::linalg_dot(g1, g1, gg1);
 			B = gg1 / gg0;
 
