@@ -20,7 +20,7 @@ namespace std {
       }
    };
 
-   inline void linalg_grad(double N, double EPS, vector<double> const& x, vector<double>& grad) {
+   inline void linalg_grad(long int N, double EPS, vector<double> const& x, vector<double>& grad) {
 
       vector<double> point;
       double val = 0.0;
@@ -31,12 +31,12 @@ namespace std {
          point = x ;
 
          point[i] -= EPS;
-         FUNCTION(N, &point[0], val);
+         FUNCTION(N, &point[0], &val);
 
          val = val * -1.0;
          point[i] += EPS2;
 
-         FUNCTION(N, &point[0], val);
+         FUNCTION(N, &point[0], &val);
          grad[i] = (val) / (EPS2);
       }
    };

@@ -27,7 +27,7 @@ namespace cuda {
       alpha_set[i] = (val < alpha_set[i]) ? val : alpha_set[i];
    };
 
-   inline void line_search(long int N , vector<double>& x, vector<double>& p, double& alpha_last , double& alpha) {
+   inline void line_search(long int N , double EPS, double* _space, vector<double>& x, vector<double>& p, double& alpha_last , double& alpha) {
       int TPB_OPTIMAL_1D = 256;
       int TPB_OPTIMAL_2D = 16;
 
@@ -43,8 +43,8 @@ namespace cuda {
       double* _x = (double*)cuda::alloc(x);
       double* _p = (double*)cuda::alloc(p);
 
-      discLine <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, EPS , _space);
-      lineValue  <<< GPU_BLOCK_1D , GPU_TPB_1D>>> (N,  _space, _alpha_set);
+      discLine <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, EPS , _space);
+      lineValue  <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (N,  _space, _alpha_set);
 
       cuda::unalloc(_alpha_set, alpha_set);
       cuda::unalloc(_x);

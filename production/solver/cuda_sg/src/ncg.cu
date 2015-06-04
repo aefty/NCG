@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
 
 			clock_t t_lineSearch_start = clock();
 
-			cuda::line_search(N , x1, p,alpha);
+			cuda::line_search(N , _GLB_EPS_,_space ], x1, p,alpha,);
 			std::linalg_add(1.0, x1, alpha, p, x1);
 
 			// BEING LINE SEARCH
