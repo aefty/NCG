@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 
 	JSON json;
 
-	vector<double> A(_GLB_N_, 2.0);
+	vector<double> A(_GLB_N_, -2.0);
 	double* _A = (double*)cuda::alloc(A);
 	vector<double> B(_GLB_N_, 1.0);
 	vector<double> C(_GLB_N_, 1.0);
@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
 	clock_t t_start_grad_cuda = clock();
 
 	int  min_i = 0;
-	cuda::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+	cuda::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
 	cuda::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
 	cuda::unalloc(_func_val, func_val );
 
