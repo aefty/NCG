@@ -9,17 +9,17 @@ namespace cuda {
 
    __global__ void bulkGrad( long int N ,  double EPS, double* space, double* grad) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
-      double val = 0.0;
+      grad[i] = 0.0;
 
       if (i < N) {
          space[i * N + i] -= EPS;
-         FUNCTION(N, &space[i * N], &val);
+         FUNCTION(N, &space[i * N], &grad[i]);
 
          space[i * N + i] += 2.0 * EPS;
-         val = val * -1.0;
+         grad[i] = grad[i] * -1.0;
 
-         FUNCTION(N, &space[i * N], &val);
-         grad[i] = val / (2.0 * EPS);
+         FUNCTION(N, &space[i * N], &grad[i]);
+         grad[i] = grad[i] / (2.0 * EPS);
       }
    };
 
