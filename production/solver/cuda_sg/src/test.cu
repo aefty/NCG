@@ -56,12 +56,7 @@ int main(int argc, char* argv[]) {
 	vector<double> func_val(D, 0.0);
 	double* _func_val = (double*) cuda::alloc(func_val);
 
-
-
-
 	double scalar = 1.0;
-
-
 
 	clock_t t_start_dot = clock();
 	std::linalg_dot (A, B, scalar);
@@ -75,14 +70,13 @@ int main(int argc, char* argv[]) {
 	std::linalg_add (1.0, A, 1.0, B, C);
 	double t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
 
+
 	clock_t t_start_grad_cuda = clock();
 	{
-		cuda::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+		int  min_i = 0;
+		cuda::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
 		cuda::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
 		cuda::unalloc(_func_val, func_val );
-
-
-		int  min_i = 0;
 
 		for (int i = 1; i < func_val.size(); i++) {
 			if (func_val[i] < func_val[min_i]) {
@@ -90,15 +84,9 @@ int main(int argc, char* argv[]) {
 			}
 		}
 
-		cout << min_i;
-
+		cuda::unalloc(_space[min_i * N], x2 );
 	}
-
-
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
-
-
-
 
 	double max_grad = *max_element(std::begin(C), std::end(C));
 	double min_grad = *min_element(std::begin(C), std::end(C));
@@ -108,9 +96,9 @@ int main(int argc, char* argv[]) {
 
 	cuda::unalloc(_space, space );
 	cuda::unalloc(_space);
-
-
 	cuda::unalloc(_func_val);
+	cuda::unalloc(A);
+	cuda::unalloc(P);
 
 	json.append("size", _GLB_N_);
 	json.append("dot_time", t_dot);
@@ -121,6 +109,8 @@ int main(int argc, char* argv[]) {
 	json.append("max", max_grad);
 	json.append("space", space);
 	json.append("func_val", func_val);
+	json.append("min_i", min);
+	json.append("x1", x2);
 	//json.append("C", C);
 
 	cout << "\n\n" << json.dump() << "\n\n";
