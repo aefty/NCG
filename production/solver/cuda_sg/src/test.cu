@@ -71,12 +71,12 @@ int main(int argc, char* argv[]) {
 	{
 
 		int TPB_OPTIMAL_1D = 128;
-		int blocks = N * disc / TPB_OPTIMAL_1D;
+		int blocks = _GLB_N_ * disc / TPB_OPTIMAL_1D;
 
 		double* _x = (double*)cuda::alloc(A);
 		double* _p = (double*)cuda::alloc(A);
 
-		discLine_kernel <<<blocks , TPB_OPTIMAL_1D>>> (N, _x , _p, h , _space);
+		discLine_kernel <<< blocks , TPB_OPTIMAL_1D>>> (_GLB_N_, _x , _p, h , _space);
 	}
 
 
