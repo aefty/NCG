@@ -67,6 +67,8 @@ int main(int argc, char* argv[]) {
 	double max_grad = *max_element(std::begin(C), std::end(C));
 	double min_grad = *min_element(std::begin(C), std::end(C));
 
+	__syncthreads();
+
 	cuda::unalloc(_space, space );
 	cuda::unalloc(_space);
 
