@@ -37,7 +37,7 @@ namespace cuda {
       int TPB_OPTIMAL_2D = 16;
 
       int bockx = N / TPB_OPTIMAL_2D ? N / TPB_OPTIMAL_2D : 1;
-      int bocky = N / (rad / h) ? N / (rad / h) : 1;
+      int bocky = (rad / h) ? (rad / h) : 1;
 
       dim3 GPU_TPB_2D(TPB_OPTIMAL_2D, TPB_OPTIMAL_2D);
       dim3 GPU_BLOCK_2D(bockx , bocky);
