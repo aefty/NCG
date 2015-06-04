@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
 	double* _space = (double*) cuda::alloc(space);
 
 	vector<double> alpha_set(D, 0.0);
-	double* _alpha_set = (double*) cuda::alloc(_alpha_set);
+	double* _alpha_set = (double*) cuda::alloc(alpha_set);
 
 	double scalar = 1.0;
 
@@ -94,7 +94,7 @@ int main(int argc, char* argv[]) {
 	double t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
 
 	clock_t t_start_grad_cuda = clock();
-	discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, D, _A , _P, h , _space);
+	discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, D, _A , _P, h , _space);
 	discLine_kernel <<< _GLB_N_ / 128 + 1 , 128 >>> (_GLB_N_, D, _space ,  _alpha_set);
 
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
