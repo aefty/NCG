@@ -50,7 +50,7 @@ double maxError(double* a, int n) {
 }
 
 int main(int argc, char** argv) {
-  const int blockSize = 256, nStreams = 4;
+  const int blockSize = 256, nStreams = 64;
   const int n = 4 * 1024 * blockSize * nStreams;
   const int streamSize = n / nStreams;
   const int streamBytes = streamSize * sizeof(double);
