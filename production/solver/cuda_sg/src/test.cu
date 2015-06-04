@@ -14,6 +14,16 @@
 
 using namespace std;
 
+__global__ void discLine_kernel( long int N ,  double* x, double* p, double h, double* space) {
+	int i = blockDim.x * blockIdx.x + threadIdx.x;
+	int j = blockDim.y * blockIdx.y + threadIdx.y;
+
+	printf("%d , %d\n", i, j);
+
+	//space[j * N + i] = x[i] + p[i] * h * j;
+};
+
+
 int main(int argc, char* argv[]) {
 
 	if (argc > 1) { _GLB_N_ = _GLB_N_ * atoi(argv[1]); }
@@ -66,11 +76,11 @@ int main(int argc, char* argv[]) {
 		double* _x = (double*)cuda::alloc(A);
 		double* _p = (double*)cuda::alloc(A);
 
-		discLine_kernel <<< blocks , TPB_OPTIMAL_1D>>> (N, _x , _p, h , _space);
+		discLine_kernel <<<blocks , TPB_OPTIMAL_1D>>> (N, _x , _p, h , _space);
 	}
 
 
-	cuda::lineSearch_disc(_GLB_N_ , h, disc,  A, A, _space);
+	//cuda::lineSearch_disc(_GLB_N_ , h, disc,  A, A, _space);
 
 
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
