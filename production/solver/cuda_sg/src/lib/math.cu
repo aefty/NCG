@@ -17,7 +17,11 @@ namespace cuda {
    __global__ void discLine_kernel( long int N ,  double* x, double* p, double h, double* space) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
       int j = blockDim.y * blockIdx.y + threadIdx.y;
-      space[j * N + i] = x[i] + p[i] * h * j;
+
+      cout << "(" << i << "," << j << ") " << endl;
+
+
+      //space[j * N + i] = x[i] + p[i] * h * j;
    };
 
    /*å
