@@ -5,7 +5,7 @@ namespace gpu {
       int j = blockDim.y * blockIdx.y + threadIdx.y;
 
       if (i < N && j < D) {
-         space[j * N + i] = x[i] + p[i] * h * (j + 1);
+         space[j * N + i] = x[i] + p[i] * h * j;
          //     printf("i %d ,  j %d ,  value : %f \n", i, j, space[j * N + i]);
       }
    };
