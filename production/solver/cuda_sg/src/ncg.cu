@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
 	int itr = 0;
 	int  min_i = 0;
 	double alpha = 1;
-	double h = 1;
+	double h;
 
 
 	int TPB_2D = 16 ;
@@ -93,9 +93,7 @@ int main(int argc, char* argv[]) {
 
 			std::cout << "|"; std::cout.flush();
 
-
 			clock_t t_lineSearch_start = clock();
-
 
 			// BEGIN LINE SEARCH
 			h = .01;
@@ -116,9 +114,6 @@ int main(int argc, char* argv[]) {
 			}
 
 			alpha = min_i * h;
-			cout << "asdfasd" << min_i << endl;
-			cout << "asdfasd" << h << endl;
-			cout << "asdfasd" << alpha << endl;
 			cpu::linalg_add (1.0, x0, alpha, p, x1);
 			// END LINE SEARCH
 
@@ -162,6 +157,8 @@ int main(int argc, char* argv[]) {
 	json.append("x_min", x_min);
 	json.append("func_val", func_val);
 	json.append("p", p);
+	json.append("x0", x0);
+	json.append("x1", x1);
 
 	cout << "\n\n";
 	cout << json.dump();
