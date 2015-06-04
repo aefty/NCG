@@ -104,8 +104,8 @@ int main(int argc, char* argv[]) {
 
 			h  = h * 1.5;
 		redo:
-			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-			gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
+			gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+			gpu::lineValue <<< GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
 
 			CUDA_ERR_CHECK(cudaDeviceSynchronize());
 			gpu::unalloc(_func_val, func_val );
@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
 			//% tol = norm(x1 - x0)
 			cpu::linalg_add(1.0, x1, -1.0, x0, vtemp);
 			cpu::linalg_dot(vtemp, vtemp, tol);
-			tol = pow(tol , 0.5) / _GLB_N_;
+			tol = pow(tol , 0.5);
 			gg0 = gg1;
 
 			x0 = x1;
