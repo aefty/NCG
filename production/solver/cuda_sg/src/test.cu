@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 
 	// Line Descretiztion
 	int TPB_OPTIMAL_1D = 128;
-	long int D = 128 * 128;
+	long int D = 32;
 
 	int rows = (_GLB_N_ / TPB_OPTIMAL_1D) < 1 ? 1 : (_GLB_N_ / TPB_OPTIMAL_1D) ;
 	int cols = D < 1 ? 1 : D ;
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
 
 	clock_t t_start_lineSearch = clock();
 	double h = .5;
-	gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+	gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
 	gpu::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
 	gpu::unalloc(_func_val, func_val );
 
