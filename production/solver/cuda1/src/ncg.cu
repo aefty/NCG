@@ -63,7 +63,8 @@ int main(int argc, char* argv[]) {
 
 	// BEGIN NCG
 	{
-		std::cout << "|";
+		std::cout << "|"; std::cout.flush();
+
 		cuda::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p, _space);
 		std::linalg_sdot( -1.0, p, p);
 
@@ -73,7 +74,7 @@ int main(int argc, char* argv[]) {
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
 
-			std::cout << "|" << endl;
+			std::cout << "|"; std::cout.flush();
 
 			j = 0;
 			alpha_last = 1.0;
@@ -84,7 +85,7 @@ int main(int argc, char* argv[]) {
 			// BEING LINE SEARCH
 			{
 				while (j < _GLB_ITR_LINE_ && abs(alpha - alpha_last) >= _GLB_EPS_) {
-					std::cout << "." << endl;
+					std::cout << "."; std::cout.flush();
 
 					//%% Note : Calculate Hessian x p (Hp)
 					//%% 2nd-term Taylor expansion (average -/+ expansion for better accuracy)

@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
 
 	double t_lineSearch = 0.0;
 
-	std::cout << "NCG - Started \n";
+	std::cout << "NCG - Started" << endl;
 	clock_t t_start = clock();
 
 	// BEGIN NCG
@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
 		x1 = x0;
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
-			std::cout << "|";
+			std::cout << "|"; std::cout.flush();
 
 			j = 0;
 			alpha_last = 1.0;
@@ -87,7 +87,7 @@ int main(int argc, char* argv[]) {
 			 */
 			{
 				while (j < _GLB_ITR_LINE_ && abs(alpha - alpha_last) >= _GLB_EPS_) {
-					std::cout << ".";
+					std::cout << "."; std::cout.flush();
 
 					//%% Note : Calculate Hessian x p (Hp)
 					//%% 2nd-term Taylor expansion (average -/+ expansion for better accuracy)
