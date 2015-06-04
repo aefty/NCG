@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 
 	if (argc > 1) { _GLB_N_ = _GLB_N_ * (double)atoi(argv[1]); }
 
-	if (argc > 2) { _GLB_ITR_ = (doule)_GLB_ITR_ * (double)atoi(argv[2]); }
+	if (argc > 2) { _GLB_ITR_ = _GLB_ITR_ * (double)atoi(argv[2]); }
 
 	if (argc > 3) { _GLB_ITR_LINE_ = _GLB_ITR_LINE_ * (double)atoi(argv[3]); }
 
