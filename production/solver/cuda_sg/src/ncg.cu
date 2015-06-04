@@ -118,8 +118,8 @@ int main(int argc, char* argv[]) {
 
 			if (alpha == 0 && h > _GLB_EPS_) {
 				h = h / 2;
-				goto redo;
 				std::cout << "."; std::cout.flush();
+				goto redo;
 			}
 
 			cpu::linalg_add (1.0, x0, alpha, p, x1);
