@@ -80,7 +80,7 @@ int main(int argc, char* argv[]) {
 		double* _x = (double*)cuda::alloc(A);
 		double* _p = (double*)cuda::alloc(A);
 
-		discLine_kernel <<< 5 , 6>>> (_GLB_N_, _x , _p, h , _space);
+		discLine_kernel <<<2 , 3>>> (_GLB_N_, _x , _p, h , _space);
 	}
 
 
