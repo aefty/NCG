@@ -20,13 +20,11 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
-	if (argc > 1) { _GLB_N_ = _GLB_N_ * atoi(argv[1]); }
+	int showX = 0;
 
-	if (argc > 2) { _GLB_ITR_ = _GLB_ITR_ * atoi(argv[2]); }
+	if (argc > 1) { _GLB_N_ = (long int) _GLB_N_ * atof(argv[1]); }
 
-	if (argc > 3) { _GLB_ITR_LINE_ = _GLB_ITR_LINE_ * atoi(argv[3]); }
-
-	if (argc > 4) { _GLB_EPS_ = _GLB_EPS_ * atoi(argv[4]); }
+	if (argc > 2) { showX = atoi(argv[2]); }
 
 	/**
 	 * CODE BLOCK 1
@@ -164,7 +162,11 @@ int main(int argc, char* argv[]) {
 	json.append("rate", rate);
 	json.append("x_max", x_max);
 	json.append("x_min", x_min);
-	//json.append("x", x1);
+
+	if (showX) {
+		json.append("x", x1);
+	}
+
 	cout << "\n\n";
 	cout << json.dump();
 	cout << "\n\n";
