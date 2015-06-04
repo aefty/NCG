@@ -151,6 +151,9 @@ int main(int argc, char* argv[]) {
 
 			x0 = x1;
 			itr ++;
+
+			json.append("x", x1);
+			cout << json.dump();
 		}
 	}
 	//END NCG
