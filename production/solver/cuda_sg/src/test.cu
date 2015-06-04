@@ -72,10 +72,6 @@ int main(int argc, char* argv[]) {
 	{
 
 		int TPB_OPTIMAL_1D = 1;
-		int blocks = (_GLB_N_ * disc / TPB_OPTIMAL_1D) < 1 ? 1 : _GLB_N_ * disc / TPB_OPTIMAL_1D  ;
-
-		cout << TPB_OPTIMAL_1D << endl;
-		cout << blocks << endl;
 
 		double* _x = (double*)cuda::alloc(A);
 		double* _p = (double*)cuda::alloc(A);
@@ -86,7 +82,7 @@ int main(int argc, char* argv[]) {
 		dim3 GPU_TPB_2D (TPB_OPTIMAL_1D, TPB_OPTIMAL_1D);
 		dim3 GPU_BLOCK_2D(rows , cols);
 
-		discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _x , _p, h , _space);
+		discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _x , _p, h , _space);
 	}
 
 
