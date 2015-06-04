@@ -18,7 +18,7 @@ namespace cuda {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
       int j = blockDim.y * blockIdx.y + threadIdx.y;
 
-      cout << "(" << i << "," << j << ") " << endl;
+      printf("( %d , %d ) \n", i, j);
 
 
       //space[j * N + i] = x[i] + p[i] * h * j;
@@ -43,7 +43,7 @@ namespace cuda {
       double* _x = (double*)cuda::alloc(x);
       double* _p = (double*)cuda::alloc(p);
 
-      discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, h , _space);
+      discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, h , _space);
    };
 
    /*
