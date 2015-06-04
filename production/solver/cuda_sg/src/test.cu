@@ -68,8 +68,6 @@ int main(int argc, char* argv[]) {
 	double* _space = (double*) cuda::alloc(space);
 
 
-
-	///
 	double scalar = 1.0;
 
 	clock_t t_start_dot = clock();
@@ -87,7 +85,7 @@ int main(int argc, char* argv[]) {
 	clock_t t_start_grad_cuda = clock();
 
 	{
-		discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _x , _p, h , _space);
+		discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _A , _P, h , _space);
 	}
 
 
