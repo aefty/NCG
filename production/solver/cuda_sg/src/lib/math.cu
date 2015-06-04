@@ -18,7 +18,7 @@ namespace gpu {
          FUNCTION(N, &space[i * N], &val);
          func_val[i] = val;
 
-         printf("i : %d, value : %f", i , val )
+         printf("i : %d, value : %f", i , val );
 
       };
    };
