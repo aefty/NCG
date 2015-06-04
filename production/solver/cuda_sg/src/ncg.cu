@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
 
 	JSON json;
 
-	vector<double> x0; GUESS(_GLB_N_, x0); double* _x0 = (double*) gpu::alloc(x1);
+	vector<double> x0; GUESS(_GLB_N_, x0); double* _x0 = (double*) gpu::alloc(x0);
 
 	vector<double> x1(_GLB_N_);
 
@@ -114,7 +114,7 @@ int main(int argc, char* argv[]) {
 
 			alpha = min_i * h;
 
-			cpu::linalg_add (1.0, x0, alpha, P, x1);
+			cpu::linalg_add (1.0, x0, alpha, p, x1);
 			// END LINE SEARCH
 
 			t_lineSearch += (clock() - t_lineSearch_start) / (double) CLOCKS_PER_SEC;
@@ -142,7 +142,7 @@ int main(int argc, char* argv[]) {
 	double rate = (double)_GLB_N_ / t_run;
 	t_lineSearch = t_lineSearch;
 
-	cuda::unalloc(_space);
+	gpu::unalloc(_space);
 
 	double x_max = *max_element(std::begin(x1), std::end(x1));
 	double x_min = *min_element(std::begin(x1), std::end(x1));
