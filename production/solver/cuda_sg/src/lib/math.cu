@@ -1,4 +1,4 @@
-namespace cuda {
+namespace gpu {
 
    __device__ float atomicMax(float* address, float val) {
       int* address_as_int = (int*)address;
