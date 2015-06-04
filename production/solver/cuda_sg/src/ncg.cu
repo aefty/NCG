@@ -113,7 +113,7 @@ int main(int argc, char* argv[]) {
 			}
 
 			alpha = min_i * h;
-
+			cout << alpha;
 			cpu::linalg_add (1.0, x0, alpha, p, x1);
 			// END LINE SEARCH
 
