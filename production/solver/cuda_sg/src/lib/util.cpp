@@ -11,7 +11,7 @@
 namespace gpu {
 
 	inline void* alloc(vector<double>& host_vec, void* p) {
-		size_t s = N * sizeof(double);
+		size_t s = host_vec.size() * sizeof(double);
 		double* host_array = &host_vec[0];
 		CUDA_ERR_CHECK(cudaMemcpy(p, host_array, s, cudaMemcpyHostToDevice));
 		return p;

@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 	dim3 GPU_BLOCK_2D(block_x , block_y);
 
 	dim3 GPU_TPB_1D (TPB_2D * TPB_2D);
-	dim3 GPU_BLOCK_1D(_GLB_N_ / GPU_TPB_1D.x);
+	dim3 GPU_BLOCK_1D(_GLB_N_ / GPU_TPB_1D.x + 1) ;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
 			gpu::alloc(p, _p);
 
 			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-			gpu::lineValue <<< GPU_BLOCK_1D + 1, GPU_TPB_1D >>> (_GLB_N_, range, _space ,  _func_val);
+			gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
 			gpu::unalloc(_func_val, func_val );
 
 			for (int i = 1; i < func_val.size(); i++) {
