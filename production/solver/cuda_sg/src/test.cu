@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
 		double* _x = (double*)cuda::alloc(A);
 		double* _p = (double*)cuda::alloc(A);
 
-		int rows = (N / TPB_OPTIMAL_1D) < 1 ? 1 : (N / TPB_OPTIMAL_1D) ;
+		int rows = (_GLB_N_ / TPB_OPTIMAL_1D) < 1 ? 1 : (_GLB_N_ / TPB_OPTIMAL_1D) ;
 		int cols = 3 < 1 ? 1 : 3 ;
 
 		dim3 GPU_TPB_2D (TPB_OPTIMAL_1D, TPB_OPTIMAL_1D);
