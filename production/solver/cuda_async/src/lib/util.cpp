@@ -56,7 +56,6 @@ namespace cuda {
 		wcout << "NBody.GPU" << endl << "=========" << endl << endl;
 
 		wcout << "CUDA version:   v" << CUDART_VERSION << endl;
-		wcout << "Thrust version: v" << THRUST_MAJOR_VERSION << "." << THRUST_MINOR_VERSION << endl << endl;
 
 		int devCount;
 		cudaGetDeviceCount(&devCount);
