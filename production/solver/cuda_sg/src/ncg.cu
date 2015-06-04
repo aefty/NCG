@@ -102,7 +102,7 @@ int main(int argc, char* argv[]) {
 
 
 
-			h  = h * 2;
+			h  = _GLB_EPS_;
 		redo:
 			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
 			gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
@@ -120,7 +120,7 @@ int main(int argc, char* argv[]) {
 
 			alpha = min_i * h;
 
-			cout << alpha << endl;
+			//cout << alpha << endl;
 
 			//if (itr > 0) { goto end; }
 
@@ -151,9 +151,6 @@ int main(int argc, char* argv[]) {
 
 			x0 = x1;
 			itr ++;
-
-			json.append("x", x1);
-			cout << json.dump();
 		}
 	}
 	//END NCG
