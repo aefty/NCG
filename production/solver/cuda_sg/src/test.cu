@@ -28,7 +28,7 @@ __global__ void discLine_kernel( long int N , long int D ,  double* x, double* p
 __global__ void lineValue_kernel( long int N , long int D , double* space, double* alpha_set) {
 	int i = blockDim.x * blockIdx.x + threadIdx.x;
 
-	if (i < N ) {
+	if (i < D ) {
 		double val = 0.0;
 		FUNCTION(N, &space[i * N], &val);
 		alpha_set[i] = val; //(val < alpha_set[i]) ? val : alpha_set[i];
@@ -94,7 +94,7 @@ int main(int argc, char* argv[]) {
 	double t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
 
 	clock_t t_start_grad_cuda = clock();
-	discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+	discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
 	lineValue_kernel <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _alpha_set);
 
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
