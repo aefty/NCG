@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
 			}
 		}
 
-		cuda::unalloc(*(_space + min_i * _GLB_N_), A );
+		cuda::unalloc((double*) (_space + sizeof(double) * (min_i * _GLB_N_)), A );
 	}
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
 
@@ -97,8 +97,8 @@ int main(int argc, char* argv[]) {
 	cuda::unalloc(_space, space );
 	cuda::unalloc(_space);
 	cuda::unalloc(_func_val);
-	cuda::unalloc(A);
-	cuda::unalloc(P);
+	cuda::unalloc(_A);
+	cuda::unalloc(_P);
 
 	json.append("size", _GLB_N_);
 	json.append("dot_time", t_dot);
