@@ -34,12 +34,14 @@ namespace cuda {
          double* _gradi = (double*)cuda::alloc(grad[i]);
 
          CUDA_ERR_CHECK(cudaStreamCreate(&stream[i]));
-         CUDA_ERR_CHECK(cudaMemcpyAsync(&x[0], _x, streamSize, cudaMemcpyHostToDevice, stream[i])) ;
+         CUDA_ERR_CHECK(cudaMemcpyAsync( _x, &x[0], streamSize, cudaMemcpyHostToDevice, stream[i])) ;
 
          async_grad <<<1, 1, 0, stream[i]>>> (N, i, EPS, _x, _gradi);
 
-         CUDA_ERR_CHECK(cudaMemcpyAsync(&grad[i], _gradi, streamSize, cudaMemcpyDeviceToHost, stream[i])) ;
+         CUDA_ERR_CHECK(cudaMemcpyAsync( _gradi, &grad[i], streamSize, cudaMemcpyDeviceToHost, stream[i])) ;
       }
+
+      cudaThreadSynchronize();
    };
 };
 
