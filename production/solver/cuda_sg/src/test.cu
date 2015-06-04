@@ -44,7 +44,6 @@ int main(int argc, char* argv[]) {
 	double* _A = (double*)cuda::alloc(A);
 	vector<double> B(_GLB_N_, 1.0);
 	vector<double> C(_GLB_N_, 1.0);
-	vector<double> D(_GLB_N_, 1.0);
 
 	vector<double> GRAD(_GLB_N_, 0.0);
 
@@ -67,8 +66,9 @@ int main(int argc, char* argv[]) {
 	vector<double> space(D * _GLB_N_, 0.0);
 	double* _space = (double*) cuda::alloc(space);
 
-
 	double scalar = 1.0;
+
+
 
 	clock_t t_start_dot = clock();
 	std::linalg_dot (A, B, scalar);
@@ -83,16 +83,12 @@ int main(int argc, char* argv[]) {
 	double t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
 
 	clock_t t_start_grad_cuda = clock();
-
-	{
-		discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _A , _P, h , _space);
-	}
-
-
-	//cuda::lineSearch_disc(_GLB_N_ , h, disc,  A, A, _space);
-
-
+	discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _A , _P, h , _space);
 	double t_grad_cuda = (clock() - t_start_grad_cuda) / (double) CLOCKS_PER_SEC;
+
+
+
+
 
 	double max_grad = *max_element(std::begin(C), std::end(C));
 	double min_grad = *min_element(std::begin(C), std::end(C));
