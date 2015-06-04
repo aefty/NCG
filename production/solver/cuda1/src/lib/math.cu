@@ -4,7 +4,8 @@ namespace cuda {
    __global__ void initSpace( long int N ,  double* x, double EPS, double* space) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
       int j = blockDim.y * blockIdx.y + threadIdx.y;
-      space[j * N + i] = x[i] + EPS;
+      //space[j * N + i] = x[i] + EPS;
+      space[j * N + i] = x[i];
    };
 
    __global__ void bulkGrad( long int N ,  double EPS, double* space, double* grad) {

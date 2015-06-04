@@ -50,28 +50,19 @@ double maxError(double* a, int n) {
 }
 
 int main(int argc, char** argv) {
-  int M = 1; int F = 1;
-
   const int blockSize = 256, nStreams = 4;
   const int n = 4 * 1024 * blockSize * nStreams;
   const int streamSize = n / nStreams;
-  const int streamBytes = streamSize * sizeof(float);
-  const int bytes = n * sizeof(float);
-  int devId = 0;
+  const int streamBytes = streamSize * sizeof(double);
+  const int bytes = n * sizeof(double);
 
+  int devId = 0;
 
   if (argc > 1) { devId = atoi(argv[1]); }
 
   cudaDeviceProp prop;
   checkCuda( cudaGetDeviceProperties(&prop, devId));
   printf("Device : %s\n", prop.name);
-  printf("CUDA version : %d\n", CUDART_VERSION);
-  printf("N : %d\n",   n);
-  printf("Streams : %d\n",   nStreams);
-
-  printf("Blocks : %d\n",   streamSize / blockSize);
-  printf("Threads : %d\n",   blockSize);
-
 
   checkCuda( cudaSetDevice(devId) );
 
@@ -95,11 +86,9 @@ int main(int argc, char** argv) {
 
   // baseline case - sequential transfer and execute
   memset(a, 0, bytes);
-
   checkCuda( cudaEventRecord(startEvent, 0) );
   checkCuda( cudaMemcpy(d_a, a, bytes, cudaMemcpyHostToDevice) );
   kernel <<< n / blockSize, blockSize >>> (d_a, 0);
-
   checkCuda( cudaMemcpy(a, d_a, bytes, cudaMemcpyDeviceToHost) );
   checkCuda( cudaEventRecord(stopEvent, 0) );
   checkCuda( cudaEventSynchronize(stopEvent) );

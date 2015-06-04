@@ -43,10 +43,6 @@ namespace cuda {
       CUDA_ERR_CHECK( cudaEventCreate(&stopEvent) );
       CUDA_ERR_CHECK( cudaEventCreate(&dummyEvent) );
 
-      for (int i = 0; i < nStreams; ++i) {
-         CUDA_ERR_CHECK( cudaStreamCreate(&stream[i]) );
-      }
-
 
       // asynchronous version 1: loop over {copy, kernel, copy}
       //memset(a, 0, bytes);
@@ -54,7 +50,7 @@ namespace cuda {
 
       for (int i = 0; i < nStreams; ++i) {
 
-
+         CUDA_ERR_CHECK( cudaStreamCreate(&stream[i]) );
 
 
 
