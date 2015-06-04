@@ -50,8 +50,8 @@ double maxError(double* a, int n) {
 }
 
 int main(int argc, char** argv) {
-  const int blockSize = 256, nStreams = 64;
-  const int n = 4 * 1024 * blockSize * nStreams;
+  const int n = 4 * 1024;
+  const int blockSize = 256, nStreams = n;
   const int streamSize = n / nStreams;
   const int streamBytes = streamSize * sizeof(double);
   const int bytes = n * sizeof(double);
@@ -85,9 +85,11 @@ int main(int argc, char** argv) {
 
   // baseline case - sequential transfer and execute
   memset(a, 0, bytes);
+
   checkCuda( cudaEventRecord(startEvent, 0) );
   checkCuda( cudaMemcpy(d_a, a, bytes, cudaMemcpyHostToDevice) );
   kernel <<< n / blockSize, blockSize >>> (d_a, 0);
+
   checkCuda( cudaMemcpy(a, d_a, bytes, cudaMemcpyDeviceToHost) );
   checkCuda( cudaEventRecord(stopEvent, 0) );
   checkCuda( cudaEventSynchronize(stopEvent) );
