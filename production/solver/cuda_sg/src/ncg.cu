@@ -102,10 +102,10 @@ int main(int argc, char* argv[]) {
 
 
 
-			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+			gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
 
 
-			gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
+			gpu::lineValue <<< GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
 
 			CUDA_ERR_CHECK(cudaDeviceSynchronize());
 
@@ -147,6 +147,7 @@ int main(int argc, char* argv[]) {
 	double rate = (double)_GLB_N_ / t_run;
 	t_lineSearch = t_lineSearch;
 
+	gpu::unalloc(_space, space);
 	gpu::unalloc(_space);
 
 	double x_max = *max_element(std::begin(x1), std::end(x1));
@@ -166,6 +167,7 @@ int main(int argc, char* argv[]) {
 	json.append("x1", x1);
 	json.append("min_i", min_i);
 	json.append("alpha", alpha);
+	json.append("space", space);
 
 	cout << "\n\n";
 	cout << json.dump();
