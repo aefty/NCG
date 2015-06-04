@@ -70,6 +70,9 @@ int main(int argc, char** argv) {
   checkCuda( cudaGetDeviceProperties(&prop, devId));
   printf("Device : %s\n", prop.name);
   printf("CUDA version : v%d\n", CUDART_VERSION);
+  printf("Number of Blocks : v%d\n",   streamSize / blockSize);
+
+
   checkCuda( cudaSetDevice(devId) );
 
   // allocate pinned host memory and device memory
