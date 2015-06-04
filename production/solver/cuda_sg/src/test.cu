@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
 
 	vector<double> P(_GLB_N_);
 	P[2] = 0.5;
-	double* _p = (double*)cuda::alloc(P);
+	double* _P = (double*)cuda::alloc(P);
 
 
 	// Line Descretiztion
@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 	clock_t t_start_grad_cuda = clock();
 
 	{
-		discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _A , _P, h , _space);
+		discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (_GLB_N_, _A , _P, h , _space);
 	}
 
 
