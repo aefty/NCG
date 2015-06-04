@@ -29,10 +29,10 @@ namespace cuda {
 
       for (int i = 0; i < N; i++) {
 
-         void* _x;
+         double* _x;
          CUDA_ERR_CHECK(cudaMalloc(_x, (size_t)x.size()*sizeof(double)));
 
-         void* _gradi;
+         double* _gradi;
          CUDA_ERR_CHECK(cudaMalloc(_gradi, (size_t)sizeof(double)));
 
          CUDA_ERR_CHECK(cudaStreamCreate(&stream[i]));
