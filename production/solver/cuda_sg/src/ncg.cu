@@ -37,6 +37,8 @@ int main(int argc, char* argv[]) {
 
 	JSON json;
 
+	cout << "1" << endl;
+
 	vector<double> x0; GUESS(_GLB_N_, x0); double* _x0 = (double*) gpu::alloc(x0);
 	vector<double> x1(_GLB_N_);
 	vector<double> p(_GLB_N_); double* _p = (double*) gpu::alloc(p);
@@ -45,9 +47,13 @@ int main(int argc, char* argv[]) {
 	vector<double> g01(_GLB_N_);
 	vector<double> g1(_GLB_N_);
 
+	cout << "2" << endl;
+
 	double gg0 = 0.0;
 	double gg1 = 0.0;
 	double B = 0.0;
+
+	cout << "3" << endl;
 
 	double tol = _GLB_EPS_ + 1.0;
 	int itr = 0;
@@ -68,8 +74,12 @@ int main(int argc, char* argv[]) {
 	dim3 GPU_TPB_1D (TPB_2D * TPB_2D);
 	dim3 GPU_BLOCK_1D(_GLB_N_ / GPU_TPB_1D.x + 1) ;
 
+	cout << "4" << endl;
+
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
+
+	cout << "5" << endl;
 
 	double t_lineSearch = 0.0;
 	clock_t t_start = clock();
@@ -93,8 +103,12 @@ int main(int argc, char* argv[]) {
 			* Line Search
 			*/
 			{
+
+				cout << "6" << endl;
 				gpu::alloc(x0, _x0);
 				gpu::alloc(p, _p);
+
+				cout << "7" << endl;
 
 				gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
 				gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
