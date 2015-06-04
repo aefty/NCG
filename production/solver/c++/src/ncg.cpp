@@ -107,9 +107,6 @@ int main(int argc, char* argv[]) {
 					cpu::linalg_dot(p, Hp, alpha);
 					alpha = -1.0 * stemp / alpha;
 
-					cout << alpha;
-					return 0;
-
 					// %x1=x1+alpha*p;
 					cpu::linalg_add(1.0, x1, alpha, p, x1);
 
