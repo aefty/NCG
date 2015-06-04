@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
 	int itr = 0;
 	int  min_i = 0;
 	double alpha = 1;
-	double h;
+	double h = 1;
 
 
 	int TPB_2D = 16 ;
@@ -96,16 +96,16 @@ int main(int argc, char* argv[]) {
 			clock_t t_lineSearch_start = clock();
 
 			// BEGIN LINE SEARCH
-			h = .01;
+
 			gpu::alloc(x0, _x0);
 			gpu::alloc(p, _p);
 
-			gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-
-			gpu::lineValue <<< GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
+		redo:
+			h  = h * 2;
+			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+			gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
 
 			CUDA_ERR_CHECK(cudaDeviceSynchronize());
-
 			gpu::unalloc(_func_val, func_val );
 
 			for (int i = 1; i < func_val.size(); i++) {
@@ -115,7 +115,15 @@ int main(int argc, char* argv[]) {
 			}
 
 			alpha = min_i * h;
+
+			if (alpha == 0 && h > _GLB_EPS_) {
+				h = h / 2;
+				goto redo;
+				std::cout << "."; std::cout.flush();
+			}
+
 			cpu::linalg_add (1.0, x0, alpha, p, x1);
+
 
 			// END LINE SEARCH
 
