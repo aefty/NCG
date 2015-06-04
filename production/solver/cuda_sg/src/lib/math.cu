@@ -40,10 +40,14 @@ namespace cuda {
       vector<double> alpha_set(GPU_TPB_1D.x * GPU_BLOCK_1D.x);
       double* _alpha_set = (double*)cuda::alloc(alpha_set);
 
-      initSpace <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, EPS , _space);
+      double* _x = (double*)cuda::alloc(x);
+
+      discLine <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, EPS , _space);
       lineValue  <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (N,  _space, _alpha_set);
 
       cuda::unalloc(_alpha_set, alpha_set);
+      cuda::unalloc(_x);
+
       alpha = *min_element(std::begin(alpha_set), std::end(alpha_set));
    };
 };
