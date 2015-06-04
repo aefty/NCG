@@ -50,29 +50,25 @@ int main(int argc, char* argv[]) {
 
 	double scalar = 1.0;
 
-	clock_t t_start_dot, t_start_sdot, t_start_lineSearch;
-	double t_dot, t_sdot, t_add, t_lineSearch
 
-
-
-	t_start_dot = clock();
+	clock_t t_start_dot = clock();
 	cpu::linalg_dot (A, B, scalar);
-	t_dot = (clock() - t_start_dot) / (double) CLOCKS_PER_SEC;
+	double t_dot = (clock() - t_start_dot) / (double) CLOCKS_PER_SEC;
 
-	t_start_sdot = clock();
+	clock_t t_start_sdot = clock();
 	cpu::linalg_sdot(scalar, A, B);
-	t_sdot = (clock() - t_start_sdot) / (double) CLOCKS_PER_SEC;
+	double t_sdot = (clock() - t_start_sdot) / (double) CLOCKS_PER_SEC;
 
-	t_start_add = clock();
+	clock_t t_start_add = clock();
 	cpu::linalg_add (1.0, A, 1.0, B, C);
-	t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
+	double t_add = (clock() - t_start_add) / (double) CLOCKS_PER_SEC;
 
 
 	int  min_i = 0;
 
-	t_start_lineSearch = clock();
+	clock_t t_start_lineSearch = clock();
 	double h = .5;
-	gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
+	gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, D, _A , _P, h , _space);
 	gpu::lineValue <<< (_GLB_N_ / 128 + 1), 128 >>> (_GLB_N_, D, _space ,  _func_val);
 	gpu::unalloc(_func_val, func_val );
 
@@ -83,7 +79,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	std::linalg_add (1.0, A, min_i * h, P, A);
-	t_lineSearch = (clock() - t_start_lineSearch) / (double) CLOCKS_PER_SEC;
+	double t_lineSearch = (clock() - t_start_lineSearch) / (double) CLOCKS_PER_SEC;
 
 
 	double max_grad = *max_element(std::begin(C), std::end(C));
