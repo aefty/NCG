@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
 
 
 	int TPB_2D = 16 ;
-	long int range = 16;
+	long int range = 16 * 2;
 
 	int block_x = (_GLB_N_ / TPB_2D) < 1 ? 1 : (_GLB_N_ / TPB_2D) ;
 	int block_y = range < 1 ? 1 : range ;
@@ -102,10 +102,10 @@ int main(int argc, char* argv[]) {
 			gpu::alloc(x0, _x0);
 			gpu::alloc(p, _p);
 
-			h  += _GLB_EPS_;
+			//h  += _GLB_EPS_;
 		redo:
-			gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-			gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
+			gpu::lineDiscretize <<<GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+			gpu::lineValue <<< GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
 
 			CUDA_ERR_CHECK(cudaDeviceSynchronize());
 			gpu::unalloc(_func_val, func_val );
@@ -118,11 +118,7 @@ int main(int argc, char* argv[]) {
 
 			alpha = min_i * h;
 
-			//cout << alpha << endl;
-
-			//if (itr > 0) { goto end; }
-
-			if (alpha == 0 && h > _GLB_EPS_ ) {
+			if (false && alpha == 0 && h > _GLB_EPS_ ) {
 				h = h / 2.0;
 				std::cout << "."; std::cout.flush();
 				goto redo;
@@ -144,8 +140,7 @@ int main(int argc, char* argv[]) {
 			//% tol = norm(x1 - x0)
 			cpu::linalg_add(1.0, x1, -1.0, x0, vtemp);
 			cpu::linalg_dot(vtemp, vtemp, tol);
-			//tol = pow(tol , 0.5) / _GLB_N_;
-			tol = tol / _GLB_N_;
+			tol = pow(tol , 0.5) / _GLB_N_;
 			gg0 = gg1;
 
 			x0 = x1;
