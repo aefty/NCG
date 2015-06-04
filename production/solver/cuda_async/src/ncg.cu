@@ -25,6 +25,8 @@ int main(int argc, char* argv[]) {
 
 	if (argc > 4) { _GLB_EPS_ = _GLB_EPS_ * (double)atoi(argv[4]); }
 
+	cout << _GLB_ITR_ << endl;
+
 	cuda::deviceSpecs();
 
 	JSON json;
