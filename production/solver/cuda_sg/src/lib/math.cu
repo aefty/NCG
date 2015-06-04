@@ -35,7 +35,8 @@ namespace cuda {
 
    inline void lineSearch_disc(long int N , double h, double rad, vector<double>& x, vector<double>& p, double* _space) {
       int TPB_OPTIMAL_2D = 16;
-      int bockx = N / GPU_TPB_2D.x ? N / GPU_TPB_2D.x : 1;
+
+      int bockx = N / TPB_OPTIMAL_2D ? N / TPB_OPTIMAL_2D : 1;
       int bocky = N / (rad / h) ? N / (rad / h) : 1;
 
       dim3 GPU_TPB_2D(TPB_OPTIMAL_2D, TPB_OPTIMAL_2D);
@@ -47,7 +48,7 @@ namespace cuda {
       double* _x = (double*)cuda::alloc(x);
       double* _p = (double*)cuda::alloc(p);
 
-      discLine_kernel <<< GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, h , _space);
+      discLine_kernel <<<GPU_BLOCK_2D , GPU_TPB_2D>>> (N, _x , _p, h , _space);
    };
 
    /*
