@@ -239,7 +239,7 @@ int main(int argc, char* argv[]) {
 	double rate = (double)_GLB_N_ / t_run;
 	t_lineSearch = t_lineSearch;
 
-	gpu::unalloc(_x0);
+
 	cout << "after 8" << endl;
 	gpu::unalloc(_vtemp);
 	cout << "after 77" << endl;
@@ -249,13 +249,14 @@ int main(int argc, char* argv[]) {
 	cout << "after 66" << endl;
 	gpu::unalloc(_p);
 
+
 	gpu::unalloc(_g00);
 
 	gpu::unalloc(_g01);
 	gpu::unalloc(_g1);
 	gpu::unalloc(_x1);
 
-
+	gpu::unalloc(_x0);
 
 	gpu::unalloc(_gr_space );
 	gpu::unalloc(_ld_space );
