@@ -37,22 +37,8 @@ int main(int argc, char* argv[]) {
 
 	JSON json;
 
-	// Primary Variables
-	vector<double> x0(_GLB_N_);
-	GUESS(_GLB_N_, x0);
-	double* _x0    		= (double*) gpu::alloc(x0);
 
-	vector<double> vtemp(_GLB_N_);
-	double* _vtemp = (double*) gpu::alloc(vtemp);
-	double* _x1    = (double*) gpu::alloc(_GLB_N_);
-	double* _p     = (double*) gpu::alloc(_GLB_N_);
-	double* _g00   = (double*) gpu::alloc(_GLB_N_);
-	double* _g01   = (double*) gpu::alloc(_GLB_N_);
-	double* _g1    = (double*) gpu::alloc(_GLB_N_);
-
-	double     gg0 = 0.0;
-	double     gg1 = 0.0;
-	double       B = 0.0;
+	// Racis
 	double temp ;
 
 	double    tol = _GLB_EPS_ + 1.0;
@@ -60,6 +46,29 @@ int main(int argc, char* argv[]) {
 	double  min_i = 0;
 	double  alpha = 1;
 	double      h = _GLB_EPS_;
+	int     range = 257;
+
+
+	// Primary Variables
+	vector<double> x0(_GLB_N_);
+	GUESS(_GLB_N_, x0);
+	double* _x0     = (double*) gpu::alloc(x0);
+
+	vector<double> vtemp(_GLB_N_);
+	double* _vtemp  = (double*) gpu::alloc(vtemp);
+
+	vector<double> vtempl(range);
+	double* _vtempl = (double*) gpu::alloc(vtempl);
+
+	double* _x1     = (double*) gpu::alloc(_GLB_N_);
+	double* _p      = (double*) gpu::alloc(_GLB_N_);
+	double* _g00    = (double*) gpu::alloc(_GLB_N_);
+	double* _g01    = (double*) gpu::alloc(_GLB_N_);
+	double* _g1     = (double*) gpu::alloc(_GLB_N_);
+
+	double     gg0  = 0.0;
+	double     gg1  = 0.0;
+	double       B  = 0.0;
 
 	// Block Memory Allocation
 	double* _gr_space = (double*) gpu::alloc(_GLB_N_ * _GLB_N_);
@@ -68,13 +77,13 @@ int main(int argc, char* argv[]) {
 
 	// Block Schimatics
 	dim3 nm_tpb (16, 16);
-	dim3 nm_blocks(_GLB_N_ / ld_tpb.x + 1, 256);
+	dim3 nm_blocks(_GLB_N_ / nm_tpb.x + 1, 256);
 
 	dim3 nn_tpb(128, 128);
 	dim3 nn_blocks(_GLB_N_ / nn_tpb.x , _GLB_N_ / nn_tpb.y);
 
 	dim3 ln_tpb (128);
-	dim3 ln_blocks(_GLB_N_ / fv_tpb.x + 1);
+	dim3 ln_blocks(_GLB_N_ / ln_tpb.x + 1);
 
 	double t_lineSearch = 0.0;
 	clock_t t_start = clock();
@@ -84,8 +93,8 @@ int main(int argc, char* argv[]) {
 		gpu::alloc(x0, _x0);
 
 		//cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
-		gpu::spcc <<< nn_blocks , nn_tpb>>>   (_GLB_N_, _x0, _space );
-		gpu::grad <<< nn_blocks , nn_tpb>>>   (_GLB_N_, _GLB_EPS_, _space , _p);
+		gpu::spcc <<< nn_blocks , nn_tpb>>>   (_GLB_N_, _x0, _gr_space );
+		gpu::grad <<< nn_blocks , nn_tpb>>>   (_GLB_N_, _GLB_EPS_, _gr_space , _p);
 
 		//cpu::linalg_sdot( -1.0, p, p);
 		gpu::axpby <<< ln_tpb , ln_blocks>>>  (_GLB_N_, -1.0, _p , 0.0, _p , _p);
@@ -118,14 +127,14 @@ int main(int argc, char* argv[]) {
 			* Line Search
 			*/
 			{
-				gpu::ld <<< ld_blocks , ld_tpb>>> (_GLB_N_, range, _x0 , _p, h , _space);
-				gpu::fv <<< fv_blocks , fv_tpb>>> (_GLB_N_, range, _space ,  _func_val);
+				gpu::ld <<< ld_blocks , ld_tpb>>> (_GLB_N_, range, _x0 , _p, h , _ld_space);
+				gpu::fv <<< fv_blocks , fv_tpb>>> (_GLB_N_, range, _ld_space ,  _vtempl);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
-				gpu::unalloc(_func_val, func_val );
+				gpu::unalloc(_vtempl, vtempl );
 
-				for (int i = 1; i < func_val.size(); i++) {
-					if (func_val[i] < func_val[min_i]) {
+				for (int i = 1; i < vtempl.size(); i++) {
+					if (vtempl[i] < vtempl[min_i]) {
 						min_i = i;
 					}
 				};

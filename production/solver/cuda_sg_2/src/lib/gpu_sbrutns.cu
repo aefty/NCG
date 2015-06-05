@@ -66,7 +66,7 @@ namespace gpu {
       };
    };
 
-   __global__ void axpby(const double* a, double* A, const double* b, double* B, double* rtrn) {
+   __global__ void axpby(long int , const double* a, double* A, const double* b, double* B, double* rtrn) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
 
       if (i < N) {
@@ -74,7 +74,7 @@ namespace gpu {
       }
    };
 
-   __global__ void dot(double* A , double* B, double* rtrn) {
+   __global__ void dot(long int N, double* A , double* B, double* rtrn) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
 
       if (i < N) {
