@@ -43,9 +43,10 @@ namespace cpu {
       double fuzzy = 0.5 * (max_grad + min_grad);
 
       for (int i = 0; i < N; i++) {
-         x[i] += 1 ;
+         x[i] += 1.0 ;
 
          for (int j = 0; j < i; j++) {
+            cout << i < endl;
             val = 0.0;
             x[j] -= EPS;
             FUNCTION(N, &x[0], &val);
@@ -64,7 +65,7 @@ namespace cpu {
             x[j] -= EPS2;
          }
 
-         x[i] -= 1 ;
+         x[i] -= 1.0 ;
       };
    };
 
