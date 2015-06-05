@@ -14,8 +14,8 @@
 
 #include "config.cu"
 #include "lib/util.cpp"
-#include "lib/math.cpp"
-#include "lib/lineSearch.cu"
+#include "lib/cpu_sbrutns.cpp"
+#include "lib/gpu_sbrutns.cu"
 #include "lib/json.cpp"
 
 using namespace std;
@@ -78,8 +78,8 @@ int main(int argc, char* argv[]) {
 	{
 		cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
 		cpu::linalg_sdot( -1.0, p, p);
-
 		cpu::linalg_dot(p, p, gg0);
+
 
 		x1 = x0;
 
@@ -123,14 +123,17 @@ int main(int argc, char* argv[]) {
 
 			cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x1, g1);
 			cpu::linalg_dot(g1, g1, gg1);
-			B = gg1 / gg0;
+			
 
+			B = gg1 / gg0;
 			//% p = -g1 + B * p;
 			cpu::linalg_add(-1.0, g1, B, p, p);
 
 			//% tol = norm(x1 - x0)
 			cpu::linalg_add(1.0, x1, -1.0, x0, vtemp);
 			cpu::linalg_dot(vtemp, vtemp, tol);
+			
+
 			tol = pow(tol , 0.5) / _GLB_N_;
 			gg0 = gg1;
 
