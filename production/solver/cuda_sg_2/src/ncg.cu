@@ -90,8 +90,6 @@ int main(int argc, char* argv[]) {
 
 	// BEGIN NCG
 	{
-		gpu::alloc(x0, _x0);
-
 		//cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
 		gpu::spcc <<< nn_blocks , nn_tpb>>>   (_GLB_N_, _x0, _gr_space );
 		gpu::grad <<< nn_blocks , nn_tpb>>>   (_GLB_N_, _GLB_EPS_, _gr_space , _p);
@@ -108,14 +106,14 @@ int main(int argc, char* argv[]) {
 
 			for (int i = 0; i < _GLB_N_; ++i) {
 				gg0 += vtemp[i];
-			}
+			};
 		}
 
 		// Pointer Swap
-		x1 = x0;
-		temp = *x1;
-		*x1 = *x0;
-		*x0 = temp;
+		_x1 = _x0;
+		temp = *_x1;
+		*_x1 = *_x0;
+		*_x0 = temp;
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
 
@@ -155,6 +153,7 @@ int main(int argc, char* argv[]) {
 			t_lineSearch += (clock() - t_lineSearch_start) / (double) CLOCKS_PER_SEC;
 
 			//cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x1, g1);
+			gpu::spcc <<< nn_blocks , nn_tpb>>> (_GLB_N_, x1, _gr_space );
 			gpu::grad <<< ld_blocks , ld_tpb>>> (_GLB_N_, _GLB_EPS_, _x1 , _g1);
 
 			//cpu::linalg_dot(g1, g1, gg1);

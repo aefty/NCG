@@ -38,7 +38,7 @@ namespace gpu {
     * @param space    Memory Space
     * @param func_val Function Value
     */
-   __global__ void fv( long int N , long int D , double* space, double* func_val) {
+   __global__ void fv( long int N, long int D , double* space, double* func_val) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
 
       if (i < D ) {
@@ -50,7 +50,7 @@ namespace gpu {
 
 
 
-   __global__ void grad( long int N ,  double EPS, double* space, double* grad) {
+   __global__ void grad( long int N,  double EPS, double* space, double* grad) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
       double val = 0.0;
 
@@ -66,7 +66,7 @@ namespace gpu {
       };
    };
 
-   __global__ void axpby(long int , const double* a, double* A, const double* b, double* B, double* rtrn) {
+   __global__ void axpby(long int  N, const double a, double* A, const double b, double* B, double* rtrn) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
 
       if (i < N) {
