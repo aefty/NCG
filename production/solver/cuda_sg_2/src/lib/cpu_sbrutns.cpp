@@ -40,6 +40,7 @@ namespace cpu {
 
       double max_grad = *max_element(std::begin(base), std::end(base));
       double min_grad = *min_element(std::begin(base), std::end(base));
+
       double fuzzy = 0.5 * (max_grad + min_grad);
 
       for (int i = 0; i < N; i++) {

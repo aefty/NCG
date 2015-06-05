@@ -5,8 +5,9 @@
 
 namespace gpu {
 
+
    /**
-    * Discretize Line
+    * Line Discretize
     * @param N     Problem Size
     * @param D     Discrtization
     * @param x     X Vector
@@ -14,7 +15,7 @@ namespace gpu {
     * @param h     Step Size
     * @param space Memory Space
     */
-   __global__ void lineDiscretize( long int N , long int D ,  double* x, double* p, double h, double* space) {
+   __global__ void spcl( long int N , long int D ,  double* x, double* p, double h, double* space) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
       int j = blockDim.y * blockIdx.y + threadIdx.y;
 
@@ -23,14 +24,21 @@ namespace gpu {
       }
    };
 
+   __global__ void spcc( long int N , double* x,  double* space) {
+      int i = blockDim.x * blockIdx.x + threadIdx.x;
+      int j = blockDim.y * blockIdx.y + threadIdx.y;
+      space[j * N + i] = x[i];
+   };
+
+
    /**
-    * Line Evaluator
+    * Function Value
     * @param N        Porbelm Size
     * @param D        Discretixation
     * @param space    Memory Space
     * @param func_val Function Value
     */
-   __global__ void lineValue( long int N , long int D , double* space, double* func_val) {
+   __global__ void fv( long int N , long int D , double* space, double* func_val) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
 
       if (i < D ) {
@@ -39,6 +47,8 @@ namespace gpu {
          func_val[i] = val;
       };
    };
+
+
 
    __global__ void grad( long int N ,  double EPS, double* space, double* grad) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
@@ -54,6 +64,22 @@ namespace gpu {
          FUNCTION(N, &space[i * N], &val);
          grad[i] = val / (2.0 * EPS);
       };
+   };
+
+   __global__ void axpby(const double* a, double* A, const double* b, double* B, double* rtrn) {
+      int i = blockDim.x * blockIdx.x + threadIdx.x;
+
+      if (i < N) {
+         rtrn[i] = a * A[i]  + b * B[i];
+      }
+   };
+
+   __global__ void dot(double* A , double* B, double* rtrn) {
+      int i = blockDim.x * blockIdx.x + threadIdx.x;
+
+      if (i < N) {
+         rtrn[i] = A[i] * B[i];
+      }
    };
 };
 
