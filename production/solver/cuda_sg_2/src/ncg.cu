@@ -111,13 +111,13 @@ int main(int argc, char* argv[]) {
 
 
 		// Pointer Swap
-		//_x1 = _x0;
+		_x1 = _x0;
 
-		temp = *_x1;
+		//temp = *_x1;
 
-		*_x1 = *_x0;
+		//*_x1 = *_x0;
 
-		*_x0 = temp;
+		//*_x0 = temp;
 
 		cout << "asdf" << endl;
 
@@ -220,12 +220,13 @@ int main(int argc, char* argv[]) {
 
 			gg0 = gg1;
 
-			//x0 = x1;
-			temp = *_x0;
+			_x0 = _x1;
 
-			*_x0 = *_x1;
+			//temp = *_x0;
 
-			*_x1 = temp;
+			//*_x0 = *_x1;
+
+			//*_x1 = temp;
 
 			itr ++;
 		}
