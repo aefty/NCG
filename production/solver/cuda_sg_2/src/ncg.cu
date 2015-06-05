@@ -125,7 +125,7 @@ int main(int argc, char* argv[]) {
 			* Line Search
 			*/
 			{
-				gpu::ld <<< ld_blocks , ld_tpb>>> (_GLB_N_, range, _x0 , _p, h , _ld_space);
+				gpu::spcl <<< ln_blocks , ln_tpb>>> (_GLB_N_, range, _x0 , _p, h , _ld_space);
 				gpu::fv <<< fv_blocks , fv_tpb>>> (_GLB_N_, range, _ld_space ,  _vtempl);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
@@ -148,16 +148,16 @@ int main(int argc, char* argv[]) {
 			*/
 
 			//cpu::linalg_add (1.0, x0, alpha, p, x1);
-			gpu::axpby <<< ld_blocks , ld_tpb>>> (_GLB_N_, 1.0, _x0 , alpha, _p , _x1);
+			gpu::axpby <<< ln_blocks , ln_tpb>>> (_GLB_N_, 1.0, _x0 , alpha, _p , _x1);
 
 			t_lineSearch += (clock() - t_lineSearch_start) / (double) CLOCKS_PER_SEC;
 
 			//cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x1, g1);
 			gpu::spcc <<< nn_blocks , nn_tpb>>> (_GLB_N_, x1, _gr_space );
-			gpu::grad <<< ld_blocks , ld_tpb>>> (_GLB_N_, _GLB_EPS_, _x1 , _g1);
+			gpu::grad <<< ln_blocks , ln_tpb >> (_GLB_N_, _GLB_EPS_, _x1 , _g1);
 
 			//cpu::linalg_dot(g1, g1, gg1);
-			gpu::dot <<< ld_blocks , ld_tpb>>>  (_GLB_N_, _g1, _g1 , _vtemp);
+			gpu::dot <<< ln_blocks , ln_tpb>>>  (_GLB_N_, _g1, _g1 , _vtemp);
 			{
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_vtemp, vtemp);
@@ -172,14 +172,14 @@ int main(int argc, char* argv[]) {
 
 			//% p = -g1 + B * p;
 			//cpu::linalg_add(-1.0, g1, B, p, p);
-			gpu::axpby <<< ld_blocks , ld_tpb>>> (_GLB_N_, -1.0, _g1 , B, _p , _p);
+			gpu::axpby <<< ln_blocks , ln_tpb>>> (_GLB_N_, -1.0, _g1 , B, _p , _p);
 
 			//% tol = norm(x1 - x0)
 			//cpu::linalg_add(1.0, x1, -1.0, x0, vtemp);
-			gpu::axpby <<< ld_blocks , ld_tpb>>> (_GLB_N_, 1.0, _x1 , -1.0, _x0 , _vtemp);
+			gpu::axpby <<< ln_blocks , ln_tpb>>> (_GLB_N_, 1.0, _x1 , -1.0, _x0 , _vtemp);
 
 			//cpu::linalg_dot(vtemp, vtemp, tol);
-			gpu::dot <<< ld_blocks , ld_tpb>>> (_GLB_N_, _vtemp, _vtemp , _vtemp);
+			gpu::dot <<< ln_blocks , ln_tpb>>> (_GLB_N_, _vtemp, _vtemp , _vtemp);
 			{
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_vtemp, vtemp);
@@ -193,10 +193,10 @@ int main(int argc, char* argv[]) {
 			tol = pow(tol , 0.5) / _GLB_N_;
 			gg0 = gg1;
 
-			x0 = x1;
-			temp = *x0;
-			*x0 = *x1;
-			*x1 = temp;
+			//x0 = x1;
+			temp = *_x0;
+			*_x0 = *_x1;
+			*_x1 = temp;
 
 			itr ++;
 		}
