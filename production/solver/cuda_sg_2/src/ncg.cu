@@ -239,13 +239,15 @@ int main(int argc, char* argv[]) {
 	t_lineSearch = t_lineSearch;
 
 	gpu::unalloc(_x0);
+	cout << "after 8" << endl;
 	gpu::unalloc(_vtemp);
+	cout << "after 77" << endl;
 	gpu::unalloc(_vtempl);
 	cout << "after 7" << endl;
 	gpu::unalloc(_x1, x1);
-	cout << "after 77" << endl;
+
 	gpu::unalloc(_p);
-	cout << "after 8" << endl;
+
 	gpu::unalloc(_g00);
 
 	gpu::unalloc(_g01);
