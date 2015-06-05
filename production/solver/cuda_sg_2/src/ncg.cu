@@ -101,20 +101,22 @@ int main(int argc, char* argv[]) {
 
 		//cpu::linalg_dot(p, p, _vtemp);
 		gpu::dot <<< ln_tpb , ln_blocks>>>    (_GLB_N_, _p, _p , _vtemp);
-		{
-			CUDA_ERR_CHECK(cudaDeviceSynchronize());
-			gpu::unalloc(_vtemp, vtemp);
-			gg0 = 0;
+		CUDA_ERR_CHECK(cudaDeviceSynchronize());
+		gpu::unalloc(_vtemp, vtemp);
+		gg0 = 0;
 
-			for (int i = 0; i < _GLB_N_; ++i) {
-				gg0 += vtemp[i];
-			};
-		}
+		for (int i = 0; i < _GLB_N_; ++i) {
+			gg0 += vtemp[i];
+		};
+
 
 		// Pointer Swap
 		_x1 = _x0;
+
 		temp = *_x1;
+
 		*_x1 = *_x0;
+
 		*_x0 = temp;
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
@@ -160,15 +162,14 @@ int main(int argc, char* argv[]) {
 
 			//cpu::linalg_dot(g1, g1, gg1);
 			gpu::dot <<< ln_blocks , ln_tpb>>>  (_GLB_N_, _g1, _g1 , _vtemp);
-			{
-				CUDA_ERR_CHECK(cudaDeviceSynchronize());
-				gpu::unalloc(_vtemp, vtemp);
-				gg1 = 0;
+			CUDA_ERR_CHECK(cudaDeviceSynchronize());
+			gpu::unalloc(_vtemp, vtemp);
+			gg1 = 0;
 
-				for (int i = 0; i < _GLB_N_; ++i) {
-					gg1 += vtemp[i];
-				};
-			}
+			for (int i = 0; i < _GLB_N_; ++i) {
+				gg1 += vtemp[i];
+			};
+
 
 			B = gg1 / gg0;
 
@@ -182,22 +183,27 @@ int main(int argc, char* argv[]) {
 
 			//cpu::linalg_dot(vtemp, vtemp, tol);
 			gpu::dot <<< ln_blocks , ln_tpb>>> (_GLB_N_, _vtemp, _vtemp , _vtemp);
-			{
-				CUDA_ERR_CHECK(cudaDeviceSynchronize());
-				gpu::unalloc(_vtemp, vtemp);
-				tol = 0;
 
-				for (int i = 0; i < _GLB_N_; ++i) {
-					tol += vtemp[i];
-				};
-			}
+			CUDA_ERR_CHECK(cudaDeviceSynchronize());
+
+			gpu::unalloc(_vtemp, vtemp);
+
+			tol = 0;
+
+			for (int i = 0; i < _GLB_N_; ++i) {
+				tol += vtemp[i];
+			};
+
 
 			tol = pow(tol , 0.5) / _GLB_N_;
+
 			gg0 = gg1;
 
 			//x0 = x1;
 			temp = *_x0;
+
 			*_x0 = *_x1;
+
 			*_x1 = temp;
 
 			itr ++;
@@ -211,14 +217,15 @@ int main(int argc, char* argv[]) {
 	double rate = (double)_GLB_N_ / t_run;
 	t_lineSearch = t_lineSearch;
 
-	gpu::unalloc(_x0 );
-	gpu::unalloc(_vtemp );
-	gpu::unalloc(_vtempl );
-	gpu::unalloc(_x1, x1 );
-	gpu::unalloc(_p );
-	gpu::unalloc(_g00 );
-	gpu::unalloc(_g01 );
-	gpu::unalloc(_g1 );
+	gpu::unalloc(_x0);
+	gpu::unalloc(_vtemp);
+	gpu::unalloc(_vtempl);
+	gpu::unalloc(_x1, x1);
+	gpu::unalloc(_p);
+	gpu::unalloc(_g00);
+	gpu::unalloc(_g01);
+	gpu::unalloc(_g1);
+	gpu::unalloc(_x1);
 
 	gpu::unalloc(_gr_space );
 	gpu::unalloc(_ld_space );
