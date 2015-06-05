@@ -46,7 +46,7 @@ namespace cpu {
          x[i] += 1.0 ;
 
          for (int j = 0; j < i; j++) {
-            cout << i < endl;
+            cout << i << endl;
             val = 0.0;
             x[j] -= EPS;
             FUNCTION(N, &x[0], &val);
