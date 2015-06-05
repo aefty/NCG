@@ -131,10 +131,14 @@ int main(int argc, char* argv[]) {
 			* Line Search
 			*/
 			{
+
+				cout << "asdfddd155551" << endl;
 				gpu::spcl <<<ln_blocks , ln_tpb>>> (_GLB_N_, range, _x0 , _p, h , _ld_space);
+				cout << "asdfddd122221" << endl;
 				gpu::fv <<<nm_blocks , nm_tpb>>> (_GLB_N_, range, _ld_space ,  _vtempl);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
+				cout << "asdfddd11" << endl;
 				gpu::unalloc(_vtempl, vtempl );
 				cout << "asdfddd" << endl;
 
