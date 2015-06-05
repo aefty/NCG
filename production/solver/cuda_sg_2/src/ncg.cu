@@ -102,7 +102,9 @@ int main(int argc, char* argv[]) {
 		//cpu::linalg_dot(p, p, _vtemp);
 		gpu::dot <<< ln_tpb , ln_blocks>>>    (_GLB_N_, _p, _p , _vtemp);
 		CUDA_ERR_CHECK(cudaDeviceSynchronize());
+		cout << "asdf" << endl;
 		gpu::unalloc(_vtemp, vtemp);
+		cout << "asdasdff" << endl;
 		gg0 = 0;
 
 		for (int i = 0; i < _GLB_N_; ++i) {
