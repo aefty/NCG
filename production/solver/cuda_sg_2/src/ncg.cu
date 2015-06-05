@@ -209,8 +209,18 @@ int main(int argc, char* argv[]) {
 	double rate = (double)_GLB_N_ / t_run;
 	t_lineSearch = t_lineSearch;
 
-	gpu::unalloc(_space, space);
-	gpu::unalloc(_space);
+	double* gpu::unalloc(_x0 );
+	double* gpu::unalloc(_vtemp );
+	double* gpu::unalloc(_vtempl );
+	double* gpu::unalloc(_x1 );
+	double* gpu::unalloc(_p );
+	double* gpu::unalloc(_g00 );
+	double* gpu::unalloc(_g01 );
+	double* gpu::unalloc(_g1 );
+
+	double* gpu::unalloc(_gr_space );
+	double* gpu::unalloc(_ld_space );
+	double* gpu::unalloc(_fv_space );
 
 	double x_max = *max_element(std::begin(x1), std::end(x1));
 	double x_min = *min_element(std::begin(x1), std::end(x1));
