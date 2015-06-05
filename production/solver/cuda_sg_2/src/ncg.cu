@@ -60,8 +60,9 @@ int main(int argc, char* argv[]) {
 	vector<double> vtempl(range);
 	double* _vtempl = (double*) gpu::alloc(vtempl);
 
-	vector<double> vtemp(_x1);
-	double* _x1     = (double*) gpu::alloc(_GLB_N_);
+	vector<double> _x1(_GLB_N_);
+	double* _x1     = (double*) gpu::alloc(_x1);
+
 	double* _p      = (double*) gpu::alloc(_GLB_N_);
 	double* _g00    = (double*) gpu::alloc(_GLB_N_);
 	double* _g01    = (double*) gpu::alloc(_GLB_N_);
