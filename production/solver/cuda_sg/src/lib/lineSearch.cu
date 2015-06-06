@@ -14,13 +14,15 @@ namespace gpu {
     * @param h     Step Size
     * @param space Memory Space
     */
-   __global__ void lineDiscretize( long int N , long int D ,  double* x, double* p, double h, double* space) {
+   __global__ void spcl( long int N , long int D ,  double* x, double* p, double h, double* space) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
-      int j = blockDim.y * blockIdx.y + threadIdx.y;
+      // int j = blockDim.y * blockIdx.y + threadIdx.y;
+      int row = i / N;
+      int col = i - row;
 
-      if (i < N && j < D) {
-         space[j * N + i] = x[i] + p[i] * h * j;
-      }
+      //  if (i < N && j < D) {
+      space[row * N + col] = x[col] + p[col] * h * j;
+      //}
    };
 
    /**
@@ -30,7 +32,7 @@ namespace gpu {
     * @param space    Memory Space
     * @param func_val Function Value
     */
-   __global__ void lineValue( long int N , long int D , double* space, double* func_val) {
+   __global__ void fv( long int N , long int D , double* space, double* func_val) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
 
       if (i < D ) {

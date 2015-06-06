@@ -62,8 +62,8 @@ int main(int argc, char* argv[]) {
 	int block_x = (_GLB_N_ / TPB_2D) < 1 ? 1 : (_GLB_N_ / TPB_2D) ;
 	int block_y = range < 1 ? 1 : range ;
 
-	dim3 GPU_TPB_2D (TPB_2D, TPB_2D);
-	dim3 GPU_BLOCK_2D(block_x , block_y);
+	dim3 GPU_TPB_2D (128);
+	dim3 GPU_BLOCK_2D(_GLB_N_*range/128);
 
 	dim3 GPU_TPB_1D (128);
 	dim3 GPU_BLOCK_1D(_GLB_N_ / 128) ;
@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
 
-			cout << "|" << tol << endl;
+			cout << "| Tol :" << tol << endl;
 			clock_t t_lineSearch_start = clock();
 
 			/**
@@ -96,16 +96,11 @@ int main(int argc, char* argv[]) {
 				gpu::alloc(x0, _x0);
 				gpu::alloc(p, _p);
 
-				gpu::lineDiscretize <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-				gpu::lineValue <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
+				gpu::spcl <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+				gpu::fv <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_func_val, func_val );
-
-				json.append("p",p);
-				json.append("f",func_val);
-				json.dump();
-				json.clear();
 
 				for (int i = 0; i < func_val.size(); i++) {
 					if (func_val[i] < func_val[min_i]) {
@@ -114,7 +109,6 @@ int main(int argc, char* argv[]) {
 				}
 
 				alpha = min_i * h;
-				cout << alpha << ","<< min_i << ","<< h <<endl;
 			}
 			// END LINE SEARCH
 
