@@ -59,16 +59,16 @@ int main(int argc, char* argv[]) {
 	std::vector<double> m_history(_GLB_ITR_, 0);
 
 	// ~50% staturated
-	long int range = 128;
+
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
-	dim3 threadsPerBlock_spcl(256, 1, 1);
+	dim3 threadsPerBlock_spcl(1024, 1, 1);
 	dim3 numBlocks_spcl(_GLB_N_ * range / threadsPerBlock_spcl.x + 1, 1, 1);
 
-
+	long int range = 512;
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
-	dim3 threadsPerBlock_fval(256, 1, 1);
-	dim3 numBlocks_fval(range / threadsPerBlock_fval.x + 1, 1, 1);
+	dim3 threadsPerBlock_fval(range, 1, 1);
+	dim3 numBlocks_fval(1, 1, 1);
 
 	double t_lineSearch = 0.0;
 	clock_t t_start = clock();
