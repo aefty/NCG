@@ -105,8 +105,9 @@ int main(int argc, char* argv[]) {
 
 				min_i = distance(func_val.begin(), min_element(func_val.begin(), func_val.end()));
 
-				alpha = (min_i - range) * h;
+				alpha = (min_i - range / 2)  * h;
 
+				m_history[itr] = (min_i - range / 2);
 				alhpa_history[itr] = alpha;
 
 
