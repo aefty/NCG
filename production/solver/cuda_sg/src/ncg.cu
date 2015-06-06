@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
 	int itr = 0;
 	double  min_i = 0;
 	double alpha = 1;
-	double h = _GLB_EPS_;
+	double h = 1;
 
 	// ~50% staturated
 	long int range = 512;
