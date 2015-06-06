@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 	long int range = 512;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
-	dim3 threadsPerBlock_spcl(1024, 1, 1);
+	dim3 threadsPerBlock_spcl(128, 1, 1);
 	dim3 numBlocks_spcl(_GLB_N_ * range / threadsPerBlock_spcl.x + 1, 1, 1);
 
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
@@ -82,16 +82,12 @@ int main(int argc, char* argv[]) {
 
 		cpu::linalg_dot(p, p, gg0);
 
-		for (int i = 0; i < p.size(); ++i) {
-			cout << " " << p[i];
-		}
-
 		cout << endl;
 		x1 = x0;
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
 
-			//	cout << "| Tol :" << tol << endl;
+			cout << "| Tol :" << tol << endl;
 			clock_t t_lineSearch_start = clock();
 
 			/**
@@ -104,8 +100,9 @@ int main(int argc, char* argv[]) {
 
 				h =  _GLB_EPS_;
 
-				gpu::spcl <<<threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-				gpu::fv   <<<threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
+				gpu::spcl <<< threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+				cout << "secd";
+				gpu::fv   <<< threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_func_val, func_val );
