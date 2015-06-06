@@ -63,10 +63,10 @@ int main(int argc, char* argv[]) {
 	int block_y = range < 1 ? 1 : range ;
 
 	dim3 nm_tpb (128);
-	dim3 nm_blocks(_GLB_N_*range/128);
+	dim3 nm_blocks(_GLB_N_*range/128+1);
 
 	dim3 ln_tpb (128);
-	dim3 ln_blocks(_GLB_N_ / 128) ;
+	dim3 ln_blocks(_GLB_N_ / 128+1) ;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
