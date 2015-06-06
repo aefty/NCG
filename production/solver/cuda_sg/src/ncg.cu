@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
 				gpu::alloc(x0, _x0);
 				gpu::alloc(p, _p);
 
-				//h = 1 / gg0;
+				h = 1 / gg0;
 
 				gpu::spcl <<< 128 , _GLB_N_ * range / 128 + 1 >>>   (_GLB_N_, range, _x0 , _p, h , _space);
 				gpu::fv <<< 128 , range + 1 >>> (_GLB_N_, range, _space ,  _func_val);
