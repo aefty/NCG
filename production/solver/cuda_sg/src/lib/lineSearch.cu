@@ -18,12 +18,12 @@ namespace gpu {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
       // int j = blockDim.y * blockIdx.y + threadIdx.y;
       int row = i / N;
-      int col = i - row;
+      int col = i - row * N;
 
-      printf("i : %d, row :%d , col %d \n", i, row, col );
+      // printf("i : %d, row :%d , col %d \n", i, row, col );
 
       //  if (i < N && j < D) {
-      //space[row * N + col] = x[col] + p[col] * h * row;
+      space[row * N + col] = x[col] + p[col] * h * row;
       //}
    };
 
