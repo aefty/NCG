@@ -137,6 +137,8 @@ int main(int argc, char* argv[]) {
 
 				cout << h << endl;
 
+				cout << alpha << endl;
+
 			}
 			// END LINE SEARCH
 			//
