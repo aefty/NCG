@@ -115,9 +115,6 @@ int main(int argc, char* argv[]) {
 			}
 			t_lineSearch += (clock() - t_lineSearch_start) / (double) CLOCKS_PER_SEC;
 
-			cout << "alpha :" << alpha << endl;
-
-
 			/**
 			 * CODE BLOCK 3
 			 * Direction
