@@ -22,7 +22,7 @@ namespace gpu {
          int row = i / N;
          int col = i - row * N;
 
-         printf("i : %d, row :%d , col %d \n", i, row, col );
+         //     printf("i : %d, row :%d , col %d \n", i, row, col );
          space[row * N + col] = x[col] + p[col] * h * row;
       }
    };

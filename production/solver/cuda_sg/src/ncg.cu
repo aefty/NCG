@@ -92,12 +92,8 @@ int main(int argc, char* argv[]) {
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_func_val, func_val );
 
-				for (int i = 0; i < func_val.size(); i++) {
-					if (func_val[i] < func_val[min_i]) {
-						min_i = i;
-					}
-				}
-
+				min_i= distance(func_val.begin(), min_element(func_val.begin(), func_val.end()));
+				
 				alpha = min_i * h;
 			}
 			// END LINE SEARCH
