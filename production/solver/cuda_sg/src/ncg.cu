@@ -56,6 +56,7 @@ int main(int argc, char* argv[]) {
 	double h = _GLB_EPS_;
 
 	std::vector<double> alhpa_history(100, 0);
+	std::vector<double> m_history(100, 0);
 
 	// ~50% staturated
 	long int range = 128;
@@ -163,6 +164,7 @@ int main(int argc, char* argv[]) {
 	json.append("x_max", x_max);
 	json.append("x_min", x_min);
 	json.append("alpha", alhpa_history);
+	json.append("m_history", m_history);
 
 	json.append("space", space);
 	json.append("func_val", func_val);
