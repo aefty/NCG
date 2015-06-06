@@ -1,11 +1,11 @@
 clear all; close all; clc;
 
-h = 1
+h = 100
 
 range =10;
 x = 0:range;
 
-f = @(x)h*x./(1+x)
+f = @(x)h*(1+x)/x
 
 figure
 scatter(f(x),ones(size(x)));

@@ -25,14 +25,7 @@ namespace gpu {
          //     printf("i : %d, row :%d , col %d \n", i, row, col );
          //  space[row * N + col] = x[col] + p[col] * h * row;
 
-         double base = 1.2;
-         double power = 1;
-
-         for (int j = 0; j < row; ++j) {
-            power = power * base;
-         }
-
-         space[row * N + col] = x[col] + p[col] * h * (power - 1.0);
+         space[row * N + col] = x[col] + p[col] * h * (1 << row - 1.0);
 
       }
    };
