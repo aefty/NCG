@@ -276,7 +276,8 @@ int main(int argc, char* argv[]) {
 	json.append("x_min", x_min);
 
 	if (showX) {
-		json.append("x", x1);
+		json.append("x1", x1);
+		json.append("x0", x0);
 	}
 
 	cout << "\n\n";
