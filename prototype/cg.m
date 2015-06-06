@@ -55,7 +55,7 @@ function [x1,itr,history,t] = cg(x0)
 
             %alpha = -g00'*p/(p'*Hp);
             stemp = math.vtv(g00,p);
-            alpha = -1 * stemp / math.vtv(p,Hp);
+            alpha = -1 * stemp / math.vtv(p,Hp)
 
             %x1=x1+alpha*p;
             x1 = math.plus(1,x1,alpha,p);

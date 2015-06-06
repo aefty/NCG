@@ -53,10 +53,10 @@ int main(int argc, char* argv[]) {
 	int itr = 0;
 	double  min_i = 0;
 	double alpha = 1;
-	double h = 1;
+	double h = _GLB_EPS_;
 
 	// ~50% staturated
-	long int range = 4;
+	long int range = 128;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
