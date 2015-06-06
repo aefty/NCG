@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
 	int itr = 0;
 	double  min_i = 0;
 	double alpha = 1;
-	double h = 0.1;
+	double h = _GLB_EPS_;
 
 	// ~50% staturated
 	long int range = 512;
@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
 
 				alpha = (min_i-range) * h;
 
-//				goto end;
+				goto end;
 			}
 			// END LINE SEARCH
 
@@ -127,7 +127,7 @@ int main(int argc, char* argv[]) {
 	}
 	//END NCG
 
-//end:
+end:
 
 	// Get timining and metrics
 	double t_run = (clock() - t_start) / (double) CLOCKS_PER_SEC;
