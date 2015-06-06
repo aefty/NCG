@@ -55,8 +55,8 @@ int main(int argc, char* argv[]) {
 	double alpha = 1;
 	double h = _GLB_EPS_;
 
-	std::vector<double> alhpa_history(100, 0);
-	std::vector<double> m_history(100, 0);
+	std::vector<double> alhpa_history(_GLB_ITR_, 0);
+	std::vector<double> m_history(_GLB_ITR_, 0);
 
 	// ~50% staturated
 	long int range = 128;
