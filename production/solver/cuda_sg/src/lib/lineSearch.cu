@@ -21,10 +21,9 @@ namespace gpu {
       if (i < N * D) {
          int row = i / N;
          int col = i - row * N;
-         int side = (D / 2 > row) ? 1 : -1;
 
          //     printf("i : %d, row :%d , col %d \n", i, row, col );
-         space[row * N + col] = x[col] + p[col] * h * (row * side);
+         space[row * N + col] = x[col] + p[col] * h * (row - D / 2);
       }
    };
 
