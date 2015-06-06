@@ -20,7 +20,7 @@ namespace gpu {
       int j = blockDim.y * blockIdx.y + threadIdx.y;
 
       if (i < N && j < D) {
-         space[j * N + i] = x[i] + p[i] * h * j;
+         space[j * N + i] = x[i] + p[i] * exp(h * j);
       }
    };
 
