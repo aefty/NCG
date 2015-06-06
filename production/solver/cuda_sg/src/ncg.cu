@@ -93,8 +93,10 @@ int main(int argc, char* argv[]) {
 				gpu::unalloc(_func_val, func_val );
 
 				min_i= distance(func_val.begin(), min_element(func_val.begin(), func_val.end()));
-				
+
 				alpha = min_i * h;
+
+				cout << "alpha"<<alpha<<endl;
 			}
 			// END LINE SEARCH
 
