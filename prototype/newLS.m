@@ -1,10 +1,14 @@
 clear all; close all; clc;
 
-h = 0.0001
+h = 1
 
 range =10;
 x = 0:range;
 
-f = @(x)h*(1.5.^x-1)
+f = @(x)h*x./(1+x)
 
+figure
 scatter(f(x),ones(size(x)));
+
+figure
+plot(x,f(x));

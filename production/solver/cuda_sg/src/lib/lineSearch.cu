@@ -26,6 +26,7 @@ namespace gpu {
          //  space[row * N + col] = x[col] + p[col] * h * row;
 
          double base = 1.5;
+         double power = 0;
 
          for (int j = 0; j < row; ++j) {
             power *= base;
