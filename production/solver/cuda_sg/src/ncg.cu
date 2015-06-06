@@ -65,8 +65,8 @@ int main(int argc, char* argv[]) {
 	dim3 GPU_TPB_2D (TPB_2D, TPB_2D);
 	dim3 GPU_BLOCK_2D(block_x , block_y);
 
-	dim3 GPU_TPB_1D (TPB_2D * TPB_2D);
-	dim3 GPU_BLOCK_1D(_GLB_N_ / GPU_TPB_1D.x + 1) ;
+	dim3 GPU_TPB_1D (128);
+	dim3 GPU_BLOCK_1D(_GLB_N_ / 128) ;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
