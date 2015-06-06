@@ -111,7 +111,7 @@ int main(int argc, char* argv[]) {
 				alpha = min_i * h;
 			}
 			// END LINE SEARCH
-goto end:
+goto end;
 
 			/**
 			* CODE BLOCK 3
