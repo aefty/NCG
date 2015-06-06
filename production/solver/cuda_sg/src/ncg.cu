@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
 
 	// ~50% staturated
 	int TPB_2D = 16 ;
-	long int range = 256;
+	long int range = 512;
 
 	int block_x = (_GLB_N_ / TPB_2D) < 1 ? 1 : (_GLB_N_ / TPB_2D) ;
 	int block_y = range < 1 ? 1 : range ;
