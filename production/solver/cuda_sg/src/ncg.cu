@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
 
-			cout << "|" << tol << endl;
+		//	cout << "|" << tol << endl;
 			clock_t t_lineSearch_start = clock();
 
 			/**
