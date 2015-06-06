@@ -21,7 +21,7 @@ class JSON {
    void append(string const& name, float const& scalar);
    void append(string const& name, int const& scalar);
    void append(string const& name, long int const& scalar);
-   void JSON::clear();
+   void clear();
    string dump();
  private:
    string output;
