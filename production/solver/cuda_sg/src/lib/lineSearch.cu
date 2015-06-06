@@ -16,15 +16,15 @@ namespace gpu {
     */
    __global__ void spcl( long int N , long int D ,  double* x, double* p, double h, double* space) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
+
       // int j = blockDim.y * blockIdx.y + threadIdx.y;
-      int row = i / N;
-      int col = i - row * N;
+      if (i < N * D) {
+         int row = i / N;
+         int col = i - row * N;
 
-      //      printf("i : %d, row :%d , col %d \n", i, row, col );
-
-      //  if (i < N && j < D) {
-      space[row * N + col] = x[col] + p[col] * h * row;
-      //}
+         printf("i : %d, row :%d , col %d \n", i, row, col );
+         space[row * N + col] = x[col] + p[col] * h * row;
+      }
    };
 
    /**
@@ -37,11 +37,11 @@ namespace gpu {
    __global__ void fv( long int N , long int D , double* space, double* func_val) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
 
-      //   if (i < D ) {
-      double val = 0.0;
-      FUNCTION(N, &space[i * N], &val);
-      func_val[i] = val;
-      //   };
+      if (i < D ) {
+         double val = 0.0;
+         FUNCTION(N, &space[i * N], &val);
+         func_val[i] = val;
+      };
    };
 };
 

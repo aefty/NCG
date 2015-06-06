@@ -111,7 +111,7 @@ int main(int argc, char* argv[]) {
 				alpha = min_i * h;
 			}
 			// END LINE SEARCH
-
+goto end:
 
 			/**
 			* CODE BLOCK 3
@@ -140,7 +140,7 @@ int main(int argc, char* argv[]) {
 	}
 	//END NCG
 
-
+end:
 	// Get timining and metrics
 	double t_run = (clock() - t_start) / (double) CLOCKS_PER_SEC;
 	double rate = (double)_GLB_N_ / t_run;
@@ -161,6 +161,9 @@ int main(int argc, char* argv[]) {
 	json.append("rate", rate);
 	json.append("x_max", x_max);
 	json.append("x_min", x_min);
+	
+	json.append("space", space);
+	json.append("func_val", func_val);
 
 	if (showX) {
 		json.append("x", x1);
