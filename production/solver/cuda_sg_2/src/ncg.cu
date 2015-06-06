@@ -138,6 +138,8 @@ int main(int argc, char* argv[]) {
 				alpha = min_i * h;
 			}
 			// END LINE SEARCH
+			//
+			cout << alpha << endl;
 
 			/**
 			* CODE BLOCK 3
