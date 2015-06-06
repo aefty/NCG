@@ -62,11 +62,11 @@ int main(int argc, char* argv[]) {
 	int block_x = (_GLB_N_ / TPB_2D) < 1 ? 1 : (_GLB_N_ / TPB_2D) ;
 	int block_y = range < 1 ? 1 : range ;
 
-	dim3 GPU_TPB_2D (128);
-	dim3 GPU_BLOCK_2D(_GLB_N_*range/128);
+	dim3 nm_tpb (128);
+	dim3 nm_blocks(_GLB_N_*range/128);
 
-	dim3 GPU_TPB_1D (128);
-	dim3 GPU_BLOCK_1D(_GLB_N_ / 128) ;
+	dim3 ln_tpb (128);
+	dim3 ln_blocks(_GLB_N_ / 128) ;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
@@ -96,8 +96,8 @@ int main(int argc, char* argv[]) {
 				gpu::alloc(x0, _x0);
 				gpu::alloc(p, _p);
 
-				gpu::spcl <<< GPU_BLOCK_2D , GPU_TPB_2D>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-			//	gpu::fv <<<GPU_BLOCK_1D , GPU_TPB_1D>>> (_GLB_N_, range, _space ,  _func_val);
+				gpu::spcl <<< nm_tpb , nm_blocks>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+			//	gpu::fv <<<ln_tpb , ln_blocks>>> (_GLB_N_, range, _space ,  _func_val);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_func_val, func_val );
