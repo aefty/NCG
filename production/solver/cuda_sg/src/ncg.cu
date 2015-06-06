@@ -63,12 +63,14 @@ int main(int argc, char* argv[]) {
 	int range = 512;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
-	dim3 threadsPerBlock_spcl(128, 1, 1);
-	dim3 numBlocks_spcl(_GLB_N_ * range / threadsPerBlock_spcl.x + 1, 1, 1);
+	dim3 threadsPerBlock_spcl(128);
+	dim3 numBlocks_spcl(_GLB_N_);
+
+	cout << _GLB_N_ * range / threadsPerBlock_spcl.x + 1;
 
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
-	dim3 threadsPerBlock_fval(range, 1, 1);
-	dim3 numBlocks_fval(1, 1, 1);
+	dim3 threadsPerBlock_fval(range);
+	dim3 numBlocks_fval(1);
 
 	double t_lineSearch = 0.0;
 	clock_t t_start = clock();
