@@ -150,6 +150,7 @@ end:
 	json.append("x_max", x_max);
 	json.append("x_min", x_min);
 	json.append("alpha", alpha);
+		json.append("p", p);
 	
 	json.append("space", space);
 	json.append("func_val", func_val);
