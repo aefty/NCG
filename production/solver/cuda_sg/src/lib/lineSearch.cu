@@ -21,7 +21,7 @@ namespace gpu {
       int col = i - row;
 
       //  if (i < N && j < D) {
-      space[row * N + col] = x[col] + p[col] * h * j;
+      space[row * N + col] = x[col] + p[col] * h * row;
       //}
    };
 
