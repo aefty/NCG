@@ -110,13 +110,9 @@ int main(int argc, char* argv[]) {
 		};
 
 		// Pointer Swap
-		_x1 = _x0;
+		//_x1 = _x0;
 
-		//temp = *_x1;
-
-		//*_x1 = *_x0;
-
-		//*_x0 = temp;
+		gpu::axpby <<<ln_blocks , ln_tpb>>> (_GLB_N_, 1.0, _x0 , 0.0, _x0 , _x1);
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
 
@@ -194,8 +190,6 @@ int main(int argc, char* argv[]) {
 			tol = pow(tol , 0.5) / _GLB_N_;
 
 			gg0 = gg1;
-
-			//_x0 = _x1;
 
 			gpu::axpby <<<ln_blocks , ln_tpb>>> (_GLB_N_, 1.0, _x1 , 0.0, _x1 , _x0);
 
