@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
 				h =  _GLB_EPS_;
 
 				gpu::spcl <<< 256 , _GLB_N_ * range / 256 >>>   (_GLB_N_, range, _x0 , _p, h , _space);
-				gpu::fv <<<256 , range>>> (_GLB_N_, range, _space ,  _func_val);
+				gpu::fv   <<< 256 , range / 256 >>> (_GLB_N_, range, _space ,  _func_val);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_func_val, func_val );
