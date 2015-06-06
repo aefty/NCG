@@ -102,6 +102,7 @@ int main(int argc, char* argv[]) {
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_func_val, func_val );
 
+				json.append("p",p);
 				json.append("f",func_val);
 				json.dump();
 				json.clear();
