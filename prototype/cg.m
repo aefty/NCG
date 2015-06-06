@@ -5,9 +5,9 @@
 
 function [x1,itr,history,t] = cg(x0)
 
-	TOL = 1e-8;
+	TOL = 1e-6;
 	ITR = 10000;
-	EPS = 1e-9;
+	EPS = 1e-6;
 
 	t=[];
 
@@ -17,7 +17,7 @@ function [x1,itr,history,t] = cg(x0)
 	%% Block 1 - Setup
 	%% =================
     g0 = Grad(x0);
-    p = -g0;
+    p = -g0
 
     %gg0 = g0'*g0;
     gg0 = math.vtv(g0,g0);
@@ -46,6 +46,8 @@ function [x1,itr,history,t] = cg(x0)
             %g01 = Grad(x1+EPS*p);
             vtemp = math.plus(1,x1,TOL,p);
 			g01 = Grad(vtemp);
+            
+     
 
             %Hp = (g01-g00)/(2*EPS);
             vtemp = math.plus(1,g01,-1,g00);

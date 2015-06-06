@@ -1,7 +1,7 @@
 clear; clc; close all;
 
 % MulitD Rosenbrock initial Guess
-x0=[-20;-2;-2;-3;10];
+x0=[7;7;7;7];
 %x0=[-20;2];
 [x,itr,history,t] = cg(x0);
 

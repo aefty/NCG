@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
 	double alpha = 1;
 	double h = _GLB_EPS_;
 
-	std::vector<double> alhpa_history(100,0);
+	std::vector<double> alhpa_history(100, 0);
 
 	// ~50% staturated
 	long int range = 128;
@@ -71,7 +71,15 @@ int main(int argc, char* argv[]) {
 		cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
 		cpu::linalg_sdot( -1.0, p, p);
 
+		for (int i = 0; i < p.size(); ++i) {
+			cout << " " << p[i];
+		}
+
+		cout << endl;
+
 		cpu::linalg_dot(p, p, gg0);
+
+
 
 		x1 = x0;
 
@@ -88,19 +96,19 @@ int main(int argc, char* argv[]) {
 				gpu::alloc(x0, _x0);
 				gpu::alloc(p, _p);
 
-				gpu::spcl <<< 128 , _GLB_N_*range/128+1>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-				gpu::fv <<< 128 , range+1 >>> (_GLB_N_, range, _space ,  _func_val);
+				gpu::spcl <<< 128 , _GLB_N_*range / 128 + 1 >>>   (_GLB_N_, range, _x0 , _p, h , _space);
+				gpu::fv <<< 128 , range + 1 >>> (_GLB_N_, range, _space ,  _func_val);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_func_val, func_val );
 
-				min_i= distance(func_val.begin(), min_element(func_val.begin(), func_val.end()));
+				min_i = distance(func_val.begin(), min_element(func_val.begin(), func_val.end()));
 
-				alpha = (min_i-range) * h;
+				alpha = (min_i - range) * h;
 
 				alhpa_history[itr] = alpha;
 
-		
+
 			}
 			// END LINE SEARCH
 
@@ -153,10 +161,10 @@ int main(int argc, char* argv[]) {
 	json.append("x_max", x_max);
 	json.append("x_min", x_min);
 	json.append("alpha", alhpa_history);
-	
+
 	json.append("space", space);
 	json.append("func_val", func_val);
-		json.append("p", p);
+	json.append("p", p);
 
 	if (showX) {
 		json.append("x", x1);
