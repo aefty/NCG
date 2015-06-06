@@ -94,7 +94,7 @@ int main(int argc, char* argv[]) {
 
 				min_i= distance(func_val.begin(), min_element(func_val.begin(), func_val.end()));
 
-				alpha = min_i * h;
+				alpha = (min_i-range) * h;
 
 				goto end;
 			}
