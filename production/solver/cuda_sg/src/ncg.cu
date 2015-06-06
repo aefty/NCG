@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
 	double h = 1;
 
 	// ~50% staturated
-	long int range = 512;
+	long int range = 4;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
