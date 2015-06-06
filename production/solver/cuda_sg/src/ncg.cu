@@ -62,7 +62,13 @@ int main(int argc, char* argv[]) {
 	long int range = 128;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
+	dim3 threadsPerBlock_spcl(256);
+	dim3 numBlocks_spcl(_GLB_N_ * range / threadsPerBlock_spcl.x);
+
+
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
+	dim3 threadsPerBlock_fval(256);
+	dim3 numBlocks_fval(range / threadsPerBlock_spcl.x);
 
 	double t_lineSearch = 0.0;
 	clock_t t_start = clock();
@@ -98,8 +104,8 @@ int main(int argc, char* argv[]) {
 
 				h =  _GLB_EPS_;
 
-				gpu::spcl <<< 256 , _GLB_N_ * range / 256 >>>   (_GLB_N_, range, _x0 , _p, h , _space);
-				gpu::fv   <<< 256 , range / 256 >>> (_GLB_N_, range, _space ,  _func_val);
+				gpu::spcl <<<threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+				gpu::fv   <<<threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_func_val, func_val );
