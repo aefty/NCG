@@ -19,9 +19,9 @@ namespace gpu {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
       int j = blockDim.y * blockIdx.y + threadIdx.y;
 
-      if (i < N && j < D) {
-         space[j * N + i] = x[i] + p[i] * exp(h * j);
-      }
+      //  if (i < N && j < D) {
+      space[j * N + i] = x[i] + p[i] * exp(h * j);
+      // }
    };
 
    __global__ void spcc( long int N , double* x,  double* space) {
