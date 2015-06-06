@@ -71,16 +71,15 @@ int main(int argc, char* argv[]) {
 		cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
 		cpu::linalg_sdot( -1.0, p, p);
 
+
+
+		cpu::linalg_dot(p, p, gg0);
+
 		for (int i = 0; i < p.size(); ++i) {
 			cout << " " << p[i];
 		}
 
 		cout << endl;
-
-		cpu::linalg_dot(p, p, gg0);
-
-
-
 		x1 = x0;
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
@@ -96,7 +95,7 @@ int main(int argc, char* argv[]) {
 				gpu::alloc(x0, _x0);
 				gpu::alloc(p, _p);
 
-				h = 1 / gg0;
+				//h = 1 / gg0;
 
 				gpu::spcl <<< 128 , _GLB_N_ * range / 128 + 1 >>>   (_GLB_N_, range, _x0 , _p, h , _space);
 				gpu::fv <<< 128 , range + 1 >>> (_GLB_N_, range, _space ,  _func_val);
