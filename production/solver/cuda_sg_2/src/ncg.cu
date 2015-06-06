@@ -135,7 +135,8 @@ int main(int argc, char* argv[]) {
 
 				alpha = min_i * h;
 
-				cout << alpha << endl;
+				cout << h << endl;
+
 			}
 			// END LINE SEARCH
 			//
