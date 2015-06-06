@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
 
 	// ~50% staturated
 
-	long int range = 512;
+	int range = 512;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	dim3 threadsPerBlock_spcl(128, 1, 1);
@@ -102,9 +102,6 @@ int main(int argc, char* argv[]) {
 
 				gpu::spcl <<<threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
 				cout << "secd";
-				cout << threadsPerBlock_fval;
-				cout << numBlocks_fval;
-
 				gpu::fv   <<<threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
