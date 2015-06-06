@@ -55,6 +55,8 @@ int main(int argc, char* argv[]) {
 	double alpha = 1;
 	double h = _GLB_EPS_;
 
+	std::vector<double> alhpa_history(100,0);
+
 	// ~50% staturated
 	long int range = 128;
 
@@ -96,7 +98,9 @@ int main(int argc, char* argv[]) {
 
 				alpha = (min_i-range) * h;
 
-				goto end;
+				alhpa_history[itr] = alpha;
+
+		
 			}
 			// END LINE SEARCH
 
@@ -127,7 +131,6 @@ int main(int argc, char* argv[]) {
 	}
 	//END NCG
 
-end:
 
 	// Get timining and metrics
 	double t_run = (clock() - t_start) / (double) CLOCKS_PER_SEC;
@@ -149,8 +152,7 @@ end:
 	json.append("rate", rate);
 	json.append("x_max", x_max);
 	json.append("x_min", x_min);
-	json.append("alpha", alpha);
-		json.append("p", p);
+	json.append("alpha", alhpa_history);
 	
 	json.append("space", space);
 	json.append("func_val", func_val);
