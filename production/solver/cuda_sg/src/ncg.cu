@@ -168,6 +168,8 @@ int main(int argc, char* argv[]) {
 	json.append("space", space);
 	json.append("func_val", func_val);
 	json.append("p", p);
+	json.append("x0", x0);
+	json.append("x1", x1);
 
 	if (showX) {
 		json.append("x", x1);
