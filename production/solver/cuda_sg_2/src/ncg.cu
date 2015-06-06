@@ -198,29 +198,19 @@ int main(int argc, char* argv[]) {
 	}
 	//END NCG
 
-
 	// Get timining and metrics
 	double t_run = (clock() - t_start) / (double) CLOCKS_PER_SEC;
 	double rate = (double)_GLB_N_ / t_run;
 	t_lineSearch = t_lineSearch;
 
-
-	cout << "after 8" << endl;
 	gpu::unalloc(_vtemp);
-	cout << "after 77" << endl;
 	gpu::unalloc(_vtempl);
-	cout << "after 7" << endl;
-	//gpu::unalloc(_x1, x1);
-	cout << "after 66" << endl;
+	gpu::unalloc(_x1, x1);
 	gpu::unalloc(_p);
-
-
 	gpu::unalloc(_g00);
-
 	gpu::unalloc(_g01);
 	gpu::unalloc(_g1);
 	gpu::unalloc(_x1);
-
 	gpu::unalloc(_x0);
 
 	gpu::unalloc(_gr_space );
@@ -242,7 +232,6 @@ int main(int argc, char* argv[]) {
 
 	if (showX) {
 		json.append("x1", x1);
-		json.append("x0", x0);
 	}
 
 	cout << "\n\n";
