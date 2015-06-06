@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	dim3 threadsPerBlock_spcl(128);
-	dim3 numBlocks_spcl(_GLB_N_);
+	dim3 numBlocks_spcl(_GLB_N_ / 128);
 
 	cout << _GLB_N_ * range / threadsPerBlock_spcl.x + 1;
 
@@ -102,9 +102,9 @@ int main(int argc, char* argv[]) {
 
 				h =  _GLB_EPS_;
 
-				gpu::spcl <<<threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+				gpu::spcl <<< threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
 				cout << "secd";
-				gpu::fv   <<<threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
+				gpu::fv   <<< threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_func_val, func_val );
