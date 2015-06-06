@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
 
 				alpha = (min_i-range) * h;
 
-				//goto end;
+				goto end;
 			}
 			// END LINE SEARCH
 
@@ -127,7 +127,7 @@ int main(int argc, char* argv[]) {
 	}
 	//END NCG
 
-//end:
+end:
 
 	// Get timining and metrics
 	double t_run = (clock() - t_start) / (double) CLOCKS_PER_SEC;
@@ -151,8 +151,8 @@ int main(int argc, char* argv[]) {
 	json.append("x_min", x_min);
 	json.append("alpha", alpha);
 	
-//	json.append("space", space);
-//	json.append("func_val", func_val);
+	json.append("space", space);
+	json.append("func_val", func_val);
 
 	if (showX) {
 		json.append("x", x1);
