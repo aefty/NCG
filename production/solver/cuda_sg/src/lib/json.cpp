@@ -21,7 +21,7 @@ class JSON {
    void append(string const& name, float const& scalar);
    void append(string const& name, int const& scalar);
    void append(string const& name, long int const& scalar);
-
+   void JSON::clear();
    string dump();
  private:
    string output;
@@ -160,7 +160,11 @@ void JSON::append(string const& name, long int const& scalar) {
    this->output += "\"" + name + "\":" + to_string(scalar);
 };
 
+void JSON::clear() {
+   this->output = "";
+};
 
 string JSON::dump() {
    return "{" + this->output + "}";
 };
+
