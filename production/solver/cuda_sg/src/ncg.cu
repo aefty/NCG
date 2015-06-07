@@ -63,11 +63,11 @@ int main(int argc, char* argv[]) {
 
 	// ~50% staturated
 
-	int range = 512;
+	int range = 1024;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	dim3 threadsPerBlock_spcl(range);
-	dim3 numBlocks_spcl(_GLB_N_);
+	dim3 numBlocks_spcl(_GLB_N_, _GLB_N_);
 
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
 	dim3 threadsPerBlock_fval(range);
@@ -99,9 +99,9 @@ int main(int argc, char* argv[]) {
 				gpu::alloc(x0, _x0);
 				gpu::alloc(p, _p);
 
-				gpu::spcl <<<threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+				gpu::spcl <<< threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
 				CUDA_ERR_CHECK(cudaGetLastError());
-				gpu::lineSearch   <<<threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
+				gpu::lineSearch   <<< threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
 				CUDA_ERR_CHECK(cudaGetLastError());
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
