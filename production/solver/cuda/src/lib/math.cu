@@ -46,8 +46,6 @@ namespace cuda {
 
 
    // FOR TESTING
-
-
    __global__ void bulkGrad_test( long int N ,  double EPS, double* space, double* grad) {
       int i = blockDim.x * blockIdx.x + threadIdx.x;
 
