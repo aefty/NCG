@@ -109,7 +109,6 @@ int main(int argc, char* argv[]) {
 				min_i = distance(func_val.begin(), min_element(func_val.begin(), func_val.end()));
 
 				alpha = h *min_i;
-				//alpha = (h * ((1 << min_i) - 1.0));
 				m_history[itr] = min_i;
 				alhpa_history[itr] = alpha;
 			}
@@ -159,10 +158,10 @@ int main(int argc, char* argv[]) {
 	json.append("run_time", t_run);
 	json.append("line_search_time", t_lineSearch);
 	json.append("rate", rate);
-	json.append("alpha", alhpa_history);
+	//json.append("alpha", alhpa_history);
 	json.append("m_history", m_history);
 	json.append("func_val", func_val);
-	json.append("space", space);
+	//json.append("space", space);
 
 	if (showX) {
 		json.append("x", x1);
