@@ -159,7 +159,7 @@ int main(int argc, char* argv[]) {
 	json.append("run_time", t_run);
 	json.append("line_search_time", t_lineSearch);
 	json.append("rate", rate);
-	//json.append("alpha", alhpa_history);
+	json.append("alpha", alhpa_history);
 	json.append("m_history", m_history);
 	json.append("func_val", func_val);
 	json.append("space", space);
