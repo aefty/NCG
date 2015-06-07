@@ -2,7 +2,7 @@
  * SOLVER CONFIGUATION (./cuda/src/config.cpp)
  * Global configuration of the solver including the function and intial value are specfied.
  */
-
+#include <math.h>       /* exp */
 long int _GLB_N_ = 1024 * 1;  // Probelm Size - Note keep at base 2
 long int _GLB_ITR_ = 100;     // Max Solver Iterations
 long int _GLB_ITR_LINE_ = 2; // Max Line search iterationsc
@@ -19,9 +19,11 @@ __device__ void _FUNCTION(long int N, double* x , double* rtrn ) {
 
 __device__ void FUNCTION(long int N, double* x , double* rtrn ) {
 	for (int i = 0; i <  N ; ++i) {
-		rtrn[0] += (1 - x[i])>0 ?(1- x[i]):0 ;
+		rtrn[0] += (1.0-x[i]) / (exp ((1.0-x[i])/.1)-1.0);
 	};
 };
+
+//\frac{\left(x-1\right)}{e^{\frac{\left(x-1\right)}{.1}}-1}
 
 inline void GUESS(long int  N, vector<double>& rtrn) {
 	vector<double>x0 (N, 7);
