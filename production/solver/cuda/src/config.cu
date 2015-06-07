@@ -11,20 +11,38 @@ double _GLB_EPS_ = 1e-6;      // Value of epsilon, Note this is equal to the tol
 
 using namespace std;
 
-__device__ void _FUNCTION(long int N, double* x , double* rtrn ) {
+
+/**
+ * Rosenbrock Equation Min  = 1
+ * @param N    [description]
+ * @param x    [description]
+ * @param rtrn [description]
+ */
+__device__ void FUNCTION(long int N, double* x , double* rtrn ) {
 	for (int i = 0; i <  N - 1; ++i) {
 		rtrn[0] += 100 * (x[i + 1] - x[i] * x[i]) * (x[i + 1] - x[i] * x[i]) + (1 - x[i]) * (1 - x[i]);
 	};
 };
 
+
+/**
+ * Relaxed Max(1-x,0) Min = x =6
+ * @param N    [description]
+ * @param x    [description]
+ * @param rtrn [description]
+ */
 __device__ void FUNCTION(long int N, double* x , double* rtrn ) {
 	for (int i = 0; i <  N ; ++i) {
 		rtrn[0] += (x[i]-1.0) / (exp ((x[i]-1.0)/.35)-1.0);
 	};
 };
 
-//\frac{\left(x-1\right)}{e^{\frac{\left(x-1\right)}{.1}}-1}
 
+/**
+ * Intail Guesss
+ * @param N    [description]
+ * @param rtrn [description]
+ */
 inline void GUESS(long int  N, vector<double>& rtrn) {
 	vector<double>x0 (N, -7);
 	rtrn = x0 ;
