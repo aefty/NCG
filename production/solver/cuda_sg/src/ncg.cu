@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
 	std::vector<double> m_history(_GLB_ITR_, 0);
 
 	// ~50% staturated
-	int range = 128;
+	int range = 16;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	dim3 threadsPerBlock_spcl(range);
@@ -108,8 +108,8 @@ int main(int argc, char* argv[]) {
 
 				min_i = distance(func_val.begin(), min_element(func_val.begin(), func_val.end()));
 
-				//alpha = h * (pow(2.0, min_i) - 1.0);
-				alpha = (h * ((1 << min_i) - 1.0));
+				alpha = h * (pow(2.0, min_i) - 1.0);
+				//alpha = (h * ((1 << min_i) - 1.0));
 				m_history[itr] = min_i;
 				alhpa_history[itr] = alpha;
 			}
@@ -160,9 +160,9 @@ int main(int argc, char* argv[]) {
 	json.append("line_search_time", t_lineSearch);
 	json.append("rate", rate);
 	//json.append("alpha", alhpa_history);
-	//json.append("m_history", m_history);
-	//json.append("func_val", func_val);
-	//json.append("space", space);
+	json.append("m_history", m_history);
+	json.append("func_val", func_val);
+	json.append("space", space);
 
 	if (showX) {
 		json.append("x", x1);
