@@ -4,7 +4,7 @@
  */
 #include <math.h>       /* exp */
 long int _GLB_N_ = 1024 * 1;  // Probelm Size - Note keep at base 2
-long int _GLB_ITR_ = 1000;     // Max Solver Iterations
+long int _GLB_ITR_ = 100;     // Max Solver Iterations
 long int _GLB_ITR_LINE_ = 2; // Max Line search iterationsc
 double _GLB_EPS_ = 1e-6;      // Value of epsilon, Note this is equal to the tolerence (both residual and linesearch)
 
