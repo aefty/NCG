@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 
 	// ~50% staturated
 
-	int range = 512;
+	int range = 1024;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	dim3 threadsPerBlock_spcl(range);
@@ -107,7 +107,7 @@ int main(int argc, char* argv[]) {
 
 				min_i = distance(func_val.begin(), min_element(func_val.begin(), func_val.end()));
 
-				alpha = h * (pow(2, min_i) - 1.0);
+				alpha = h * (pow(2.0, min_i) - 1.0);
 				m_history[itr] = min_i;
 				alhpa_history[itr] = alpha;
 			}
