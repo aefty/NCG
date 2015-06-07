@@ -11,9 +11,15 @@ double _GLB_EPS_ = 1e-6;      // Value of epsilon, Note this is equal to the tol
 
 using namespace std;
 
-__device__ void FUNCTION(long int N, double* x , double* rtrn ) {
+__device__ void _FUNCTION(long int N, double* x , double* rtrn ) {
 	for (int i = 0; i <  N - 1; ++i) {
 		rtrn[0] += 100 * (x[i + 1] - x[i] * x[i]) * (x[i + 1] - x[i] * x[i]) + (1 - x[i]) * (1 - x[i]);
+	};
+};
+
+__device__ void FUNCTION(long int N, double* x , double* rtrn ) {
+	for (int i = 0; i <  N ; ++i) {
+		rtrn[0] += (1 - x[i])>0 ?(1- x[i]):0 ;
 	};
 };
 
