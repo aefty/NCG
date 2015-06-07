@@ -164,7 +164,7 @@ int main(int argc, char* argv[]) {
 	//json.append("alpha", alhpa_history);
 	//json.append("m_history", m_history);
 	//json.append("func_val", func_val);
-	//json.append("space", space);
+	json.append("space", space);
 
 	if (showX) {
 		json.append("x", x1);
