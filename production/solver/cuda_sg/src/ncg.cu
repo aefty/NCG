@@ -103,10 +103,7 @@ int main(int argc, char* argv[]) {
 				gpu::alloc(x0, _x0);
 				gpu::alloc(p, _p);
 
-				h =  _GLB_EPS_;
-
 				gpu::spcl <<< threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-				cout << "secd";
 				gpu::lineSearch   <<< threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
@@ -117,8 +114,6 @@ int main(int argc, char* argv[]) {
 				alpha = min_i  * h;
 				m_history[itr] = min_i;
 				alhpa_history[itr] = alpha;
-
-
 			}
 			// END LINE SEARCH
 
@@ -172,12 +167,6 @@ int main(int argc, char* argv[]) {
 	json.append("x_min", x_min);
 	json.append("alpha", alhpa_history);
 	json.append("m_history", m_history);
-
-	//	json.append("space", space);
-	//	json.append("func_val", func_val);
-	//	json.append("p", p);
-	//	json.append("x0", x0);
-	//	json.append("x1", x1);
 
 	if (showX) {
 		json.append("x", x1);
