@@ -63,11 +63,11 @@ int main(int argc, char* argv[]) {
 
 	// ~50% staturated
 
-	int range = 1024;
+	int range = 128;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	dim3 threadsPerBlock_spcl(range);
-	dim3 numBlocks_spcl(_GLB_N_ / 2, _GLB_N_ / 2);
+	dim3 numBlocks_spcl(_GLB_N_);
 
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
 	dim3 threadsPerBlock_fval(range);
