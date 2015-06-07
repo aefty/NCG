@@ -31,8 +31,13 @@ __host__ __device__ void __FUNCTION(long int N, double* x , double* rtrn ) {
  * @param rtrn [description]
  */
 __host__ __device__ void FUNCTION(long int N, double* x , double* rtrn ) {
+	double a;
+	double b;
+
 	for (int i = 0; i <  N; ++i) {
-		rtrn[0] += (100.0 - x[i])>1 ? (100.0 - x[i]) :1;
+
+		a = 100.0 - x[i];
+		b = 1.0;
 	};
 };
 

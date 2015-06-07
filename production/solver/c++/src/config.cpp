@@ -23,14 +23,23 @@ inline void _FUNCTION(long int N, double* x , double& rtrn ) {
  * @param x    [description]
  * @param rtrn [description]
  */
-inline void __FUNCTION(long int N, double* x , double& rtrn ) {
+inline void FUNCTION(long int N, double* x , double& rtrn ) {
+	double a;
+	double b;
+
 	for (int i = 0; i <  N; ++i) {
-		rtrn += max(2.0 - x[i], 1.2);
+
+		a = 100.0 - x[i];
+		b = 1.0;
+
+		rtrn += (a < b) ? b : a;
 	};
+
+	cout << rtrn << endl;
 };
 
 
-inline void FUNCTION(long int N, double* x , double& rtrn ) {
+inline void __FUNCTION(long int N, double* x , double& rtrn ) {
 	for (int i = 0; i < N; ++i) {
 		rtrn += x[i] * x[i];
 	};
