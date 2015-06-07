@@ -28,22 +28,21 @@ namespace cpu {
 
    inline void linalg_grad(long int N, double EPS, vector<double> const& x, vector<double>& grad) {
 
-      vector<double> point;
       double val = 0.0;
       double EPS2 = 2.0 * EPS;
 
       for (int i = 0; i < N; i++) {
          val = 0;
-         point = x ;
 
-         point[i] -= EPS;
-         FUNCTION(N, &point[0], &val);
+         x[i] -= EPS;
+         FUNCTION(N, &x[0], &val);
 
          val = val * -1.0;
-         point[i] += EPS2;
+         x[i] += EPS2;
 
-         FUNCTION(N, &point[0], &val);
-         grad[i] = (val) / (EPS2);
+         FUNCTION(N, &x[0], &val);
+         rtrn[i] = (val) / (EPS2);
+         x[i] -= EPS2;
       }
    };
 };

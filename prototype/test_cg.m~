@@ -1,7 +1,7 @@
 clear; clc; close all;
 
 % MulitD Rosenbrock initial Guess
-x0=[-20;-2;-2;-3;10];
+x0=[7;7;7;7];
 %x0=[-20;2];
 [x,itr,history,t] = cg(x0);
 
@@ -18,7 +18,7 @@ if(1) % Plot error
 	figure;
 	semilogx(1:size(normValue,1),normValue,'-sr');
 
-	title('ND Rosenbrock - Convergence of NLCG');
+	title('Rosenbrock - Convergence of NLCG');
 	legend('NLCG Method');
 	xlabel('Iteration') % x-axis label
 	ylabel('Norm Convergence') % y-axis label
@@ -29,7 +29,9 @@ if(1)% Plot Time
 	figure;
 	plot(t');
 	title('NLCG Block Timing');
-	legend('Block 2 - Linesearch','Block 3 - Direction Calculation','Block 4 - Vector Transfer & Tolerance');
+	legend('Block 2 - Line Search',...
+    'Block 3 - Direction Calculation',...
+    'Block 4 - Vector Transfer & Tolerance');
 	xlabel('Iteration') % x-axis label
 	ylabel('Time') % y-axis label
 	grid on;

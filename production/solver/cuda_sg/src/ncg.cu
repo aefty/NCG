@@ -23,10 +23,13 @@ using namespace std;
 int main(int argc, char* argv[]) {
 
 	int showX = 0;
+	int showTol = 0;
 
 	if (argc > 1) { _GLB_N_ = (long int) _GLB_N_ * atof(argv[1]); }
 
 	if (argc > 2) { showX = atoi(argv[2]); }
+
+	if (argc > 3) { showTol = atoi(argv[3]); }
 
 	gpu::deviceSpecs();
 
@@ -79,9 +82,6 @@ int main(int argc, char* argv[]) {
 	{
 		cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
 		cpu::linalg_sdot( -1.0, p, p);
-
-
-
 		cpu::linalg_dot(p, p, gg0);
 
 		cout << endl;
@@ -89,7 +89,10 @@ int main(int argc, char* argv[]) {
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
 
-			cout << "| Tol :" << tol << endl;
+			if (showTol) {
+				cout << "| Tol :" << tol << endl;
+			}
+
 			clock_t t_lineSearch_start = clock();
 
 			/**
@@ -102,9 +105,9 @@ int main(int argc, char* argv[]) {
 
 				h =  _GLB_EPS_;
 
-				gpu::spcl <<< threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+				gpu::spcl <<<threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
 				cout << "secd";
-				gpu::fv   <<< threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
+				gpu::fv   <<<threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_func_val, func_val );

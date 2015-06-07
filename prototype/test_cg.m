@@ -15,21 +15,24 @@ if(1) % Plot error
     f =history - ones(size(history));
 	normValue = sum(f.^2,2).^(.5);
 
-	figure;
+	hFig = figure;
 	semilogx(1:size(normValue,1),normValue,'-sr');
 
-	title('ND Rosenbrock - Convergence of NLCG');
+	title('Rosenbrock - Convergence of NLCG');
 	legend('NLCG Method');
 	xlabel('Iteration') % x-axis label
 	ylabel('Norm Convergence') % y-axis label
 	grid on;
+    set(hFig, 'Position', [100 100 350 400]);
 end
 
-if(1)% Plot Time
+if(0)% Plot Time
 	figure;
 	plot(t');
 	title('NLCG Block Timing');
-	legend('Block 2 - Linesearch','Block 3 - Direction Calculation','Block 4 - Vector Transfer & Tolerance');
+	legend('Line Search',...
+    'Direction Calculation',...
+    'Vector Transfer & Tolerance');
 	xlabel('Iteration') % x-axis label
 	ylabel('Time') % y-axis label
 	grid on;

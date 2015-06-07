@@ -21,10 +21,13 @@ using namespace std;
 int main(int argc, char* argv[]) {
 
 	int showX = 0;
+	int showTol = 0;
 
 	if (argc > 1) { _GLB_N_ = (long int) _GLB_N_ * atof(argv[1]); }
 
 	if (argc > 2) { showX = atoi(argv[2]); }
+
+	if (argc > 3) { showTol = atoi(argv[3]); }
 
 	/**
 	 * CODE BLOCK 1
@@ -71,7 +74,9 @@ int main(int argc, char* argv[]) {
 		x1 = x0;
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
-			cout << "|" << tol << endl;
+			if (showTol) {
+				cout << "|" << tol << endl;
+			}
 
 			j = 0;
 			alpha_last = 1.0;
@@ -137,6 +142,7 @@ int main(int argc, char* argv[]) {
 			itr ++;
 		}
 	}
+
 	//END NCG
 
 
