@@ -11,14 +11,26 @@ double _GLB_EPS_ = 1e-6;      // Value of epsilon, Note this is equal to the tol
 
 using namespace std;
 
-inline void FUNCTION(long int N, double* x , double& rtrn ) {
+inline void _FUNCTION(long int N, double* x , double& rtrn ) {
 	for (int i = 0; i < N - 1; ++i) {
 		rtrn += 100 * (x[i + 1] - x[i] * x[i]) * (x[i + 1] - x[i] * x[i]) + (1 - x[i]) * (1 - x[i]);
 	};
 };
 
+/**
+ * Min = 1.2
+ * @param N    [description]
+ * @param x    [description]
+ * @param rtrn [description]
+ */
+inline void __FUNCTION(long int N, double* x , double& rtrn ) {
+	for (int i = 0; i <  N; ++i) {
+		rtrn += max(2.0 - x[i], 1.2);
+	};
+};
 
-inline void _FUNCTION(long int N, double* x , double& rtrn ) {
+
+inline void FUNCTION(long int N, double* x , double& rtrn ) {
 	for (int i = 0; i < N; ++i) {
 		rtrn += x[i] * x[i];
 	};

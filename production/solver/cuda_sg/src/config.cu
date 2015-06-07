@@ -25,14 +25,14 @@ __host__ __device__ void __FUNCTION(long int N, double* x , double* rtrn ) {
 
 
 /**
- * Min = 1.2
+ * Min = 100
  * @param N    [description]
  * @param x    [description]
  * @param rtrn [description]
  */
 __host__ __device__ void FUNCTION(long int N, double* x , double* rtrn ) {
 	for (int i = 0; i <  N; ++i) {
-		rtrn[0] += max(2.0 - x[i],1.2);
+		rtrn[0] += max(100.0 - x[i],1);
 	};
 };
 
