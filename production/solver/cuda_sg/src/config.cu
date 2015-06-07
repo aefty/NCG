@@ -25,7 +25,7 @@ __host__ __device__ void __FUNCTION(long int N, double* x , double* rtrn ) {
 
 
 /**
- * Min = 100
+ * Maximum Function
  * @param N    [description]
  * @param x    [description]
  * @param rtrn [description]
@@ -36,6 +36,7 @@ __host__ __device__ void FUNCTION(long int N, double* x , double* rtrn ) {
 		rtrn[0] += (x[i] > 1) ? x[i] : 1 ;
 	}
 };
+
 
 /**
  * Min = - Infinit
