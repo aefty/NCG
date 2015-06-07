@@ -24,7 +24,6 @@ __device__ void FUNCTION(long int N, double* x , double* rtrn ) {
 	};
 };
 
-
 /**
  * Intail Guesss
  * @param N    [description]

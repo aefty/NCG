@@ -11,12 +11,24 @@ double _GLB_EPS_ = 1e-6;      // Value of epsilon, Note this is equal to the tol
 
 using namespace std;
 
+/**
+ * Rosenbrock quation
+ * @param N    [description]
+ * @param x    [description]
+ * @param rtrn [description]
+ */
 inline void FUNCTION(long int N, double* x , double& rtrn ) {
 	for (int i = 0; i < N - 1; ++i) {
 		rtrn += 100 * (x[i + 1] - x[i] * x[i]) * (x[i + 1] - x[i] * x[i]) + (1 - x[i]) * (1 - x[i]);
 	};
 };
 
+
+/**
+ * Intial Guess
+ * @param N    [description]
+ * @param rtrn [description]
+ */
 inline void GUESS(long int  N, vector<double>& rtrn) {
 	vector<double>x0 (N, 7);
 	rtrn = x0 ;
