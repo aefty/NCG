@@ -22,28 +22,6 @@ namespace gpu {
          int col = i - row * N;
          space[row * N + col] = x[col] + p[col] * (h * ((1 << row) - 1.0));
       }
-
-      /*
-            __syncthreads();
-
-            if (blockIdx.x == 0 ) {
-               extern __shared__ cache[];
-               //double val = 0.0;
-               FUNCTION(N, &space[i * N], &cache[i]);
-               //func_val[i] = val;
-               __syncthreads();
-
-               if (threadIdx.x == 0) {
-                  for (int k = 0; k < D; ++k) {
-
-                     if () {}
-                  }
-               };
-            }
-
-            */
-
-
    };
 
    /**
