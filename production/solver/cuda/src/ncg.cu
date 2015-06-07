@@ -17,12 +17,14 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
 
-
 	int showX = 0;
+	int showTol = 0;
 
 	if (argc > 1) { _GLB_N_ = (long int) _GLB_N_ * atof(argv[1]); }
 
 	if (argc > 2) { showX = atoi(argv[2]); }
+
+	if (argc > 3) { showTol = atoi(argv[3]); }
 
 	cuda::deviceSpecs();
 
@@ -59,7 +61,7 @@ int main(int argc, char* argv[]) {
 
 	// BEGIN NCG
 	{
-		std::cout << "|"; std::cout.flush();
+
 
 		cuda::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p, _space);
 		std::linalg_sdot( -1.0, p, p);
@@ -69,8 +71,10 @@ int main(int argc, char* argv[]) {
 		x1 = x0;
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
-
-			cout << "|" << tol << endl;
+			
+			if (showTol) {
+				cout << "|" << tol << endl;
+			}
 
 			j = 0;
 			alpha_last = 1.0;

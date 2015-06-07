@@ -71,8 +71,6 @@ int main(int argc, char* argv[]) {
 	json.append("add_time", t_add);
 	json.append("cuda_grad_time", t_grad_cuda);
 	json.append("grad_spaceAlloc", t_grad_spaceAlloc);
-	json.append("min", min_grad);
-	json.append("max", max_grad);
 	//json.append("A", A);
 	//json.append("C", C);
 
