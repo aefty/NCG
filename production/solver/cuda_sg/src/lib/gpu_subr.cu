@@ -15,7 +15,7 @@ namespace gpu {
     * @param space Memory Space
     */
    __global__ void spcl( long int N , long int D ,  double* x, double* p, double h, double* space) {
-      int i = blockDim.x * blockIdx.x + threadIdx.x;
+      int i = blockDim.x * blockIdx.x + threadIdx.x +blockDim.y * blockIdx.y + threadIdx.y;
 
       if (i < N * D) {
          int row = i / N;
@@ -32,7 +32,7 @@ namespace gpu {
     * @param func_val Function Value
     */
    __global__ void lineSearch( long int N , long int D , double* space, double* func_val) {
-      int i = blockDim.x * blockIdx.x + threadIdx.x;
+      int i = blockDim.x * blockIdx.x + threadIdx.x +blockDim.y * blockIdx.y + threadIdx.y;
 
       if (i < D ) {
          double val = 0.0;

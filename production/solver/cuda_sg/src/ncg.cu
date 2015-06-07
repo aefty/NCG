@@ -62,11 +62,11 @@ int main(int argc, char* argv[]) {
 	std::vector<double> m_history(_GLB_ITR_, 0);
 
 	// ~50% staturated
-	int range = 128;
+	int range = 1024;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	dim3 threadsPerBlock_spcl(range);
-	dim3 numBlocks_spcl(_GLB_N_);
+	dim3 numBlocks_spcl(sqrt(_GLB_N_),sqrt(_GLB_N_));
 
 	vector<double> func_val(range, 0.0); double* _func_val = (double*) gpu::alloc(func_val);
 	dim3 threadsPerBlock_fval(range);
