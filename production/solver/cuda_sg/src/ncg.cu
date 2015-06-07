@@ -165,8 +165,9 @@ int main(int argc, char* argv[]) {
 	json.append("rate", rate);
 	json.append("x_max", x_max);
 	json.append("x_min", x_min);
-	json.append("alpha", alhpa_history);
-	json.append("m_history", m_history);
+	//json.append("alpha", alhpa_history);
+	//json.append("m_history", m_history);
+	json.append("func_val", func_val);
 
 	if (showX) {
 		json.append("x", x1);
