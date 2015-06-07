@@ -99,10 +99,11 @@ int main(int argc, char* argv[]) {
 				gpu::alloc(x0, _x0);
 				gpu::alloc(p, _p);
 
-				gpu::spcl <<< threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-				gpu::lineSearch   <<< threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
-
+				gpu::spcl <<<threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
 				CUDA_ERR_CHECK(cudaGetLastError());
+				gpu::lineSearch   <<<threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
+				CUDA_ERR_CHECK(cudaGetLastError());
+
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_func_val, func_val );
 
