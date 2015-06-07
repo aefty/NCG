@@ -14,8 +14,8 @@
 
 #include "config.cu"
 #include "lib/util.cpp"
-#include "lib/math.cpp"
-#include "lib/lineSearch.cu"
+#include "lib/cpu_subr.cpp"
+#include "lib/gpu_subr.cu"
 #include "lib/json.cpp"
 
 using namespace std;
@@ -105,9 +105,9 @@ int main(int argc, char* argv[]) {
 
 				h =  _GLB_EPS_;
 
-				gpu::spcl <<<threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+				gpu::spcl <<< threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
 				cout << "secd";
-				gpu::fv   <<<threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
+				gpu::lineSearch   <<< threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_func_val, func_val );

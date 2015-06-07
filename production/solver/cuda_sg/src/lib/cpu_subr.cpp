@@ -26,7 +26,7 @@ namespace cpu {
       }
    };
 
-   inline void linalg_grad(long int N, double EPS, vector<double>& x, vector<double>& grad) {
+   inline void linalg_grad(long int N, double EPS, vector<double>& x, vector<double>& rtrn) {
 
       double val = 0.0;
       double EPS2 = 2.0 * EPS;
