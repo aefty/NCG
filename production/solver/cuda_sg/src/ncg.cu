@@ -109,7 +109,7 @@ int main(int argc, char* argv[]) {
 				min_i = distance(func_val.begin(), min_element(func_val.begin(), func_val.end()));
 
 				//alpha = h * (pow(2.0, min_i) - 1.0);
-				alpha = h*min_i;
+				alpha = (h * ((1 << row) - 1.0));
 				m_history[itr] = min_i;
 				alhpa_history[itr] = alpha;
 			}
@@ -151,8 +151,6 @@ int main(int argc, char* argv[]) {
 	gpu::unalloc(_space, space);
 	gpu::unalloc(_space);
 
-	double x_max = *max_element(std::begin(x1), std::end(x1));
-	double x_min = *min_element(std::begin(x1), std::end(x1));
 
 	// Output
 	json.append("size", _GLB_N_);
@@ -161,8 +159,6 @@ int main(int argc, char* argv[]) {
 	json.append("run_time", t_run);
 	json.append("line_search_time", t_lineSearch);
 	json.append("rate", rate);
-	json.append("x_max", x_max);
-	json.append("x_min", x_min);
 	//json.append("alpha", alhpa_history);
 	//json.append("m_history", m_history);
 	//json.append("func_val", func_val);
