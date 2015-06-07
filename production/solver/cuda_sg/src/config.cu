@@ -38,7 +38,7 @@ __host__ __device__ void FUNCTION(long int N, double* x , double* rtrn ) {
 
 		a = 100.0 - x[i];
 		b = 1.0;
-		rtrn += (a < b) ? b : a;
+		rtrn[0] += (a < b) ? b : a;
 	}
 };
 
