@@ -62,7 +62,6 @@ int main(int argc, char* argv[]) {
 	std::vector<double> m_history(_GLB_ITR_, 0);
 
 	// ~50% staturated
-
 	int range = 128;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);

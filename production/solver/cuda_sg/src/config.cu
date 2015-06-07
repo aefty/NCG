@@ -36,19 +36,6 @@ __host__ __device__ void __FUNCTION(long int N, double* x , double* rtrn ) {
 	}
 };
 
-
-/**
- * Min = - Infinit
- * @param N    [description]
- * @param x    [description]
- * @param rtrn [description]
- */
-__host__ __device__ void _FUNCTION(long int N, double* x , double* rtrn ) {
-	for (int i = 0; i <  N; ++i) {
-		rtrn[0] += x[i];
-	};
-};
-
 inline void GUESS(long int  N, vector<double>& rtrn) {
 	vector<double>x0 (N, 7);
 	rtrn = x0 ;
