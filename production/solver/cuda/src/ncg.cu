@@ -9,8 +9,8 @@
 
 #include "config.cu"
 #include "lib/util.cpp"
-#include "lib/math.cu"
-#include "lib/math.cpp"
+#include "lib/gpu_subr.cu"
+#include "lib/cpu_subr.cpp"
 #include "lib/json.cpp"
 
 using namespace std;

@@ -18,6 +18,6 @@ inline void FUNCTION(long int N, double* x , double& rtrn ) {
 };
 
 inline void GUESS(long int  N, vector<double>& rtrn) {
-	vector<double>x0 (N, 7);
+	vector<double>x0 (N, 10);
 	rtrn = x0 ;
 };

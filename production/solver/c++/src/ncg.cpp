@@ -13,7 +13,7 @@
 #include <algorithm>
 
 #include "config.cpp"
-#include "lib/math.cpp"
+#include "lib/cpu_subr.cpp"
 #include "lib/json.cpp"
 
 using namespace std;
