@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
 	std::vector<double> m_history(_GLB_ITR_, 0);
 
 	// ~50% staturated
-	int range = 16;
+	int range = 128;
 
 	vector<double> space(range * _GLB_N_, 0.0); double* _space = (double*) gpu::alloc(space);
 	dim3 threadsPerBlock_spcl(range);
@@ -159,9 +159,9 @@ int main(int argc, char* argv[]) {
 	json.append("line_search_time", t_lineSearch);
 	json.append("rate", rate);
 	//json.append("alpha", alhpa_history);
-	json.append("m_history", m_history);
-	json.append("func_val", func_val);
-	json.append("space", space);
+	//json.append("m_history", m_history);
+	//json.append("func_val", func_val);
+	//json.append("space", space);
 
 	if (showX) {
 		json.append("x", x1);
