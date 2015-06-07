@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
 	int itr = 0;
 	double  min_i = 0;
 	double alpha = 1;
-	double h = _GLB_EPS_;
+	double h = 1;
 
 	std::vector<double> alhpa_history(_GLB_ITR_, 0);
 	std::vector<double> m_history(_GLB_ITR_, 0);
@@ -99,8 +99,8 @@ int main(int argc, char* argv[]) {
 				gpu::alloc(x0, _x0);
 				gpu::alloc(p, _p);
 
-				gpu::spcl <<<threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
-				gpu::lineSearch   <<<threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
+				gpu::spcl <<< threadsPerBlock_spcl , numBlocks_spcl>>>   (_GLB_N_, range, _x0 , _p, h , _space);
+				gpu::lineSearch   <<< threadsPerBlock_fval  , numBlocks_fval>>> (_GLB_N_, range, _space ,  _func_val);
 
 				CUDA_ERR_CHECK(cudaDeviceSynchronize());
 				gpu::unalloc(_func_val, func_val );
