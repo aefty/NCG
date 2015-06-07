@@ -81,8 +81,6 @@ int main(int argc, char* argv[]) {
 		cpu::linalg_grad(_GLB_N_, _GLB_EPS_, x0, p);
 		cpu::linalg_sdot( -1.0, p, p);
 		cpu::linalg_dot(p, p, gg0);
-
-		cout << endl;
 		x1 = x0;
 
 		while (tol > _GLB_EPS_ && itr < _GLB_ITR_) {
@@ -166,7 +164,7 @@ int main(int argc, char* argv[]) {
 	//json.append("alpha", alhpa_history);
 	//json.append("m_history", m_history);
 	//json.append("func_val", func_val);
-	json.append("space", space);
+	//json.append("space", space);
 
 	if (showX) {
 		json.append("x", x1);
