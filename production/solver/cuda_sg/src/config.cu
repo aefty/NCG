@@ -33,7 +33,7 @@ __host__ __device__ void __FUNCTION(long int N, double* x , double* rtrn ) {
 __host__ __device__ void FUNCTION(long int N, double* x , double* rtrn ) {
 
 	for (int i = 0; i <  N; ++i) {
-		rtrn[0] += (x[i] > 1) > x[i]: 1 ;
+		rtrn[0] += (x[i] > 1) ? x[i] : 1 ;
 	}
 };
 
