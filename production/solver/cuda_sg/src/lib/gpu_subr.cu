@@ -20,7 +20,7 @@ namespace gpu {
       if (i < N * D) {
          int row = i / N;
          int col = i - row * N;
-         space[row * N + col] = x[col] + p[col] * h * ((1 << row) - 1.0);
+         space[row * N + col] = x[col] + p[col] * (h * ((1 << row) - 1.0));
       }
 
       /*
